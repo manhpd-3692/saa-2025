@@ -39,3 +39,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Takumi agent kit (from private repo sun-asterisk-internal/takumi) - do not publish
+/.claude/
+/release-manifest.json
+/.repomixignore
