@@ -1,0 +1,13 @@
+{
+  "mode": "system",
+  "intents": [
+    "Sunner signs in with Google and sees countdown or homepage",
+    "Sunner reads static event content (homepage, award system, community standards)",
+    "Sunner writes, edits, views and browses kudos on the live board",
+    "Sunner gives hearts, earns hero badges and opens secret boxes",
+    "Sunner views own and other profiles",
+    "Sunner receives and reads notifications",
+    "Admin monitors stats, moderates kudos, manages users and campaigns"
+  ],
+  "justification": ""
+}
