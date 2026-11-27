@@ -19,6 +19,8 @@ import (
 const (
 	CodeDomainNotAllowed      = "domain_not_allowed"
 	CodeProfileNotProvisioned = "profile_not_provisioned"
+	// CodeProfileConflict: another users row already owns the email (reviewer W3).
+	CodeProfileConflict = "profile_conflict"
 )
 
 // TokenVerifier verifies a raw bearer token (JWTVerifier in production).

@@ -45,3 +45,7 @@ next-env.d.ts
 /.claude/
 /release-manifest.json
 /.repomixignore
+
+# local run logs and Playwright auth state (test sessions, never commit)
+/logs/
+/playwright/.auth/

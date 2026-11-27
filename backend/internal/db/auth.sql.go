@@ -11,6 +11,42 @@ import (
 	"github.com/google/uuid"
 )
 
+const getMe = `-- name: GetMe :one
+SELECT u.id, u.email, u.name, u.avatar_url, u.role,
+       un.id AS unit_id, un.name AS unit_name, un.code AS unit_code
+FROM users u
+LEFT JOIN units un ON un.id = u.unit_id
+WHERE u.id = $1
+`
+
+type GetMeRow struct {
+	ID        uuid.UUID
+	Email     string
+	Name      string
+	AvatarUrl *string
+	Role      UserRole
+	UnitID    *uuid.UUID
+	UnitName  *string
+	UnitCode  *string
+}
+
+// A8: the caller's own row with its unit (Codex R15); role only from users.role (R05).
+func (q *Queries) GetMe(ctx context.Context, id uuid.UUID) (GetMeRow, error) {
+	row := q.db.QueryRow(ctx, getMe, id)
+	var i GetMeRow
+	err := row.Scan(
+		&i.ID,
+		&i.Email,
+		&i.Name,
+		&i.AvatarUrl,
+		&i.Role,
+		&i.UnitID,
+		&i.UnitName,
+		&i.UnitCode,
+	)
+	return i, err
+}
+
 const getProfileAuth = `-- name: GetProfileAuth :one
 SELECT id, role
 FROM users
@@ -28,4 +64,36 @@ func (q *Queries) GetProfileAuth(ctx context.Context, id uuid.UUID) (GetProfileA
 	var i GetProfileAuthRow
 	err := row.Scan(&i.ID, &i.Role)
 	return i, err
+}
+
+const upsertProfileOnSignIn = `-- name: UpsertProfileOnSignIn :exec
+INSERT INTO users (id, email, name, avatar_url, role, last_login_at)
+VALUES ($1, $2, $3, $4, $5, now())
+ON CONFLICT (id) DO UPDATE SET
+  name = EXCLUDED.name,
+  avatar_url = EXCLUDED.avatar_url,
+  last_login_at = now(),
+  role = CASE WHEN EXCLUDED.role = 'admin' THEN 'admin'::user_role ELSE users.role END
+`
+
+type UpsertProfileOnSignInParams struct {
+	ID        uuid.UUID
+	Email     string
+	Name      string
+	AvatarUrl *string
+	Role      UserRole
+}
+
+// A9 (BR-001): insert on first sign-in; a later sign-in refreshes name, avatar and
+// last_login_at and only ever promotes the role (an ADMIN_EMAILS entry), never demotes.
+// The email is written on insert only.
+func (q *Queries) UpsertProfileOnSignIn(ctx context.Context, arg UpsertProfileOnSignInParams) error {
+	_, err := q.db.Exec(ctx, upsertProfileOnSignIn,
+		arg.ID,
+		arg.Email,
+		arg.Name,
+		arg.AvatarUrl,
+		arg.Role,
+	)
+	return err
 }

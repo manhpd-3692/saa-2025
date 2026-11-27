@@ -118,3 +118,4 @@ Modify: `package.json` (`@playwright/test`, script `test:e2e`)
 
 ## Next Steps
 - Unblocks Phase 3. Open items: Playwright auth strategy = storageState from one manual Google login (decided P02); C06 claim locations.
+- Pending-upload sweeper: P02 only caps pending uploads (20 created per owner in 24 h → 429 `upload_quota_exceeded`, reviewer W2). Reaping abandoned `pending` rows/objects is owned by Phase 6 (`backend/cmd/purge-uploads`: pending > 24 h, leftover `pending_delete`), not by Phase 14.

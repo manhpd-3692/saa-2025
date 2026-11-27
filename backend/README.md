@@ -89,6 +89,9 @@ max-age 600. Behind it every route is in exactly one class:
 | ADMIN | `d.Routes.Admin(h)` | PROFILE + `RequireAdmin` | `/api/v1/admin/*` |
 
 Failures: 401 `unauthorized`; 403 `domain_not_allowed`, `profile_not_provisioned`, `forbidden`.
+Provision answers 409 `profile_conflict` when another `users` row already owns the email (logged
+with `user_id` and `email_sha256` for support to reconcile). `POST /api/v1/uploads/kudo-images`
+answers 429 `upload_quota_exceeded` past 20 pending uploads created by the caller in 24 h.
 Every error body is `{ "error": { "code": "...", "message": "..." } }` (`httpx.WriteError`). The role
 comes only from `users.role`; JWT claims, body, headers and query never set it. A new route defaults
 to PROFILE; putting one in PUBLIC or IDENTITY is a contract change made in the F002 spec first.
