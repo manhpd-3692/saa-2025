@@ -1,0 +1,7 @@
+{
+  "errors.forbidden.title": "Không có quyền truy cập",
+  "errors.forbidden.message": "Nội dung bạn tìm không tồn tại hoặc đã bị gỡ bỏ.",
+  "errors.notFound.title": "KHÔNG TÌM THẤY",
+  "errors.notFound.message": "Nội dung bạn tìm không tồn tại hoặc đã bị gỡ bỏ.",
+  "errors.backHome": "Về trang chủ"
+}

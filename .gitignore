@@ -49,3 +49,4 @@ next-env.d.ts
 # local run logs and Playwright auth state (test sessions, never commit)
 /logs/
 /playwright/.auth/
+.playwright-mcp/

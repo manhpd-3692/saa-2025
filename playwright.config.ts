@@ -15,6 +15,9 @@ export default defineConfig({
   outputDir: "logs/playwright/test-results",
   reporter: [["list"], ["html", { outputFolder: "logs/playwright/report", open: "never" }]],
   fullyParallel: false,
+  // One worker: the local stack is reached through the WSL port relay, which
+  // drops requests under parallel load (see e2e/README.md).
+  workers: 1,
   forbidOnly: Boolean(process.env.CI),
   retries: 0,
   use: {

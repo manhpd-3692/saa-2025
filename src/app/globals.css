@@ -1,31 +1,47 @@
 @import "tailwindcss";
 
 /*
- * Design token skeleton. Brand colors, type scale and spacing are filled in
- * from the Figma variables in Phase 3; only the scaffold defaults live here now.
+ * SAA 2025 design tokens (FR-001), read by eye from the 1x Figma exports in
+ * docs/figma-refs (login, homepage header/footer, dropdowns, FAB, admin chrome).
+ * Pages use these utilities (`bg-page`, `text-primary`, `border-divider`, …);
+ * no component hard-codes a hex value.
  */
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-  /* Placeholder token groups (add tokens as `--color-*`, `--radius-*`, `--spacing-*`): */
+  --font-sans: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
+
+  /* Surfaces */
+  --color-page: #00101a; /* page background behind every user screen */
+  --color-header: rgb(11 15 17 / 0.8); /* translucent header bar */
+  --color-menu: #00070c; /* dropdown panels */
+  --color-divider: #2e3940; /* footer top rule */
+
+  /* Brand */
+  --color-primary: #ffea9e; /* cream-gold: buttons, active nav, FAB */
+  --color-primary-hover: #fff3c6;
+  --color-primary-border: #998c5f; /* dropdown and avatar outline */
+  --color-primary-soft: rgb(255 234 158 / 0.1); /* hover / pressed item */
+  --color-primary-muted: rgb(255 234 158 / 0.2); /* current item (language) */
+  --color-on-primary: #00101a; /* text on cream-gold */
+  --color-danger: #d4271d; /* FAB close, unread dot */
+
+  /* Admin chrome */
+  --color-admin-header: #2c2f31;
+  --color-admin-page: #999999;
+
+  --radius-control: 4px;
+  --radius-panel: 8px;
+  --shadow-glow: 0 0 12px 2px rgb(255 234 158 / 0.45);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  body {
+    background: var(--color-page);
+    color: #ffffff;
+    font-family: var(--font-sans);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Gold glow on the selected or hovered navigation text (header, footer, menus). */
+@utility text-glow {
+  text-shadow: 0 0 6px rgb(250 226 135 / 0.9);
 }

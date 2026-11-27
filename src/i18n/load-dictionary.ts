@@ -32,6 +32,15 @@ export async function loadDictionary(
   return withMasterFallback(master, await importDictionary(locale, namespace));
 }
 
+/** Several namespaces merged into one dictionary (keys are namespace-prefixed). */
+export async function loadDictionaries(
+  locale: Locale,
+  namespaces: readonly DictionaryNamespace[],
+): Promise<Dictionary> {
+  const parts = await Promise.all(namespaces.map((namespace) => loadDictionary(locale, namespace)));
+  return Object.assign({}, ...parts) as Dictionary;
+}
+
 /** Text for `key`; an unknown key renders as the key itself so gaps stay visible. */
 export function translate(dictionary: Dictionary, key: string): string {
   return dictionary[key] ?? key;

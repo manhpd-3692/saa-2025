@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
+import { MinimalChrome } from "@/components/shell/minimal-chrome";
 
-// Structural skeleton for chrome-less pages such as Login (chrome arrives in Phase 3).
+/** F001 minimal chrome for Login (DEC-002): language switch and copyright only, no `/me` call. */
 export default function MinimalLayout({ children }: { children: ReactNode }) {
-  return <>{children}</>;
+  return <MinimalChrome>{children}</MinimalChrome>;
 }

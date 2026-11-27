@@ -16,6 +16,8 @@ const eslintConfig = defineConfig([
     ".claude/**",
     "plans/**",
     "backend/**",
+    // Local run output (dev-server logs, Playwright traces and HTML report).
+    "logs/**",
   ]),
 ]);
 

@@ -6,7 +6,7 @@ import type { Locale } from "./locale-config";
 
 interface LocaleContextValue {
   locale: Locale;
-  /** Text from the `common` dictionary; unknown keys render as the key. */
+  /** Text from the client namespaces (`common`, `shell`); unknown keys render as the key. */
   t: (key: string) => string;
 }
 

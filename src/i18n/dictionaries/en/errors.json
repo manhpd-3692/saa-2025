@@ -1,0 +1,7 @@
+{
+  "errors.forbidden.title": "Access Denied",
+  "errors.forbidden.message": "The resource you’re looking for doesn’t exist or has been removed.",
+  "errors.notFound.title": "NOT FOUND",
+  "errors.notFound.message": "The resource you’re looking for doesn’t exist or has been removed.",
+  "errors.backHome": "Back to Homepage"
+}
