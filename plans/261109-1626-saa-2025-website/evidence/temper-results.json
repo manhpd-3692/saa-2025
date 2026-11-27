@@ -1,11 +1,11 @@
 {
   "commands": [
-    {"command": "supabase db reset + dev-db-role.sql + go run ./cmd/seed (prelaunch, live, after-ceremony)", "exitCode": 0, "status": "pass", "summary": "9 migrations applied from empty; all 3 seed scenarios ok", "ts": "2026-11-10T07:58:39Z"},
-    {"command": "go build ./... && go vet ./... && go vet -tags integration ./...", "exitCode": 0, "status": "pass", "summary": "clean after fix round", "ts": "2026-11-10T07:58:39Z"},
-    {"command": "go test -count=1 ./...", "exitCode": 0, "status": "pass", "summary": "unit tests incl. SC-008 matrix (+no-kid), CORS, recover, route-class guard pass", "ts": "2026-11-10T07:58:39Z"},
-    {"command": "go test -tags integration -count=1 ./...", "exitCode": 0, "status": "pass", "summary": "SC-010 grants/RLS, saa_api, local JWKS integration pass", "ts": "2026-11-10T07:58:39Z"},
-    {"command": "sqlc diff", "exitCode": 0, "status": "pass", "summary": "no generated-code drift", "ts": "2026-11-10T07:58:39Z"},
-    {"command": "npm run typecheck && npm run lint && npm test", "exitCode": 0, "status": "pass", "summary": "tsc clean, eslint clean, vitest 27/27", "ts": "2026-11-10T07:58:39Z"},
-    {"command": "npm run build", "exitCode": 0, "status": "pass", "summary": "next build ok, routes dynamic", "ts": "2026-11-10T07:58:39Z"}
+    {"command": "npm run typecheck", "exitCode": 0, "status": "pass", "summary": "tsc clean (fix round 2)", "ts": "2026-11-27T12:03:54Z"},
+    {"command": "npm run lint", "exitCode": 0, "status": "pass", "summary": "eslint clean (logs/** ignored)", "ts": "2026-11-27T12:03:54Z"},
+    {"command": "npm test", "exitCode": 0, "status": "pass", "summary": "vitest 105/105", "ts": "2026-11-27T12:03:54Z"},
+    {"command": "npm run test:e2e", "exitCode": 0, "status": "pass", "summary": "playwright 34/34, 1 worker (tester round 2 and implementer round 2)", "ts": "2026-11-27T12:03:54Z"},
+    {"command": "npm run build", "exitCode": 0, "status": "pass", "summary": "next build ok on final code (fix round 2); dev server still 200", "ts": "2026-11-27T12:03:54Z"},
+    {"command": "Playwright MCP visual + AC check of 8 screens at 1440x1024", "exitCode": 0, "status": "pass", "summary": "8/8 PASS after 2 fix rounds; reports/verify-*.md", "ts": "2026-11-27T12:03:54Z"},
+    {"command": "go test (backend)", "exitCode": 0, "status": "skipped", "summary": "backend untouched in phase 3", "ts": "2026-11-27T12:03:54Z"}
   ]
 }

@@ -29,8 +29,8 @@ box idempotency and moderation versioning on real code → feature phases in the
 | Phase | Name | Status |
 |-------|------|--------|
 | 1 | [Foundation and bootstrap](./phase-01-foundation-bootstrap.md) | Complete |
-| 2 | [End-to-end risk path](./phase-02-end-to-end-risk-path.md) | Pending |
-| 3 | [Auth, app shell, i18n, 403/404](./phase-03-auth-shell-i18n-error-pages.md) | Pending |
+| 2 | [End-to-end risk path](./phase-02-end-to-end-risk-path.md) | Complete (bb599fd) |
+| 3 | [Auth, app shell, i18n, 403/404](./phase-03-auth-shell-i18n-error-pages.md) | Complete (manual Google sign-in check open) |
 | 4 | [Countdown and launch gate](./phase-04-countdown-launch-gate.md) | Pending |
 | 5 | [Homepage, awards, community standards](./phase-05-homepage-awards-community-standards.md) | Pending |
 | 6 | [Write, edit and send kudos](./phase-06-write-edit-send-kudos.md) | Pending |

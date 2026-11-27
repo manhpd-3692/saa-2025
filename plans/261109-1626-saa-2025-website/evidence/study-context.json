@@ -1,17 +1,17 @@
 {
-  "task": "Phase 1 foundation: local Supabase, 9 migrations, Go API skeleton with CORS/route classes/JWT/RequireAdmin, sqlc, seeds, Next.js i18n plumbing, API clients and layout skeletons",
+  "task": "Phase 3: auth shell, Login per Figma, VN/EN locale switch, 403/404 pages, header/footer/avatar menu, admin gate chrome, floating action button (F001, F002)",
   "mode": "code",
   "acceptanceCriteria": [
-    "R06 CORS",
-    "R21 JWT allow-list/iss/aud/exp/nbf",
-    "R21 deny-all RLS + grants",
-    "R23 timeouts",
-    "R16 seed scenarios",
-    "N03 partial unique",
-    "N09 route classes",
-    "role only from users.role"
+    "U1 Login",
+    "Dropdown ngon ngu",
+    "U11 Error 403",
+    "U12 Error 404",
+    "Dropdown profile",
+    "Dropdown profile admin",
+    "FAB closed",
+    "FAB open"
   ],
-  "touchpoints": ["supabase/", "backend/", "src/i18n/", "src/lib/", "src/app/layout.tsx", "src/app/(shell)/layout.tsx", "src/app/(minimal)/layout.tsx", "src/app/admin/layout.tsx", "package.json", "eslint.config.mjs", ".gitignore", "vitest.config.mts"],
-  "blastRadius": ["every later phase: schema, auth chain, API clients, layouts"],
-  "contracts": ["Go /api/v1 error envelope", "route classes PUBLIC/IDENTITY/PROFILE/ADMIN", "database schema", "locale cookie saa_locale"]
+  "touchpoints": ["src/app/layout.tsx", "src/app/(shell)/", "src/app/(minimal)/", "src/app/admin/", "src/app/not-found.tsx", "src/components/shell/", "src/components/errors/", "src/features/auth/", "src/features/admin/", "src/lib/auth/", "src/lib/api/go-api-browser.ts", "src/i18n/", "public/images/", "e2e/", "next.config.ts", "playwright.config.ts", "eslint.config.mjs"],
+  "blastRadius": ["every page under (shell) and admin", "P6/P8/P10 mount into shell slots"],
+  "contracts": ["locale cookie saa_locale", "Go /api/v1/me", "next return path internal-only", "Supabase session cookies"]
 }

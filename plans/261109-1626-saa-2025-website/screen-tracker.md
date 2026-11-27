@@ -46,14 +46,14 @@ P2 (đường rủi ro đầu-cuối: provision, JWT, `/me`...) không có màn 
 
 | # | Tên màn | Hạng mục checklist | Phase | Frame ID | Ảnh tham chiếu | Mã AC | Trạng thái | Số vòng sửa | Commit sha |
 |---|---|---|---|---|---|---|---|---|---|
-| 1 | U1 Login | Login | P3 | 662:14387 | `docs/figma-refs/user/login.png` | F002 FR-101,102,103,201,202,203,604,605 · BR-002,003 · SC-001,003,005,007 | Pending | 0 | - |
-| 2 | Dropdown-ngôn ngữ | Đa ngôn ngữ | P3 | 721:4942 | `docs/figma-refs/user/dropdown-language.png` | F001 FR-002,203,401 · BR-001,003 · SC-001,002,007 | Pending | 0 | - |
-| 3 | U11 Error 403 | (ngoài checklist) | P3 | 2182:9291 | `docs/figma-refs/user/error-403.png` | F001 FR-403 · SC-005 · F002 FR-603 · DEC-003 · SC-004 | Pending | 0 | - |
-| 4 | U12 Error 404 | (ngoài checklist) | P3 | 1378:5063 | `docs/figma-refs/user/error-404.png` | F001 FR-402 · SC-005 · F006 FR-405 | Pending | 0 | - |
-| 5 | Dropdown-profile | Homepage SAA | P3 | 721:5223 | `docs/figma-refs/user/dropdown-profile.png` | F001 FR-201,602 · F002 FR-104,402 · SC-006 | Pending | 0 | - |
-| 6 | Dropdown-profile Admin | (ngoài checklist) | P3 | 721:5277 | `docs/figma-refs/user/dropdown-profile-admin.png` | F001 FR-201,601 · DEC-001 · SC-003,008 · F002 FR-603 | Pending | 0 | - |
-| 7 | Floating Action Button (đóng) | Homepage SAA | P3 | 313:9137 hoặc 313:9139 | `docs/figma-refs/user/fab-closed.png` | F001 FR-104 · F008 FR-101 · F005 FR-101 | Pending | 0 | - |
-| 8 | Floating Action Button (mở) | Homepage SAA | P3 | 313:9137 hoặc 313:9139 | `docs/figma-refs/user/fab-open.png` | F001 FR-104 · F008 FR-101,103 · F005 FR-101 | Pending | 0 | - |
+| 1 | U1 Login | Login | P3 | 662:14387 | `docs/figma-refs/user/login.png` | F002 FR-101,102,103,201,202,203,604,605 · BR-002,003 · SC-001,003,005,007 | Done (PASS) | 0 | 01b620e |
+| 2 | Dropdown-ngôn ngữ | Đa ngôn ngữ | P3 | 721:4942 | `docs/figma-refs/user/dropdown-language.png` | F001 FR-002,203,401 · BR-001,003 · SC-001,002,007 | Done (PASS) | 0 | 01b620e |
+| 3 | U11 Error 403 | (ngoài checklist) | P3 | 2182:9291 | `docs/figma-refs/user/error-403.png` | F001 FR-403 · SC-005 · F002 FR-603 · DEC-003 · SC-004 | Done (PASS) | 2 | 01b620e |
+| 4 | U12 Error 404 | (ngoài checklist) | P3 | 1378:5063 | `docs/figma-refs/user/error-404.png` | F001 FR-402 · SC-005 · F006 FR-405 | Done (PASS) | 2 | 01b620e |
+| 5 | Dropdown-profile | Homepage SAA | P3 | 721:5223 | `docs/figma-refs/user/dropdown-profile.png` | F001 FR-201,602 · F002 FR-104,402 · SC-006 | Done (PASS) | 0 | 01b620e |
+| 6 | Dropdown-profile Admin | (ngoài checklist) | P3 | 721:5277 | `docs/figma-refs/user/dropdown-profile-admin.png` | F001 FR-201,601 · DEC-001 · SC-003,008 · F002 FR-603 | Done (PASS) | 1 | 01b620e |
+| 7 | Floating Action Button (đóng) | Homepage SAA | P3 | 313:9137 hoặc 313:9139 | `docs/figma-refs/user/fab-closed.png` | F001 FR-104 · F008 FR-101 · F005 FR-101 | Done (PASS) | 1 | 01b620e |
+| 8 | Floating Action Button (mở) | Homepage SAA | P3 | 313:9137 hoặc 313:9139 | `docs/figma-refs/user/fab-open.png` | F001 FR-104 · F008 FR-101,103 · F005 FR-101 | Done (PASS) | 2 | 01b620e |
 | 9 | U2 Countdown - Prelaunch | Countdown Prelaunch | P4 | 2268:35127 | `docs/figma-refs/user/countdown-prelaunch.png` | F003 FR-101,102,103,201,202,203,204,401,402,403 · BR-001,002,003 · SC-003,004,005,008,011 | Pending | 0 | - |
 | 10 | U3 Homepage SAA | Homepage SAA | P5 | 2167:9026 | `docs/figma-refs/user/homepage-saa.png` | F004 FR-101,201,202,203,204,205,206,207,403,601 · SC-001,005,007,010 | Pending | 0 | - |
 | 11 | U4 Hệ thống giải | Hệ thống giải | P5 | 313:8436 | `docs/figma-refs/user/awards-system.png` | F004 FR-301,302,303,304,305,401,402 · BR-001,002,003 · SC-001,002,003,004 | Pending | 0 | - |

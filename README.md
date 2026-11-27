@@ -53,6 +53,8 @@ publishable key belongs in the frontend; never a service/secret key.
 | `npm run lint` | ESLint |
 | `npm run typecheck` | `tsc --noEmit` |
 | `npm test` | Vitest (`vitest run`) |
+| `npm run e2e:session` | Write local test sessions for Playwright (no Google login) |
+| `npm run test:e2e` | Playwright against the running local stack, one worker; see [`e2e/README.md`](e2e/README.md) |
 
 Backend checks (`go build`, `go vet`, `go test`, integration tests, `sqlc generate`) are listed in
 [`backend/README.md`](backend/README.md).
@@ -60,6 +62,8 @@ Backend checks (`go build`, `go vet`, `go test`, integration tests, `sqlc genera
 ## Documentation
 
 - [`docs/system-architecture.md`](docs/system-architecture.md) — architecture as implemented
+- [`docs/project-changelog.md`](docs/project-changelog.md) — what each phase delivered
+- [`e2e/README.md`](e2e/README.md) — Playwright setup, local test sessions, specs
 - [`docs/SCREENFLOW.md`](docs/SCREENFLOW.md) — screen flow overview; per-screen specs in `docs/screen-specs/`
 - [`backend/README.md`](backend/README.md) — Go API: layout, local setup, route classes, adding routes
 - [`plans/261109-1626-saa-2025-website/plan.md`](plans/261109-1626-saa-2025-website/plan.md) — phased implementation plan

@@ -35,9 +35,13 @@ npm run test:e2e                  # all specs
 npx playwright test e2e/browser-transport-smoke.spec.ts
 ```
 
+Playwright runs with **one worker** (`workers: 1` in `playwright.config.ts`): the local stack is
+reached through the Windows to WSL port relay, which drops requests under parallel load (analysis:
+`plans/261109-1626-saa-2025-website/reports/debugger-me-stall.md`). Do not raise it on this setup.
+
 Overrides: `E2E_BASE_URL` (default http://localhost:3000), `E2E_API_BASE_URL` (default
 http://localhost:8080; must be an origin listed in the API's `FRONTEND_ORIGINS` for the frontend
-side). Reports and traces go to `logs/playwright/` (gitignored).
+side). Reports and traces go to `logs/playwright/` (gitignored; ESLint ignores `logs/**`).
 
 ## Specs
 
@@ -46,6 +50,7 @@ side). Reports and traces go to `logs/playwright/` (gitignored).
 | `browser-transport-smoke.spec.ts` | F002 SC-009 (Codex R06): from a page on the frontend origin, GET/POST/PATCH/PUT/DELETE and an `Idempotency-Key` header reach Go with a bearer token (no cookies); preflight answered 204 without a JWT for allowed origins only; a page on another origin is blocked by the browser. Requests are picked so they change no data. |
 | `app-shell-and-locale.spec.ts` | F001 (phase 3): header/footer/FAB, one selected header link, avatar menu per role, Admin item after a stored role change on window focus (SC-003, SC-008; toggles `sunner02.demo`'s `users.role` and restores it), FAB states (SM-001), VN/EN switch kept across reloads and pages (SC-001), unsupported cookie ignored (SC-002), Login chrome (SC-004), localized 404 (SC-005), 1280/1024 px widths (SC-009). |
 | `login-and-admin-gate.spec.ts` | F002 (phase 3): sign-in redirects and public paths (SC-003), Login copy and reason messages (FR-201, FR-203), Google button up to the Supabase authorize request with a safe `next` (FR-202, SC-005), Login → Home when signed in (FR-103), Forbidden page vs admin chrome on `/admin` (SC-004, F001 SC-005), logout (SC-006) and the missing-profile recovery ending on Login without a bounce (SC-011). |
+| `shell-menu-keyboard.spec.ts` | F001 (phase 3): keyboard model of the avatar menu, language menu and FAB choices: focus on open, ArrowUp/ArrowDown wrap, Home/End, Escape returns focus to the trigger, focus leaving closes the panel. |
 
 Helpers: `support/local-session-cookies.ts` mints a short-lived session (fresh `session_id`) in memory for
 one test, so logout and the missing-profile case never touch the shared storage states;

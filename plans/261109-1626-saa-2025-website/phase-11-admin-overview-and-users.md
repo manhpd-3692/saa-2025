@@ -13,6 +13,7 @@
   unit/level/role filters, search suggest, paging, row menu (View profile), CSV export.
 
 ## Key Insights
+- (From P3 review W3) `admin/layout.tsx` checks the role once per layout mount, so a demoted admin keeps the admin chrome until a reload. Every admin page must treat a Go 403 as "show Forbidden" and a Go 401 as "go to Login". `src/app/admin/page.tsx` is a P3 placeholder: edit it, do not create it.
 - Spam excluded; "with kudo" = sent or received; All row first, includes users without unit (D002, D003).
 - Total Heart = weighted `kudo_heart_state` over received public kudos (same as F007, X07); Level from F008 tier read; badges/time-to-6 from opened box icons (ALG-003).
 - Export streaming (N11): headers only after first page read OK; late failure aborts connection; browser saves only a complete blob, else retry.

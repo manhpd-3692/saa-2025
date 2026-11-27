@@ -8,7 +8,7 @@
 - Next guides: `node_modules/next/dist/docs/01-app/03-api-reference/03-file-conventions/{layout,route-groups,not-found}.md`
 
 ## Overview
-- Priority: P1. Status: pending. Effort: 10h.
+- Priority: P1. Status: complete (code commit `01b620e`, pushed to `feat/saa-screens`). Manual real Google sign-in check still open, see Delivery. Effort: 10h.
 - Checklist: **Login**, **Đa ngôn ngữ**, Homepage SAA (shared chrome).
 - Finish F002 user-facing flows (styled Login, return path, logout, admin gate) and build all F001 chrome: header,
   nav, avatar menu, locale switch, bell slot, footer, FAB, minimal chrome, 403/404, design tokens.
@@ -59,13 +59,13 @@ Create
 8. Playwright specs + Vitest units.
 
 ## Todo List
-- [ ] Design tokens
-- [ ] Session summary + recovery handling
-- [ ] Shell chrome components
-- [ ] Minimal chrome, Login visuals, 403/404
-- [ ] Admin layout gate + nav config
-- [ ] Locale switcher + logout
-- [ ] Tests
+- [x] Design tokens
+- [x] Session summary + recovery handling
+- [x] Shell chrome components
+- [x] Minimal chrome, Login visuals, 403/404
+- [x] Admin layout gate + nav config
+- [x] Locale switcher + logout
+- [x] Tests
 
 ## Success Criteria (test plan)
 - Playwright (signed-in storageState, `live` seed): F001 SC-001, SC-002, SC-003, SC-004 (Login part; countdown part in P4), SC-005, SC-008, SC-009; F002 SC-003, SC-004 (visual + Go 403 already proven P2), SC-005, SC-006, SC-011 (N06 cookies cleared, Login stable after reload).
@@ -94,3 +94,35 @@ Create
 
 ## Next Steps
 - Unblocks P4–P7, P10. Open items (copy to confirm): F001 messages "Your session has ended…", "You do not have access to this page.", "This page could not be found.", "Close the form to change language."; F002 Login E04 "Your profile could not be loaded…".
+
+## Delivery
+Commit `01b620e` (pushed). Screen tracker rows 1–8 Done (PASS). Round 1 closed by `reports/reviewer-phase-03.md`.
+
+**Done**
+- Shell, minimal and admin chrome; Login; VN/EN locale switch; 403/404; FAB; sign-out; keyboard-operable menus; browser `/me` timeout.
+- Fix rounds per screen: login 0, language 0, 403 2, 404 2, profile 0, profile-admin 1, FAB closed 1, FAB open 2.
+- Checks on final code: typecheck 0, lint 0, vitest 105/105, Playwright e2e 34/34 (1 worker), `next build` 0.
+- Review: 0 critical. W1 (menu keyboard model) and W2 (browser `/me` timeout) fixed. W3 (admin gate evaluated per layout mount) recorded in phase-11 Key Insights.
+
+**Deviations from plan**
+- Placeholder pages `src/app/(shell)/page.tsx` and `src/app/admin/page.tsx` exist. P5 and P11 edit them; do not create new ones.
+- Every page under `(shell)` and `admin` exports `instant = false`.
+- 403/404 use minimal chrome with a Back button (C01, DEC-002).
+- Admin menu label is "Admin" (DEC-001), not Figma "Dashboard".
+- Test files are `src/components/shell/nav-active-item.test.ts` and `src/lib/auth/session-summary.test.ts`, not the planned `nav-links.test.tsx` and `get-session-summary.test.ts`.
+- Raster assets are low-res crops from `docs/figma-refs` (the MoMorph project has no screens). Replace with real exports.
+
+**Open carry-overs**
+
+| # | Item | Owner | Done when |
+|---|------|-------|-----------|
+| 1 | Real Google sign-in and logout, manual (F002 SC-001, SC-007, FR-102, FR-604) | User (needs company Google account) | Sign-in and logout run on the local stack; result recorded in a verify report |
+| 2 | F001 SC-007 language lock | P6 implementer | SC-007 Playwright test passes in P6 |
+| 3 | F001 SC-004 countdown part | P4 implementer | Countdown part of SC-004 passes in P4 |
+| 4 | Copy: VN/EN 403, 404 and Login error strings; 403 text currently equals 404 text | User (product copy) | Approved copy in `errors` and `auth` dictionaries; 403 message differs from 404 |
+| 5 | Windows→WSL relay stalls `/me` about 30 s (environment) | User | `.wslconfig` mirrored networking applied and `wsl -e true` probe stays under 1 s, or stall accepted |
+| 6 | Tab out of avatar menu lands on header logo | P14 integration | Tab from the avatar moves to the next focusable control |
+| 7 | Brand logo upscaled (71×65 source) | User (supply export), P14 (swap in) | Native-size logo file replaces `public/images/brand/saa-logo.png` |
+| 8 | Reviewer suggestions 1–7 (not confirmed against final code) | P14 integration | Each suggestion either applied or closed with a reason |
+
+Accepted, closed: 403/404 title ink 4–5 px narrower than reference (font render).
