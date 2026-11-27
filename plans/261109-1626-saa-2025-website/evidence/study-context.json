@@ -1,17 +1,10 @@
 {
-  "task": "Phase 3: auth shell, Login per Figma, VN/EN locale switch, 403/404 pages, header/footer/avatar menu, admin gate chrome, floating action button (F001, F002)",
+  "task": "Phase 4: countdown launch gate (F003) - proxy gate before launch, /countdown prelaunch page per Figma, shared countdown display and hook for P5",
   "mode": "code",
   "acceptanceCriteria": [
-    "U1 Login",
-    "Dropdown ngon ngu",
-    "U11 Error 403",
-    "U12 Error 404",
-    "Dropdown profile",
-    "Dropdown profile admin",
-    "FAB closed",
-    "FAB open"
+    "U2 Countdown Prelaunch"
   ],
-  "touchpoints": ["src/app/layout.tsx", "src/app/(shell)/", "src/app/(minimal)/", "src/app/admin/", "src/app/not-found.tsx", "src/components/shell/", "src/components/errors/", "src/features/auth/", "src/features/admin/", "src/lib/auth/", "src/lib/api/go-api-browser.ts", "src/i18n/", "public/images/", "e2e/", "next.config.ts", "playwright.config.ts", "eslint.config.mjs"],
-  "blastRadius": ["every page under (shell) and admin", "P6/P8/P10 mount into shell slots"],
-  "contracts": ["locale cookie saa_locale", "Go /api/v1/me", "next return path internal-only", "Supabase session cookies"]
+  "touchpoints": ["src/proxy.ts", "src/lib/events/", "src/app/countdown/", "src/features/countdown/", "src/i18n/locale-config.ts", "src/i18n/dictionaries/{vi,en}/countdown.json", "public/images/countdown/", "backend/internal/events/", "e2e/countdown-prelaunch.spec.ts", "e2e/support/launch-gate-fixtures.ts", "e2e/login-and-admin-gate.spec.ts"],
+  "blastRadius": ["every page route passes the launch gate in src/proxy.ts", "P5 homepage reuses countdown-display and use-countdown"],
+  "contracts": ["Go GET /api/v1/events/current (serverNow, startAt, status)", "gate fail-open on Go error or 1.5 s timeout (DEC-003)", "307 redirects", "60 s success-only gate cache (AD13)"]
 }

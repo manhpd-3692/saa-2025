@@ -1,0 +1,1 @@
+ok  	github.com/manhpd-3692/saa-2025/backend/internal/events	0.008s

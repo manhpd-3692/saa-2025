@@ -1,0 +1,9 @@
+
+ RUN  v5.1.0 C:/Users/phan.duc.manh/sourcecode/saa-2025
+
+
+ Test Files  4 passed (4)
+      Tests  38 passed (38)
+   Start at  23:52:20
+   Duration  312ms (import 39%, transform 25%, tests 23%, worker 12%, environment 1%)
+

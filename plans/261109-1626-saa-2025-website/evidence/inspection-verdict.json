@@ -1,20 +1,14 @@
 { "score": 9, "criticalCount": 0, "decision": "SEALED",
   "acceptanceCovered": [
-    "U1 Login: PASS round 0 (reports/verify-login.md); real Google OAuth manual",
-    "Dropdown ngon ngu: PASS, keyboard re-check round 2 (reports/verify-dropdown-language.md)",
-    "U11 Error 403: PASS round 2, minimal chrome per C01 (reports/verify-error-403.md)",
-    "U12 Error 404: PASS round 2 (reports/verify-error-404.md)",
-    "Dropdown profile: PASS (reports/verify-dropdown-profile.md)",
-    "Dropdown profile admin: PASS round 1, label Admin per DEC-001 (reports/verify-dropdown-profile-admin.md)",
-    "FAB closed: PASS round 1 (reports/verify-fab-closed.md)",
-    "FAB open: PASS round 2 (reports/verify-fab-open.md)"
+    "U2 Countdown Prelaunch: PASS after fix round 1 (reports/verify-countdown-prelaunch.md); F003 FR-101..403, BR-001..003, SC-003/004/005/008/011 and F001 SC-004 all PASS"
   ],
-  "regressionChecked": ["tsc", "eslint", "vitest 105", "playwright e2e 34", "next build", "logs/web.log and logs/api.log no new ERROR"],
+  "regressionChecked": ["tsc", "eslint", "vitest 146", "go vet + go test + go integration", "playwright e2e full suite", "next build", "logs/web.log and logs/api.log no new ERROR"],
   "contractStatus": "OK", "refuted": [], "unproven": [], "reachableRegressions": [],
   "findings": [
-    { "severity": "Warning", "category": "Accessibility", "location": "src/components/shell/use-dismissable-popover.ts:1", "summary": "menus lacked keyboard model and close on focus-out (fixed round 2, e2e/shell-menu-keyboard.spec.ts)", "disposition": "Accept" },
-    { "severity": "Warning", "category": "Reliability", "location": "src/lib/api/go-api-browser.ts:1", "summary": "browser /me call had no timeout (fixed: 5 s)", "disposition": "Accept" },
-    { "severity": "Warning", "category": "Security", "location": "src/app/admin/layout.tsx:20", "summary": "admin role checked once per layout mount; Go RequireAdmin enforces; P11 pages must map Go 403/401 (noted in phase-11 plan)", "disposition": "Defer" },
-    { "severity": "Suggestion", "category": "Environment", "location": "plans/261109-1626-saa-2025-website/reports/debugger-me-stall.md:1", "summary": "Windows to WSL relay outages stall /me ~30 s; Go healthy; mitigation is a .wslconfig change left to the user", "disposition": "Defer" },
-    { "severity": "Suggestion", "category": "Design", "location": "public/images/login/key-visual.webp:1", "summary": "raster assets are low-res crops from figma-refs; replace with real exports", "disposition": "Defer" }
+    { "severity": "Warning", "category": "Correctness", "location": "src/lib/events/launch-gate-cache.ts:1", "summary": "stale upcoming reading could bounce /countdown <-> / after an early start (fixed: proxy re-reads on /countdown while cached reading is upcoming)", "disposition": "Accept" },
+    { "severity": "Warning", "category": "Security", "location": "src/lib/events/launch-gate.ts:1", "summary": "dotted last segment skipped the gate (fixed: regex removed, proxy matcher excludes assets; unit + e2e cases)", "disposition": "Accept" },
+    { "severity": "Warning", "category": "Observability", "location": "backend/internal/events/events_handler.go:31", "summary": "WARN branch could hide a real DB error (fixed: WARN only for caller context.Canceled; table test)", "disposition": "Accept" },
+    { "severity": "Warning", "category": "Correctness", "location": "src/features/countdown/countdown-clock.ts:1", "summary": "device clock step mid-session changed display, BR-003 (fixed: performance.now elapsed from server anchor)", "disposition": "Accept" },
+    { "severity": "Suggestion", "category": "Design", "location": "public/images/countdown/countdown-background.webp:1", "summary": "background is a low-res crop from figma-refs; replace with real export; digits are SVG seven-segment (font unlicensed, D008)", "disposition": "Defer" },
+    { "severity": "Suggestion", "category": "Correctness", "location": "src/features/countdown/countdown-clock.ts:1", "summary": "performance.now may pause in system sleep; display resyncs on visibility/focus per spec A4", "disposition": "Defer" }
   ] }

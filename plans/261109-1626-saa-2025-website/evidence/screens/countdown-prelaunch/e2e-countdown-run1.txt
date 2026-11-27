@@ -1,0 +1,47 @@
+
+Running 7 tests using 1 worker
+
+  ok 1 [chromium] › e2e\countdown-prelaunch.spec.ts:48:1 › prelaunch: bare countdown page with days, hours and minutes on the server clock (SC-012, FR-201..203, SC-004) (874ms)
+  ok 2 [chromium] › e2e\countdown-prelaunch.spec.ts:71:1 › refocus before the start re-reads the server clock and corrects the digits (SC-009) (1.9s)
+  ok 3 [chromium] › e2e\countdown-prelaunch.spec.ts:83:1 › gate: every page goes to the countdown before the start, sign-in and assets stay reachable (SC-001, SC-002, FR-601) (862ms)
+  x  4 [chromium] › e2e\countdown-prelaunch.spec.ts:103:1 › no event row: 'Coming soon' without digits, pages load normally; a stalled read fails open within 1.5 s and is not cached (SC-011, SC-010) (1.6m)
+  -  5 [chromium] › e2e\countdown-prelaunch.spec.ts:133:1 › sub-minute boundary: digits read 00 00 00 and the Homepage opens at 0 ms without a reload (SC-008, SC-005)
+  -  6 [chromium] › e2e\countdown-prelaunch.spec.ts:149:1 › a resync on refocus that reports the event active hands over at once (SC-009, SC-007)
+  -  7 [chromium] › e2e\countdown-prelaunch.spec.ts:163:1 › live: the countdown address lands on the Homepage and renders no countdown (SC-003, SC-007, FR-102)
+
+
+  1) [chromium] › e2e\countdown-prelaunch.spec.ts:103:1 › no event row: 'Coming soon' without digits, pages load normally; a stalled read fails open within 1.5 s and is not cached (SC-011, SC-010) 
+
+    Error: lock session failed: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond. 
+    Error code: Wsl/Service/WSAETIMEDOUT
+    If this error was unexpected, please consider searching for existing issues or filing a new issue at https://github.com/microsoft/WSL/issues.
+
+
+       at support\launch-gate-fixtures.ts:65
+
+      63 |   );
+      64 |   const released = exited.then((code) => {
+    > 65 |     if (code !== 0) throw new Error(`lock session failed: ${output}`);
+         |                           ^
+      66 |   });
+      67 |   return { locked, released, output: () => output };
+      68 | }
+        at C:\Users\phan.duc.manh\sourcecode\saa-2025\e2e\support\launch-gate-fixtures.ts:65:27
+
+    Error Context: logs\playwright\test-results\countdown-prelaunch-no-eve-d21d6-s-not-cached-SC-011-SC-010--chromium\error-context.md
+
+    Error Context: logs\playwright\test-results\countdown-prelaunch-no-eve-d21d6-s-not-cached-SC-011-SC-010--chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    logs\playwright\test-results\countdown-prelaunch-no-eve-d21d6-s-not-cached-SC-011-SC-010--chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace logs\playwright\test-results\countdown-prelaunch-no-eve-d21d6-s-not-cached-SC-011-SC-010--chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › e2e\countdown-prelaunch.spec.ts:103:1 › no event row: 'Coming soon' without digits, pages load normally; a stalled read fails open within 1.5 s and is not cached (SC-011, SC-010) 
+  3 did not run
+  3 passed (6.2m)
+PW_EXIT=1

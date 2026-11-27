@@ -1,11 +1,12 @@
 {
   "commands": [
-    {"command": "npm run typecheck", "exitCode": 0, "status": "pass", "summary": "tsc clean (fix round 2)", "ts": "2026-11-27T12:03:54Z"},
-    {"command": "npm run lint", "exitCode": 0, "status": "pass", "summary": "eslint clean (logs/** ignored)", "ts": "2026-11-27T12:03:54Z"},
-    {"command": "npm test", "exitCode": 0, "status": "pass", "summary": "vitest 105/105", "ts": "2026-11-27T12:03:54Z"},
-    {"command": "npm run test:e2e", "exitCode": 0, "status": "pass", "summary": "playwright 34/34, 1 worker (tester round 2 and implementer round 2)", "ts": "2026-11-27T12:03:54Z"},
-    {"command": "npm run build", "exitCode": 0, "status": "pass", "summary": "next build ok on final code (fix round 2); dev server still 200", "ts": "2026-11-27T12:03:54Z"},
-    {"command": "Playwright MCP visual + AC check of 8 screens at 1440x1024", "exitCode": 0, "status": "pass", "summary": "8/8 PASS after 2 fix rounds; reports/verify-*.md", "ts": "2026-11-27T12:03:54Z"},
-    {"command": "go test (backend)", "exitCode": 0, "status": "skipped", "summary": "backend untouched in phase 3", "ts": "2026-11-27T12:03:54Z"}
+    {"command": "npm run typecheck", "exitCode": 0, "status": "pass", "summary": "tsc clean after fix round 1", "ts": "2026-11-28T00:00:00Z"},
+    {"command": "npm run lint", "exitCode": 0, "status": "pass", "summary": "eslint clean after fix round 1", "ts": "2026-11-28T00:00:00Z"},
+    {"command": "npm test", "exitCode": 0, "status": "pass", "summary": "vitest 146/146 (15 files)", "ts": "2026-11-28T00:00:00Z"},
+    {"command": "logs/p4-fix-go.sh (gofmt, go vet, go test ./internal/events)", "exitCode": 0, "status": "pass", "summary": "clean; red run against old WARN condition exits 1 as intended", "ts": "2026-11-28T00:00:00Z"},
+    {"command": "go vet + go test ./... + go test -tags integration -p 1 ./...", "exitCode": 0, "status": "pass", "summary": "implementer round 0; go -race skipped (no gcc in WSL)", "ts": "2026-11-28T00:00:00Z"},
+    {"command": "npm run build", "exitCode": 0, "status": "pass", "summary": "next build on final code (logs/p4-final-build.log)", "ts": "2026-11-28T00:00:00Z"},
+    {"command": "npx playwright test (full suite, 1 worker)", "exitCode": 0, "status": "pass", "summary": "42/42: 38 passed in full run (logs/p4-final-e2e.log, 1 countdown test hit WSL WSAETIMEDOUT in lock fixture and skipped 3); countdown spec rerun 8/8 exit 0 (logs/p4-final-e2e-countdown-rerun.log)", "ts": "2026-11-28T00:00:00Z"},
+    {"command": "Playwright MCP visual + AC check of countdown-prelaunch at 1440x1024", "exitCode": 0, "status": "pass", "summary": "PASS after fix round 1 (reports/verify-countdown-prelaunch.md)", "ts": "2026-11-28T00:00:00Z"}
   ]
 }

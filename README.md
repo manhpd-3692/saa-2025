@@ -40,6 +40,9 @@ npm install
 npm run dev                                           # frontend
 ```
 
+Before the event start every page redirects to `/countdown`. `SEED_SCENARIO=prelaunch` shows the
+countdown, `live` restores the site (the frontend may take up to 60 s to notice the change).
+
 Frontend variables (names only, see `.env.example`): `NEXT_PUBLIC_SUPABASE_URL`,
 `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, `NEXT_PUBLIC_API_BASE_URL`, `API_BASE_URL`. Only the
 publishable key belongs in the frontend; never a service/secret key.

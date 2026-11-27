@@ -1,6 +1,6 @@
 # System Architecture
 
-State after Phase 3 (app shell, Login, locale switch, 403/404). Items marked **planned (Phase N)** do
+State after Phase 4 (countdown and launch gate on top of the Phase 3 shell). Items marked **planned (Phase N)** do
 not exist in code yet. Backend detail lives in [`backend/README.md`](../backend/README.md).
 
 ## Components
@@ -19,7 +19,7 @@ Browser ──> Next.js (src/)  ──Bearer──> Go API (backend/, /api/v1) �
 
 1. The user signs in with Google through Supabase Auth on `/login`. `/auth/callback`
    (`src/app/auth/callback/route.ts`) exchanges the code and provisions the profile in Go; `src/proxy.ts`
-   refreshes the session cookies and sends anonymous visitors of protected paths to Login.
+   refreshes the session cookies, applies the launch gate (below) and sends anonymous visitors of protected paths to Login.
 2. Server code calls `goApiServer(path)` (`src/lib/api/go-api-server.ts`): reads the access token from
    the Supabase cookie session, sends `Authorization: Bearer <token>` to `API_BASE_URL`, 5 s timeout,
    `cache: "no-store"`.
@@ -90,6 +90,9 @@ Migrations (`supabase/migrations`, in order):
 | `src/app/admin/layout.tsx` | Role gate plus `AdminChrome`; nav items in `src/features/admin/admin-nav-items.ts` |
 | `src/app/not-found.tsx` | Localized 404 in the minimal chrome (`src/components/errors/`) |
 | `src/components/shell/` | Header, avatar and language menus, nav links, FAB, footer, bell slot |
+| `src/app/countdown/page.tsx` | Prelaunch countdown: bare route (no header or footer), reads Go fresh per request |
+| `src/features/countdown/` | Shared countdown: clock store, `useCountdown`, `CountdownDisplay`; launch wrapper `LaunchCountdown` |
+| `src/lib/events/` | Events client and launch gate (below) |
 | `src/features/auth/` | Login button and messages, sign-out, profile recovery, route decisions |
 | `src/lib/auth/` | Session summary (`session-summary.ts`, server read in `get-session-summary.ts`) |
 | `src/lib/supabase/` | Browser and server Supabase clients (publishable key only; server client is read-only for cookies) |
@@ -135,7 +138,7 @@ Supported: `vi`, `en` (`src/i18n/locale-config.ts`). Order, in `resolveLocale`:
 3. `vi` (master language and last fallback).
 
 `getRequestLocale()` reads cookies and headers; dictionaries load per namespace from
-`src/i18n/dictionaries/{locale}/{namespace}.json` (namespaces `common`, `shell`, `auth`, `errors`; the root layout sends `common` and `shell` to the client).
+`src/i18n/dictionaries/{locale}/{namespace}.json` (namespaces `common`, `shell`, `auth`, `errors`, `countdown`; the root layout sends `common` and `shell` to the client).
 
 ## Rendering decision: `instant = false`
 
@@ -148,12 +151,57 @@ Go `/me`. **Every page under `src/app/admin` needs `export const instant = false
 
 Dev only: `next.config.ts` sets `allowedDevOrigins: ["[::1]"]` so the IPv6 loopback origin reaches HMR.
 
+## Launch gate (F003)
+
+Before the event start (`events.start_at`), every page except the exempt ones goes to `/countdown`. It is
+a convenience, not access control. Go is the only reader of the event: public route
+`GET /api/v1/events/current` (`backend/internal/events/events_handler.go`: 200 event, 404 no row,
+500 on error or deadline, never cached). Client: `src/lib/events/events-api.ts`.
+
+**In `src/proxy.ts`.** `refreshProxySession` and `launchGateRedirect(pathname)` run in parallel
+(`Promise.all`). The gate answer wins: it is checked before the sign-in rule, and the redirect keeps the
+refreshed session cookies (`redirectWithSession`).
+
+| Rule | Behaviour (`launch-gate.ts`) |
+|---|---|
+| Upcoming, non-exempt path | 307 to `/countdown` |
+| Exempt paths | `/countdown`, `/login`, `/auth/callback`, `/_next` (exact, or as prefix followed by `/`) pass |
+| Static files | Never reach the proxy: its `matcher` excludes them by extension |
+| Fail open | No event row, Go error, invalid body, or no answer within 1.5 s: the request passes and the failure is logged |
+
+**Cache (`launch-gate-cache.ts`).** Per process, 60 s (`LAUNCH_GATE_CACHE_TTL_MS`).
+- Keeps only successful reads (`startAt`, `serverNow`); a failure is never stored, so the next request retries.
+- One lookup in flight at a time; concurrent requests share it.
+- "Now" is the cached server time plus the process time elapsed since the request was sent, so the Next.js clock never decides alone.
+- With several instances, each may lag a start-time change by up to 60 s.
+- On `/countdown` the gate calls `recheckIfUpcoming()`: while the cached reading says upcoming it reads Go again. The page redirects to `/` once started; a stale "upcoming" would send the visitor straight back.
+
+**`/countdown` page.** `instant = false` and `connection()`: a fresh Go read per request (5 s budget),
+before any markup. `active` redirects to `/` (307); `upcoming` shows the title and `LaunchCountdown`; no
+row, error or timeout shows "Coming soon" without digits. Language: saved choice, else `vi`.
+
+**Browser clock (`countdown-clock.ts`, `use-countdown.ts`).** The server's `serverNow` is taken as "now"
+at the first client read and advanced by `performance.now()`, never `Date.now()`, so a wrong or stepped
+device clock changes nothing. It ticks every 1000 ms; the last tick is scheduled for the exact zero
+moment. Server render and hydration use the server's own remaining time.
+
+**Hand-over and resync (`launch-countdown.tsx`).** At 0 ms remaining (not when the digits first read
+zero) it calls `router.replace("/")` once, without a full reload. When the window gains focus or the tab
+becomes visible it calls the events route from the browser (5 s): `active` hands over at once; `upcoming`
+replaces the start time and server time; a failure keeps counting on the existing offset.
+
+**Reuse (Phase 5).** `CountdownDisplay` (pure: days, hours, minutes boxes plus a polite live region) and
+`useCountdown(targetIso, serverNowIso)` (returns `remainingMs` and the parts; never navigates) know nothing
+about redirects or event status, so the ceremony countdown reuses them. Only `LaunchCountdown` navigates.
+
+Tests: `e2e/countdown-prelaunch.spec.ts` with `e2e/support/launch-gate-fixtures.ts` switches the event
+row between seed scenarios and restores `live`; the 60 s cache makes step order matter.
+
 ## Planned (not yet in code)
 
 | Item | Phase |
 |---|---|
-| Launch-gate redirect in `proxy.ts` | 4 |
-| Feature routes and screens | 4 to 13 |
+| Feature routes and screens | 5 to 13 |
 | Final integration, E2E, docs | 14 |
 
 Source of truth for phases: `plans/261109-1626-saa-2025-website/plan.md`.

@@ -8,7 +8,7 @@
 - Next guide: `node_modules/next/dist/docs/01-app/03-api-reference/03-file-conventions/proxy.md`
 
 ## Overview
-- Priority: P1. Status: pending. Effort: 5h.
+- Priority: P1. Status: **complete** (commit `ed625fa`; verify PASS after fix round 1; reviewer 0 critical). Effort: 5h.
 - Checklist: **Countdown Prelaunch**.
 - Launch gate in `proxy.ts` (before the sign-in redirect), bare `/countdown` page, shared `CountdownDisplay` +
   `useCountdown` (reused by F004), `LaunchCountdown` with server offset, refocus resync and redirect at 0 ms.
@@ -53,13 +53,19 @@ Create
 7. Tests.
 
 ## Todo List
-- [ ] ALG-001 split + tests
-- [ ] Shared hook + display (hand-off to P5)
-- [ ] Events client + gate cache
-- [ ] Proxy gate
-- [ ] Countdown page + LaunchCountdown
-- [ ] Visuals + font
-- [ ] E2E + Go router test
+- [x] ALG-001 split + tests
+- [x] Shared hook + display (hand-off to P5)
+- [x] Events client + gate cache
+- [x] Proxy gate
+- [x] Countdown page + LaunchCountdown
+- [x] Visuals + font (SVG seven-segment digits, low-res background crop; see Deviations)
+- [x] E2E + Go router test (SC-006 covered by an existing file; see Deviations)
+
+## Deviations from Plan
+- `backend/internal/events/events_router_integration_test.go` was not created. SC-006 is covered by `backend/cmd/api/api_auth_routes_integration_test.go`.
+- The hook test lives in `src/features/countdown/countdown-clock.test.ts`, not `use-countdown.test.ts`.
+- Digits are SVG seven-segment, not the "Digital Numbers" font. The font is unlicensed, so the D008 fallback applies.
+- The background is a low-res crop of the Figma art, not the full export.
 
 ## Success Criteria (test plan)
 - Vitest: split math; hook with fake timers and a skewed `Date.now()` (SC-004); cache does not store failures (SC-010).
@@ -86,4 +92,17 @@ Create
 - Revert `proxy.ts` gate block; site opens without gate. Countdown files are additive.
 
 ## Next Steps
-- P5 consumes shared countdown. Open items: Digital Numbers font licence (D008); real production `start_at` (AD03 placeholder 15 Dec 2025 18:00 ICT).
+P5 consumes the shared countdown. Open items, each with an owner and a done mark:
+
+| # | Open item | Owner | Done when |
+|---|-----------|-------|-----------|
+| 1 | Real background export replaces the low-res crop (`public/images/countdown/countdown-background.webp`) | Project owner (asset from design) | Full-res file swapped in; `/images/countdown/countdown-background.webp` 200; `momorph-ui-implementer` re-run; tester visual pass against `countdown-vi.png` |
+| 2 | Real production `start_at` (AD03 placeholder: 15 Dec 2025 18:00 ICT) | Project owner (confirms the date) | Confirmed value in the event row; `/countdown` shows the real remaining time; tester re-runs the e2e spec |
+| 3 | `performance.now()` sleep caveat: digits and hand-over lag until the next visibility or focus resync if the clock stops during sleep | `implementer` | Either a `pageshow` or large-tick-gap resync is added with a test, or the team accepts the risk in writing here |
+| 4 | D004 locale wording says "Vietnamese when none"; code follows F001 (Accept-Language before `vi`) | `implementer` (wording), project owner (sign-off) | D004 text matches F001 BR-001; no code change |
+| 5 | Proxy matcher skips only image, font and icon extensions, so a future `public/` file such as `.json`, `.txt` or `.js` would be gated | `implementer` | A comment in the matcher or `e2e/README.md` states the rule, or the gate exempts by explicit list before such a file is added |
+| 6 | Review suggestions S2 (anchor offset on response time, use `performance.now()` for elapsed), S5 (exact `/countdown` landing assertion), S6 (runbook line for an aborted e2e run) were skipped | Project owner (accept or schedule) | Each is either scheduled into Phase 14 or recorded as accepted |
+| 7 | `go test -race` not run (no gcc on the host) | `tester` | Run in an environment with gcc (WSL with gcc or CI); exit 0 |
+| 8 | WSL relay timeouts (`WSAETIMEDOUT`) hit the seed and e2e lock fixture on run 1 | `tester` | Seed and countdown spec pass first try on 3 consecutive runs, or a retry is added to the fixture; log the result in `reports/` |
+
+Blockers for Phase 14: items 1 and 2 are external inputs. Phase 14 final E2E must not close until both are done.

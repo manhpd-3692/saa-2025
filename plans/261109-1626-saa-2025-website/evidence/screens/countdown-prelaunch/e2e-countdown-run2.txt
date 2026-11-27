@@ -1,0 +1,13 @@
+
+Running 7 tests using 1 worker
+
+  ok 1 [chromium] › e2e\countdown-prelaunch.spec.ts:48:1 › prelaunch: bare countdown page with days, hours and minutes on the server clock (SC-012, FR-201..203, SC-004) (1.2s)
+  ok 2 [chromium] › e2e\countdown-prelaunch.spec.ts:71:1 › refocus before the start re-reads the server clock and corrects the digits (SC-009) (2.3s)
+  ok 3 [chromium] › e2e\countdown-prelaunch.spec.ts:83:1 › gate: every page goes to the countdown before the start, sign-in and assets stay reachable (SC-001, SC-002, FR-601) (838ms)
+  ok 4 [chromium] › e2e\countdown-prelaunch.spec.ts:103:1 › no event row: 'Coming soon' without digits, pages load normally; a stalled read fails open within 1.5 s and is not cached (SC-011, SC-010) (1.1m)
+  ok 5 [chromium] › e2e\countdown-prelaunch.spec.ts:133:1 › sub-minute boundary: digits read 00 00 00 and the Homepage opens at 0 ms without a reload (SC-008, SC-005) (35.9s)
+  ok 6 [chromium] › e2e\countdown-prelaunch.spec.ts:149:1 › a resync on refocus that reports the event active hands over at once (SC-009, SC-007) (1.6s)
+  ok 7 [chromium] › e2e\countdown-prelaunch.spec.ts:163:1 › live: the countdown address lands on the Homepage and renders no countdown (SC-003, SC-007, FR-102) (31.3s)
+
+  7 passed (2.4m)
+PW_EXIT=0

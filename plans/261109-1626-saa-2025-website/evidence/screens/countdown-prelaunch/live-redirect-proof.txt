@@ -1,0 +1,6 @@
+# live-redirect proof (2026-11-27T23:19:04+07:00)
+curl -g -D - http://[::1]:3000/countdown  (DB seeded live)
+HTTP/1.1 307 Temporary Redirect
+location: /
+GET http://localhost:8080/api/v1/events/current -> status active (see api line)
+"status":"active"

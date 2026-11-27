@@ -54,7 +54,7 @@ P2 (đường rủi ro đầu-cuối: provision, JWT, `/me`...) không có màn 
 | 6 | Dropdown-profile Admin | (ngoài checklist) | P3 | 721:5277 | `docs/figma-refs/user/dropdown-profile-admin.png` | F001 FR-201,601 · DEC-001 · SC-003,008 · F002 FR-603 | Done (PASS) | 1 | 01b620e |
 | 7 | Floating Action Button (đóng) | Homepage SAA | P3 | 313:9137 hoặc 313:9139 | `docs/figma-refs/user/fab-closed.png` | F001 FR-104 · F008 FR-101 · F005 FR-101 | Done (PASS) | 1 | 01b620e |
 | 8 | Floating Action Button (mở) | Homepage SAA | P3 | 313:9137 hoặc 313:9139 | `docs/figma-refs/user/fab-open.png` | F001 FR-104 · F008 FR-101,103 · F005 FR-101 | Done (PASS) | 2 | 01b620e |
-| 9 | U2 Countdown - Prelaunch | Countdown Prelaunch | P4 | 2268:35127 | `docs/figma-refs/user/countdown-prelaunch.png` | F003 FR-101,102,103,201,202,203,204,401,402,403 · BR-001,002,003 · SC-003,004,005,008,011 | Pending | 0 | - |
+| 9 | U2 Countdown - Prelaunch | Countdown Prelaunch | P4 | 2268:35127 | `docs/figma-refs/user/countdown-prelaunch.png` | F003 FR-101,102,103,201,202,203,204,401,402,403 · BR-001,002,003 · SC-003,004,005,008,011 | Done (PASS) | 1 | ed625fa |
 | 10 | U3 Homepage SAA | Homepage SAA | P5 | 2167:9026 | `docs/figma-refs/user/homepage-saa.png` | F004 FR-101,201,202,203,204,205,206,207,403,601 · SC-001,005,007,010 | Pending | 0 | - |
 | 11 | U4 Hệ thống giải | Hệ thống giải | P5 | 313:8436 | `docs/figma-refs/user/awards-system.png` | F004 FR-301,302,303,304,305,401,402 · BR-001,002,003 · SC-001,002,003,004 | Pending | 0 | - |
 | 12 | U10 Tiêu chuẩn cộng đồng | Homepage SAA (footer) | P5 | 1161:8944 | `docs/figma-refs/user/community-standards.png` | F004 FR-103,351,352,601 · SC-006 · F005 FR-210 | Pending | 0 | - |
