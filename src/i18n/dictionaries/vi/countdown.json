@@ -1,0 +1,13 @@
+{
+  "countdown.title": "Sự kiện sẽ bắt đầu sau",
+  "countdown.unit.days": "DAYS",
+  "countdown.unit.hours": "HOURS",
+  "countdown.unit.minutes": "MINUTES",
+  "countdown.comingSoon": "Coming soon",
+  "countdown.spoken.days.one": "{count} ngày",
+  "countdown.spoken.days.other": "{count} ngày",
+  "countdown.spoken.hours.one": "{count} giờ",
+  "countdown.spoken.hours.other": "{count} giờ",
+  "countdown.spoken.minutes.one": "{count} phút",
+  "countdown.spoken.minutes.other": "{count} phút"
+}

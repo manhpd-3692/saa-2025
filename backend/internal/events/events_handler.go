@@ -1,6 +1,7 @@
 package events
 
 import (
+	"context"
 	"errors"
 	"log/slog"
 	"net/http"
@@ -28,6 +29,13 @@ func (h Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		httpx.WriteJSON(w, http.StatusOK, event)
 	case errors.Is(err, ErrNoEvent):
 		httpx.WriteError(w, http.StatusNotFound, CodeEventNotFound, "No event is configured.")
+	case r.Context().Err() != nil && errors.Is(err, context.Canceled):
+		// The caller went away first, e.g. the Next.js launch gate gives up after
+		// 1.5 s and fails open (F003 A1, R23): a slow read, not a server fault.
+		// Any other error stays ERROR even when the caller has also gone, so a
+		// database outage slower than the gate's deadline is still alerted on.
+		slog.WarnContext(r.Context(), "current event request cancelled by the caller", "error", err)
+		httpx.WriteInternalError(w)
 	default:
 		slog.ErrorContext(r.Context(), "read current event", "error", err)
 		httpx.WriteInternalError(w)

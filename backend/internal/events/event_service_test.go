@@ -1,11 +1,14 @@
 package events_test
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"errors"
+	"log/slog"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 	"time"
 
@@ -41,6 +44,38 @@ func TestCurrentEventStatusAroundStartAt(t *testing.T) {
 		got, err := svc.Current(context.Background())
 		if err != nil || got.Status != tc.want || !got.ServerNow.Equal(tc.now) {
 			t.Errorf("%s: %+v, %v; want status %s", name, got, err, tc.want)
+		}
+	}
+}
+
+// F003 A1/R23: the Next.js launch gate abandons a stalled read after 1.5 s. A
+// read cancelled because its caller went away is not a server fault: it is
+// logged as a warning, never as an ERROR. A real database failure is an ERROR,
+// even when the caller has gone too, so a slow outage still reaches alerting.
+func TestEventsHandlerLogLevels(t *testing.T) {
+	var logs bytes.Buffer
+	previous := slog.Default()
+	slog.SetDefault(slog.New(slog.NewJSONHandler(&logs, nil)))
+	t.Cleanup(func() { slog.SetDefault(previous) })
+
+	callerGone, cancel := context.WithCancel(context.Background())
+	cancel()
+	cases := map[string]struct {
+		ctx        context.Context
+		err        error
+		want, deny string
+	}{
+		"caller cancelled the read":         {callerGone, context.Canceled, "WARN", "ERROR"},
+		"database failure":                  {context.Background(), errors.New("down"), "ERROR", "WARN"},
+		"database failure, caller gone too": {callerGone, errors.New("down"), "ERROR", "WARN"},
+	}
+	for name, tc := range cases {
+		logs.Reset()
+		req := httptest.NewRequest(http.MethodGet, "/api/v1/events/current", nil).WithContext(tc.ctx)
+		events.NewHandler(events.NewService(fakeEvents{err: tc.err}, time.Now)).ServeHTTP(httptest.NewRecorder(), req)
+		got := logs.String()
+		if !strings.Contains(got, `"level":"`+tc.want+`"`) || strings.Contains(got, `"level":"`+tc.deny+`"`) {
+			t.Errorf("%s: logged %q; want %s and no %s", name, got, tc.want, tc.deny)
 		}
 	}
 }

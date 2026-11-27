@@ -1,0 +1,13 @@
+{
+  "countdown.title": "Event will start in",
+  "countdown.unit.days": "DAYS",
+  "countdown.unit.hours": "HOURS",
+  "countdown.unit.minutes": "MINUTES",
+  "countdown.comingSoon": "Coming soon",
+  "countdown.spoken.days.one": "{count} day",
+  "countdown.spoken.days.other": "{count} days",
+  "countdown.spoken.hours.one": "{count} hour",
+  "countdown.spoken.hours.other": "{count} hours",
+  "countdown.spoken.minutes.one": "{count} minute",
+  "countdown.spoken.minutes.other": "{count} minutes"
+}

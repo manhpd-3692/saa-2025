@@ -25,8 +25,10 @@ test.describe("Login for a visitor", () => {
     await expect(page).toHaveURL("/login?next=%2Fadmin");
     await page.goto("/");
     await expect(page).toHaveURL("/login");
-    await page.goto("/countdown"); // public; its page arrives in phase 4
-    await expect(page).toHaveURL("/countdown");
+    // Public: never sent to Login itself; after the start (live seed) the page sends visitors
+    // Home (F003 FR-102), and only "/" asks for sign-in, so no `next=%2Fcountdown` here.
+    await page.goto("/countdown");
+    await expect(page).toHaveURL("/login");
     await page.goto("/auth/callback"); // public; no code → back to Login with a reason, not a sign-in redirect
     await expect(page).toHaveURL("/login?error=failed");
   });

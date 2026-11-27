@@ -15,7 +15,7 @@ export const LOCALE_COOKIE_MAX_AGE_SECONDS = 60 * 60 * 24 * 365;
  * Keys carry their namespace as a prefix (`shell.nav.about`), so namespaces can
  * be merged into one client dictionary without collisions.
  */
-export const DICTIONARY_NAMESPACES = ["common", "shell", "auth", "errors"] as const;
+export const DICTIONARY_NAMESPACES = ["common", "shell", "auth", "errors", "countdown"] as const;
 export type DictionaryNamespace = (typeof DICTIONARY_NAMESPACES)[number];
 
 /** Namespaces every page needs on the client: shared words and the app chrome. */
