@@ -1,0 +1,11 @@
+{
+  "app.name": "Sun* Annual Awards 2025",
+  "locale.vi": "VN",
+  "locale.en": "EN",
+  "locale.switch": "Language",
+  "common.loading": "Loading...",
+  "common.retry": "Retry",
+  "common.close": "Close",
+  "error.generic": "Something went wrong. Please try again.",
+  "error.network": "Cannot reach the server. Please try again later."
+}

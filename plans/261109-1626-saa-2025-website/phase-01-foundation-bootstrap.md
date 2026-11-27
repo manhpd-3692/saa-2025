@@ -10,7 +10,7 @@
 - Next.js 16 guides (Read/Grep only): `node_modules/next/dist/docs/01-app/03-api-reference/03-file-conventions/{layout,route-groups,proxy}.md`
 
 ## Overview
-- Priority: P1 (blocks everything). Status: pending. Effort: 10h.
+- Priority: P1 (blocks everything). Status: Complete (2026-11-10). Effort: 10h.
 - Features: system, F001/F002 plumbing. Checklist: none directly; enables Đa ngôn ngữ (i18n plumbing) and all others.
 - Stand up local Supabase, the Go module skeleton with transport/auth middleware, the full schema, sqlc, seed
   scenarios, Next.js root + route-group layout skeletons, i18n plumbing and the Go API client.
@@ -64,12 +64,12 @@ Create (frontend, repo root)
 - `src/lib/supabase/browser-client.ts`, `src/lib/supabase/server-client.ts`
 - `src/lib/api/go-api-server.ts` (5 s AbortSignal.timeout, no-store, Bearer), `src/lib/api/go-api-browser.ts`, `src/lib/api/api-error.ts`
 - `src/app/(shell)/layout.tsx`, `src/app/(minimal)/layout.tsx`, `src/app/admin/layout.tsx` (structural skeletons: render children; chrome in P3)
-- `vitest.config.ts`
+- `vitest.config.mts`
 Modify: `src/app/layout.tsx` (html lang from locale, fonts, LocaleProvider only), `src/app/globals.css` (token block skeleton), `package.json` (deps `@supabase/ssr`, `@supabase/supabase-js`, `vitest`; scripts `test`)
 Create (backend)
 - `backend/go.mod`, `backend/sqlc.yaml` (schema = `../supabase/migrations`, queries = `db/queries`, out = `internal/db`, no interface), `backend/README.md`, `backend/.env.example`
 - `backend/cmd/api/main.go` (config, pool, server timeouts, graceful shutdown), `backend/cmd/api/router.go` (mux, CORS wrap, iterate registrations)
-- `backend/internal/config/config.go` (DATABASE_URL, SUPABASE_URL, FRONTEND_ORIGINS, ADMIN_EMAILS, STORAGE_SERVICE_KEY)
+- `backend/internal/config/config.go` (DATABASE_URL, SUPABASE_URL, FRONTEND_ORIGINS, ADMIN_EMAILS, SUPABASE_SERVICE_KEY — optional until F005)
 - `backend/internal/httpx/{cors_middleware.go, route_classes.go, json_response.go, error_envelope.go}`
 - `backend/internal/auth/{jwks_verifier.go, auth_middleware.go, require_admin.go, auth_context.go}`
 - `backend/internal/dbx/with_tx.go` (tx helper + 5 s ctx), `backend/internal/db/` (sqlc output)
@@ -92,15 +92,15 @@ Delete: none.
 11. Vitest config + first unit tests (resolve-locale, dictionary fallback).
 
 ## Todo List
-- [ ] Supabase config + `db reset` clean
-- [ ] 9 migrations in dependency order
-- [ ] Go server, config, timeouts
-- [ ] CORS + route classes + JWT + RequireAdmin
-- [ ] sqlc + tx helper
-- [ ] Seed runner + 3 scenarios + demo activity
-- [ ] testkit (JWKS issuer, DB helper)
-- [ ] Next root/route-group skeletons, Supabase clients, Go API clients
-- [ ] i18n plumbing + Vitest
+- [x] Supabase config + `db reset` clean
+- [x] 9 migrations in dependency order
+- [x] Go server, config, timeouts
+- [x] CORS + route classes + JWT + RequireAdmin
+- [x] sqlc + tx helper
+- [x] Seed runner + 3 scenarios + demo activity
+- [x] testkit (JWKS issuer, DB helper)
+- [x] Next root/route-group skeletons, Supabase clients, Go API clients
+- [x] i18n plumbing + Vitest
 
 ## Success Criteria
 - `supabase db reset && go run ./cmd/seed` works for each scenario; `go build ./...`, `go vet ./...`, `npm run build`, `npm run lint` pass.
@@ -129,6 +129,28 @@ Delete: none.
 ## Rollback
 - Pre-release: revert phase commits, `supabase db reset`. Nothing user-facing changes.
 
+## Implementation Notes and Deviations
+Recorded at completion (2026-11-10). Where this list and the text above differ, the code and its tests are authoritative.
+
+- **Service key name:** `SUPABASE_SERVICE_KEY` replaces `STORAGE_SERVICE_KEY` (F002 § 4.6 outranks this file). Optional at boot until F005 (see Next Steps).
+- **Extra env vars:** `API_ADDR`, `LOCAL_OWNER_DATABASE_URL` (local owner role for seed and test fixtures), `SAA_API_DB_PASSWORD` (dev `saa_api` login, consumed by `backend/scripts/dev-db-role.sql`). Names only in `.env.example`.
+- **Go directive:** `go 1.25.0` (plan said 1.22+). Routing still uses Go 1.22 ServeMux patterns.
+- **Toolchain:** Go, Supabase CLI and sqlc run inside WSL Ubuntu on the Windows dev machine.
+- **Root layout:** `export const instant = false` in `src/app/layout.tsx`. `<html lang>` depends on the request locale, so every route renders dynamically and instant-navigation validation is off. Revisit in Phase 3 when Login can be static.
+- **Grants:** `service_role` is revoked on every business table, the view, and default privileges (migration 9). Stricter than R21; Storage uses its own DB role.
+- **Token rules:** tokens without `kid` are rejected with 401 (SC-008 matrix). Role comes only from `users.role`.
+- **Route-class guard:** `backend/cmd/api/route_class_guard_test.go` fails when a `/api/v1/*` route answers without a token and is not on the public allow-list. A plain `mux.Handle` can no longer slip through as PUBLIC.
+- **`email_verified`:** not read from `user_metadata` (client-writable). The verifier checks provider and domain only. Provisioning must verify `email_verified` from `auth.identities` (gap log C08). That is Phase 2 work.
+- **Review fixes applied:** https required for non-loopback Supabase and JWKS URLs (W1); panic recovery inside CORS (W2); `kudos(created_at)` and `kudos(status, created_at)` indexes (W4); `.mcp.json` and agent memory kept out of the commit (W7); `vitest.config.mts` (S4).
+- **Local DB hazards:** re-run `backend/scripts/dev-db-role.sql` after every `supabase db reset`. Integration tests truncate business tables, so reseed (`SEED_SCENARIO=live`) afterwards.
+
 ## Next Steps
 - Phase 2 builds the risk path on this skeleton.
 - Open items: confirm BYPASSRLS behaviour on target host (no hosting target in specs).
+- Carry-overs to Phase 2 (owner: Phase 2 implementer, assigned by the main agent):
+  1. **C08 provision check.** `POST /api/v1/me/provision` verifies `email_verified` from `auth.identities` before any `users` write. Done when a test shows a token with `user_metadata.email_verified=true` and an unverified identity is refused with 403 `domain_not_allowed`.
+  2. **Session refresh (reviewer W6).** `proxy.ts` refreshes the session and forwards renewed cookies. `/auth/callback` gets its own cookie-writing server client; the read-only one in `src/lib/supabase/server-client.ts` cannot serve it. Done when an expired access token on a server-rendered page still leaves the user signed in after the refresh-token rotation.
+  3. **Service key required where used.** Make `SUPABASE_SERVICE_KEY` mandatory when the upload service is constructed (F005), not at boot. Done when the upload service refuses to start with the key missing and boot still succeeds without it.
+  4. **Split `backend/cmd/api/router_test.go`** (193 lines, near the 200-line limit) before adding Phase 2 route tests. Done when every file under `backend/cmd/api/` is under 200 lines and `go test ./...` passes.
+
+- Reviewer suggestions still open (fold into Phase 2 or Phase 14): S5 catch-all JSON 404/405 envelope; S6 narrow PostgREST `schemas` in `supabase/config.toml`; S7 pooler/prepared-statement note + `statement_timeout` for `saa_api`.

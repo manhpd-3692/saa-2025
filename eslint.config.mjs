@@ -12,6 +12,10 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Agent kit, plans and the Go backend are not part of the Next.js app.
+    ".claude/**",
+    "plans/**",
+    "backend/**",
   ]),
 ]);
 

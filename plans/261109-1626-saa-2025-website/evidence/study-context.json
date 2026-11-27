@@ -1,0 +1,17 @@
+{
+  "task": "Phase 1 foundation: local Supabase, 9 migrations, Go API skeleton with CORS/route classes/JWT/RequireAdmin, sqlc, seeds, Next.js i18n plumbing, API clients and layout skeletons",
+  "mode": "code",
+  "acceptanceCriteria": [
+    "R06 CORS",
+    "R21 JWT allow-list/iss/aud/exp/nbf",
+    "R21 deny-all RLS + grants",
+    "R23 timeouts",
+    "R16 seed scenarios",
+    "N03 partial unique",
+    "N09 route classes",
+    "role only from users.role"
+  ],
+  "touchpoints": ["supabase/", "backend/", "src/i18n/", "src/lib/", "src/app/layout.tsx", "src/app/(shell)/layout.tsx", "src/app/(minimal)/layout.tsx", "src/app/admin/layout.tsx", "package.json", "eslint.config.mjs", ".gitignore", "vitest.config.mts"],
+  "blastRadius": ["every later phase: schema, auth chain, API clients, layouts"],
+  "contracts": ["Go /api/v1 error envelope", "route classes PUBLIC/IDENTITY/PROFILE/ADMIN", "database schema", "locale cookie saa_locale"]
+}

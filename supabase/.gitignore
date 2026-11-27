@@ -1,0 +1,11 @@
+# Supabase
+.branches
+.temp
+
+# dotenvx
+.env.keys
+.env.local
+.env.*.local
+
+# SAA 2025: local asymmetric JWT signing keys (private keys, never commit)
+signing_keys.json

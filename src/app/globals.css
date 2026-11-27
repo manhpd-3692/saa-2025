@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+/*
+ * Design token skeleton. Brand colors, type scale and spacing are filled in
+ * from the Figma variables in Phase 3; only the scaffold defaults live here now.
+ */
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -10,6 +14,7 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  /* Placeholder token groups (add tokens as `--color-*`, `--radius-*`, `--spacing-*`): */
 }
 
 @media (prefers-color-scheme: dark) {

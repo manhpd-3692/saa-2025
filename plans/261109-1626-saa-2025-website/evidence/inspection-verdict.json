@@ -1,0 +1,15 @@
+{ "score": 8, "criticalCount": 0, "decision": "SEALED",
+  "acceptanceCovered": ["R06 CORS", "R21 JWT allow-list/iss/aud/exp/nbf", "R21 deny-all RLS + grants + saa_api NOLOGIN", "R23 timeouts", "R16 seed scenarios + loopback guard", "N03 partial unique", "N09 route classes", "role only from users.role", "migration schema vs F002/F003/F005/F008/F009/F011/F012"],
+  "regressionChecked": ["go build/vet/test", "go integration subset (grants, RLS, JWKS)", "tsc", "eslint", "vitest", "next build"],
+  "contractStatus": "OK", "refuted": [], "unproven": [], "reachableRegressions": [],
+  "findings": [
+    { "severity": "Warning", "category": "Security", "location": "backend/internal/config/config.go:98-108", "summary": "SUPABASE_URL/JWKS URL accepted http on non-loopback hosts (fixed: config_url_checks.go)", "disposition": "Accept" },
+    { "severity": "Warning", "category": "Reliability", "location": "backend/cmd/api/router.go:45", "summary": "no panic recovery middleware (fixed: httpx.Recover inside CORS)", "disposition": "Accept" },
+    { "severity": "Warning", "category": "Security", "location": "backend/internal/auth/jwks_verifier.go:86-87", "summary": "email_verified read from user_metadata (fixed: provider-only eligibility, C08 for provision)", "disposition": "Accept" },
+    { "severity": "Warning", "category": "Performance", "location": "supabase/migrations/20261110070238_kudos_uploads_images_hashtags.sql:25-26", "summary": "missing kudos status/created_at indexes (fixed)", "disposition": "Accept" },
+    { "severity": "Warning", "category": "Config", "location": "backend/internal/config/config.go:61", "summary": "service key required at boot, no redaction (fixed: optional + LogValue)", "disposition": "Accept" },
+    { "severity": "Warning", "category": "Correctness", "location": "src/lib/supabase/server-client.ts:9", "summary": "wrong refresh comment (fixed)", "disposition": "Accept" },
+    { "severity": "Warning", "category": "Scope", "location": ".mcp.json:1", "summary": "stray untracked files excluded from commit by explicit staging", "disposition": "Accept" },
+    { "severity": "Warning", "category": "Security", "location": "backend/cmd/api/router.go:19-31", "summary": "route-class wrapping not enforced (fixed: route_class_guard_test.go)", "disposition": "Accept" },
+    { "severity": "Suggestion", "category": "Framework", "location": "src/app/layout.tsx:26", "summary": "instant=false documented opt-out; revisit Phase 3", "disposition": "Defer" }
+  ] }

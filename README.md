@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SAA 2025 — Sun* Annual Awards website
 
-## Getting Started
+Internal website for Sun* Annual Awards 2025 ("Root Further"): countdown and launch gate,
+homepage, award system, Sun* Kudos (live board, hearts, secret boxes), Sunner profiles,
+notifications and an admin area. Sign-in is Google OAuth restricted to `@sun-asterisk.com`.
 
-First, run the development server:
+## Stack
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+| Part | Where | Role |
+|---|---|---|
+| Frontend | repo root (`src/`) | Next.js 16 (App Router), React 19, Tailwind 4. Presentation only: it never reads or writes the database. |
+| API | `backend/` | Go REST API, `/api/v1`. Owns every business read/write and all authorization. |
+| Data/Auth | `supabase/` | Local Supabase: Google OAuth, Postgres (migrations + seed), private Storage. |
+
+Architecture: [`docs/system-architecture.md`](docs/system-architecture.md).
+
+## Prerequisites
+
+- Node.js and npm (frontend)
+- Docker (local Supabase)
+- Go 1.25+, Supabase CLI, sqlc. On the reference machine these run inside WSL Ubuntu; see the
+  toolchain section of [`backend/README.md`](backend/README.md).
+
+## Quick start
+
+Full first-time setup (signing key, Google OAuth, `.env` values) is in
+[`backend/README.md`](backend/README.md) under "Local Supabase (first time)". Short version, from the
+repo root:
+
+```sh
+supabase start                                        # migrations + units seed + kudo-images bucket
+# give the saa_api role a login (re-run after every `supabase db reset`)
+set -a; . backend/.env; set +a
+docker exec -i supabase_db_saa-2025 psql -U postgres -d postgres -v ON_ERROR_STOP=1 \
+  -v saa_api_password="$SAA_API_DB_PASSWORD" < backend/scripts/dev-db-role.sql
+(cd backend && set -a && . ./.env && set +a && go run ./cmd/seed)   # SEED_SCENARIO=prelaunch|live|after-ceremony
+(cd backend && set -a && . ./.env && set +a && go run ./cmd/api)    # API on :8080, GET /healthz
+cp .env.example .env.local                            # fill the NEXT_PUBLIC_* and API_BASE_URL values
+npm install
+npm run dev                                           # frontend
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Frontend variables (names only, see `.env.example`): `NEXT_PUBLIC_SUPABASE_URL`,
+`NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, `NEXT_PUBLIC_API_BASE_URL`, `API_BASE_URL`. Only the
+publishable key belongs in the frontend; never a service/secret key.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Command | What it does |
+|---|---|
+| `npm run dev` | Next.js dev server |
+| `npm run build` / `npm start` | Production build / serve it |
+| `npm run lint` | ESLint |
+| `npm run typecheck` | `tsc --noEmit` |
+| `npm test` | Vitest (`vitest run`) |
 
-## Learn More
+Backend checks (`go build`, `go vet`, `go test`, integration tests, `sqlc generate`) are listed in
+[`backend/README.md`](backend/README.md).
 
-To learn more about Next.js, take a look at the following resources:
+## Documentation
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [`docs/system-architecture.md`](docs/system-architecture.md) — architecture as implemented
+- [`docs/SCREENFLOW.md`](docs/SCREENFLOW.md) — screen flow overview; per-screen specs in `docs/screen-specs/`
+- [`backend/README.md`](backend/README.md) — Go API: layout, local setup, route classes, adding routes
+- [`plans/261109-1626-saa-2025-website/plan.md`](plans/261109-1626-saa-2025-website/plan.md) — phased implementation plan

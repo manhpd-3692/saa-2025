@@ -106,6 +106,7 @@ Source: `reports/codex-review-specs-and-plans.md` (findings) and `reports/codex-
 | C05 | `users.icons_completed_at` is added by F008's migration to F002's `users` table | F002, F008 |
 | C06 | Unverified email / non-Google provider reuses the `domain_not_allowed` refusal; claim locations (`app_metadata.provider`, `user_metadata.email_verified`) to be confirmed against a real local Supabase token at build | F002 |
 | C07 | X07's `TierCrossed` wording is superseded by R10 (transition computed in F005's create transaction) | F005, F008, F009 |
+| C08 | `user_metadata.email_verified` is client-writable (`auth.updateUser({data})`), so the Go API never trusts it (supersedes the claim location in C06). Per-request eligibility uses only server-controlled claims: domain of `email` and `app_metadata.provider == "google"` (when `app_metadata.providers` is present it must contain only `google`). `POST /api/v1/me/provision` must verify `email_verified` server-side from `auth.identities.identity_data` of the Google identity before inserting the `users` row (Phase 2) | F002 |
 
 ## Codex re-review fixes N01–N12 (2026-11-10)
 

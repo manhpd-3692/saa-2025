@@ -1,7 +1,7 @@
 ---
 title: "SAA 2025 website — Next.js 16 frontend + Go API + Supabase"
 description: "Build all 12 release-one features (F001–F012) on the decided Next.js/Go/Supabase stack, proving the risky contracts first."
-status: pending
+status: in-progress
 priority: P1
 effort: 132h
 branch: main
@@ -28,7 +28,7 @@ box idempotency and moderation versioning on real code → feature phases in the
 
 | Phase | Name | Status |
 |-------|------|--------|
-| 1 | [Foundation and bootstrap](./phase-01-foundation-bootstrap.md) | Pending |
+| 1 | [Foundation and bootstrap](./phase-01-foundation-bootstrap.md) | Complete |
 | 2 | [End-to-end risk path](./phase-02-end-to-end-risk-path.md) | Pending |
 | 3 | [Auth, app shell, i18n, 403/404](./phase-03-auth-shell-i18n-error-pages.md) | Pending |
 | 4 | [Countdown and launch gate](./phase-04-countdown-launch-gate.md) | Pending |

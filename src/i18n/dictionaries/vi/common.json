@@ -1,0 +1,11 @@
+{
+  "app.name": "Sun* Annual Awards 2025",
+  "locale.vi": "VN",
+  "locale.en": "EN",
+  "locale.switch": "Ngôn ngữ",
+  "common.loading": "Đang tải...",
+  "common.retry": "Thử lại",
+  "common.close": "Đóng",
+  "error.generic": "Đã có lỗi xảy ra. Vui lòng thử lại.",
+  "error.network": "Không kết nối được máy chủ. Vui lòng thử lại sau."
+}
