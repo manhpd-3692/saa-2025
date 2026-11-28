@@ -4,6 +4,25 @@ What each delivered phase changed, newest first. Phase scope and status live in
 [`plans/261109-1626-saa-2025-website/plan.md`](../plans/261109-1626-saa-2025-website/plan.md);
 current structure in [`system-architecture.md`](system-architecture.md).
 
+## Phase 7: Kudos Live board and View Kudo, F006 (commit `2f44032`, 2026-11-28)
+
+- Added: `/kudos` board: key visual, Highlight carousel (top 5 by weighted hearts, Hashtag and Phòng ban
+  filters), Spotlight word cloud with search and ticker, All Kudos infinite feed and sidebar (own stats,
+  latest gift recipients). Each section loads, empties, fails and retries on its own.
+- Added: View Kudo as an overlay over the board (intercepted `@modal/(.)[id]` route) and as a direct page
+  `/kudos/[id]`, with Copy Link; avatar hover card with "Gửi KUDO" preselecting the recipient.
+- Added: Go routes `GET /api/v1/kudos`, `/kudos/highlight`, `/kudos/filter-options`, `/kudos/spotlight`,
+  `/kudos/sidebar` and `GET /api/v1/users/{id}/hover-card`; opaque keyset cursor (400 `invalid_cursor`).
+- Added: migration `20261128070000_kudo_board_read_indexes` (two partial indexes); 11 migrations in total.
+- Changed: a missing, non-uuid or hidden kudo shows the root 404 in the minimal chrome inside the shell;
+  `MinimalChrome` takes `bodyAs`, and the shell hides its own chrome under a `data-minimal-page`.
+- Changed: `next.config.ts` allows the signed `kudo-images` Storage path for `next/image`.
+- Changed: seed stores 16 demo kudo images through the local Storage API, so it needs `SUPABASE_URL` and
+  `SUPABASE_SERVICE_KEY` and refuses a non-loopback Storage host; demo data is 16 users and 30 kudos.
+- Added: dictionary namespace `kudos-board` (vi and en); Playwright specs `e2e/kudos-board.spec.ts` and
+  `e2e/kudos-board-images-and-actions.spec.ts`; Vitest and Go tests for cursor, card builder and reads.
+- Docs: Kudos Live board section in `system-architecture.md`; route table in `backend/README.md`.
+
 ## Phase 6: write, edit and send kudos, F005 (commit `7a31bbd`, 2026-11-28)
 
 - Added: compose/edit modal (Tiptap) opened from the FAB: recipient combobox, mention suggestions, hashtag

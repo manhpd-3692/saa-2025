@@ -96,7 +96,7 @@ Read-only reuse: `src/features/countdown/{countdown-display.tsx, use-countdown.t
 | Copy drift from Figma (RISK-01) | M | M | Open, partly mitigated | Transcribed verbatim; Figma copy issues in Open Items 5 |
 | Missing EN content | H | L | Open | VN fallback per AD04 (Open Item 2) |
 | Artwork export quality/size | M | L | Realised (crops) | `next/image` fixed sizes in place; real exports pending (Open Item 3) |
-| `/kudos` CTAs 404 until F006 | H | M | Open until phase 07 | Re-verify when board lands (Open Item 1) |
+| `/kudos` CTAs 404 until F006 | H | M | Closed (phase 07, 2f44032) | Re-verified: both CTAs land on the board (Open Item 1) |
 | Event venue/livestream seed placeholders | M | M | Open | Real values before launch (Open Item 4) |
 | WSL/local environment hang | M | M | Closed | Recovered via `wsl --shutdown`; DB reseeded; checks re-run |
 
@@ -106,7 +106,7 @@ Read-only reuse: `src/features/countdown/{countdown-display.tsx, use-countdown.t
 ## Open Items
 | # | Item | Owner | Done when |
 |---|---|---|---|
-| 1 | `/kudos` CTAs 404 until F006 ships. Re-verify Homepage and Awards links to `KUDOS_BOARD_PATH`; add the matching note to phase-07 Key Insights | Orchestrator (main agent); phase-07 owner | Board route returns 200 from both CTAs in e2e |
+| 1 | `/kudos` CTAs 404 until F006 ships. Re-verify Homepage and Awards links to `KUDOS_BOARD_PATH`; add the matching note to phase-07 Key Insights | Orchestrator (main agent); phase-07 owner | **Closed (2f44032):** board route returns 200 from both CTAs in e2e (`verify-kudos-live-board.md` round 2, FR-101, e2e test 16) |
 | 2 | English copy not supplied; VN fallback in place (AD04) | Content owner (client) | EN dictionaries supplied and reviewed, or fallback accepted in writing |
 | 3 | Backgrounds are painted-out crops | Orchestrator (UI implementer) | Figma exports replace `public/images/home/*` and `public/images/awards/*`; 1280 px check re-run |
 | 4 | Event venue and livestream text are seed placeholders | Content owner; Admin campaign settings (P13) | Real values entered before launch |

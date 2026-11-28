@@ -1,22 +1,21 @@
 { "score": 9.5, "criticalCount": 0, "decision": "SEALED",
   "acceptanceCovered": [
-    "U6 Viet Kudo: PASS after fix round 1 (reports/verify-write-kudo.md); board part of FR-401 is a dependency on F006",
-    "Gui loi chuc Kudos variant 1: PASS after fix round 1 (reports/verify-write-kudo-variant-1.md)",
-    "Gui loi chuc Kudos variant 2: PASS after fix round 1 (reports/verify-write-kudo-variant-2.md)",
-    "Viet KUDO loi chua dien du: PASS round 0 (reports/verify-write-kudo-validation-error.md)",
-    "Dropdown list nguoi nhan: PASS round 0 (reports/verify-write-kudo-dropdown-receiver.md)",
-    "Dropdown list hashtag: PASS round 0 (reports/verify-write-kudo-dropdown-hashtag.md)",
-    "Addlink Box: PASS after fix round 1 (reports/verify-write-kudo-addlink-box.md)",
-    "An danh: PASS round 0 (reports/verify-write-kudo-anonymous.md)",
-    "Man sua bai viet edit mode: PASS after fix round 1 (reports/verify-write-kudo-edit-mode.md); spam refusal depends on F011"
+    "U5 Sun Kudos Live board: PASS round 0 (reports/verify-kudos-live-board.md); FR-403 first-paint errors deferred to P14",
+    "U7 View Kudo: PASS after fix round 1 (reports/verify-view-kudo.md)",
+    "Dropdown Hashtag filter: PASS round 0 (reports/verify-kudos-dropdown-hashtag-filter.md)",
+    "Dropdown Phong ban: PASS round 0 (reports/verify-kudos-dropdown-department.md)",
+    "Hover Avatar info user: PASS round 0 (reports/verify-hover-avatar-info.md)",
+    "Infor HoverAvatar: PASS round 0 (reports/verify-hover-avatar-info-2.md)",
+    "Hashtag group: PASS after fix round 1 (reports/verify-hashtag-group.md)",
+    "KUDO card: PASS after fix round 1 (reports/verify-kudo-card.md)"
   ],
-  "regressionChecked": ["gofmt", "go vet", "go test", "go test -tags integration", "tsc", "eslint", "vitest 303", "playwright e2e full suite 73", "next build", "logs/web.log and logs/api.log no unexpected ERROR"],
+  "regressionChecked": ["gofmt", "go vet", "go test", "go test -tags integration", "tsc", "eslint", "vitest 317", "playwright e2e full suite 90", "next build", "logs/web.log and logs/api.log no new ERROR"],
   "contractStatus": "OK", "refuted": [], "unproven": [], "reachableRegressions": [],
   "findings": [
-    { "severity": "Warning", "category": "Reliability", "location": "backend/internal/upload/pending_delete_cleanup.go:1", "summary": "W1 post-commit cleanup blocked PATCH (fixed: async cleaner); W2 storage I/O under row lock and N1 orphan risk (fixed: mark pending_delete, then object, then row; migration 20261128060000)", "disposition": "Accept" },
-    { "severity": "Warning", "category": "Correctness", "location": "src/features/kudo-compose/kudo-compose-form-state.ts:1", "summary": "W3 double submit (fixed: ref guard, e2e proven)", "disposition": "Accept" },
-    { "severity": "Warning", "category": "Accessibility", "location": "src/features/kudo-compose/dialog-focus-trap.ts:1", "summary": "W5 focus trap and restore (fixed, e2e); W4 Escape same as Huy per FR-405", "disposition": "Accept" },
-    { "severity": "Warning", "category": "Test coverage", "location": "backend/internal/kudo/kudo_edit_race_integration_test.go:1", "summary": "W6 race tests edit/spam and delete/attach (added)", "disposition": "Accept" },
-    { "severity": "Suggestion", "category": "Product", "location": "backend/internal/upload/upload_handler.go:31", "summary": "PendingUploadQuota 20/24h not in spec; needs product decision", "disposition": "Defer" },
-    { "severity": "Suggestion", "category": "Schema", "location": "supabase/migrations/20261128060000_kudo_uploads_unsaved_pending_delete.sql:1", "summary": "S8 both-or-neither check for pending_delete columns plus rollback note", "disposition": "Defer" }
+    { "severity": "Warning", "category": "Security", "location": "src/features/kudos-board/load-board-sections.ts:55", "summary": "W1 detail id not validated before Go URL (fixed: parseKudoIdParam requires UUID, notFound otherwise)", "disposition": "Accept" },
+    { "severity": "Warning", "category": "Performance", "location": "backend/db/queries/kudo_read.sql:20", "summary": "W2 heart-state aggregate per page (fixed for feed: OFFSET 0 fence, 40.9 to 0.17 ms); highlight full aggregate by design RISK-02", "disposition": "Accept" },
+    { "severity": "Warning", "category": "Privacy", "location": "src/features/kudos-board/hover-card-cache.ts:1", "summary": "W3 hover cache shared across viewers (fixed: keyed by signed-in user)", "disposition": "Accept" },
+    { "severity": "Warning", "category": "Performance", "location": "supabase/migrations/20261128070000_kudo_board_read_indexes.sql:1", "summary": "W4 missing indexes (added; spotlight index shows no measured gain, S-A)", "disposition": "Accept" },
+    { "severity": "Suggestion", "category": "Security", "location": "backend/cmd/seed/seed_kudo_images.go:1", "summary": "S-C seed http client follows redirects with apikey; set CheckRedirect (local-only seed)", "disposition": "Defer" },
+    { "severity": "Suggestion", "category": "Accessibility", "location": "src/app/(shell)/kudos/not-found.tsx:1", "summary": "S-B kudo 404 loses banner/footer landmarks inside shell main", "disposition": "Defer" }
   ] }

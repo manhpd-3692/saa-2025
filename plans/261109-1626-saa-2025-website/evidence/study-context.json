@@ -1,11 +1,11 @@
 {
-  "task": "Phase 6: write, edit and send kudos (F005) - compose/edit modal, recipient search, hashtags, edit PATCH with anonymity redaction, upload delete and purge",
+  "task": "Phase 7: Kudos live board and kudo detail (F006) - highlight carousel with filters, spotlight, keyset feed, sidebar, detail overlay and page, avatar hover card",
   "mode": "code",
   "acceptanceCriteria": [
-    "U6 Viet Kudo", "Gui loi chuc Kudos variant 1", "Gui loi chuc Kudos variant 2", "Viet KUDO loi chua dien du",
-    "Dropdown list nguoi nhan", "Dropdown list hashtag", "Addlink Box", "An danh", "Man sua bai viet edit mode"
+    "U5 Sun Kudos Live board", "U7 View Kudo", "Dropdown Hashtag filter", "Dropdown Phong ban",
+    "Hover Avatar info user", "Infor HoverAvatar", "Hashtag group", "KUDO card"
   ],
-  "touchpoints": ["backend/internal/kudo/", "backend/internal/upload/", "backend/internal/user/", "backend/cmd/api/wire_kudo_compose.go", "backend/cmd/purge-uploads/", "backend/db/queries/{kudo_write,uploads,user_search}.sql", "supabase/migrations/20261128060000_kudo_uploads_unsaved_pending_delete.sql", "src/features/kudo-compose/", "src/app/(shell)/layout.tsx", "src/components/shell/{shell-actions-context,floating-action-button}.tsx", "src/i18n/", "e2e/write-kudo.spec.ts", "e2e/browser-transport-smoke.spec.ts"],
-  "blastRadius": ["notifications.params (anonymity redaction)", "kudo_uploads state machine and check constraints", "shell FAB focus behaviour", "locale switcher lock while compose open"],
-  "contracts": ["GET /api/v1/users/search", "GET /api/v1/hashtags", "GET /api/v1/kudos/{id}/edit", "PATCH /api/v1/kudos/{id}", "DELETE /api/v1/uploads/{uploadId} 204/409/404", "visible-text ALG-002 parity Go and TS (shared vectors)", "R02/N01 redaction never restored", "N02 pending_delete never reusable"]
+  "touchpoints": ["backend/internal/kudo/", "backend/internal/user/user_hover_card_handler.go", "backend/cmd/api/wire_kudo_board.go", "backend/db/queries/{kudo_read,user_hover_card}.sql", "backend/cmd/seed/", "backend/db/seeds/", "supabase/migrations/20261128070000_kudo_board_read_indexes.sql", "src/app/(shell)/kudos/", "src/app/(shell)/layout.tsx", "src/features/kudos-board/", "src/components/shell/{minimal-chrome,shell-actions-context}.tsx", "src/features/kudo-compose/", "next.config.ts", "e2e/kudos-board*.spec.ts"],
+  "blastRadius": ["homepage and awards /kudos links", "P6 edit entry and receiver prefill", "shell chrome hidden on kudo not-found", "seed now uploads Storage images"],
+  "contracts": ["GET /api/v1/kudos (keyset cursor)", "GET /api/v1/kudos/highlight", "GET /api/v1/kudos/spotlight", "GET /api/v1/kudos/sidebar", "GET /api/v1/kudos/filter-options", "GET /api/v1/users/{id}/hover-card", "KudoCard DTO R15", "R02 anonymous masking", "uniform not-found SC-006"]
 }

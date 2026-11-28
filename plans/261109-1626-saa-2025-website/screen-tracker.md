@@ -67,14 +67,14 @@ P2 (đường rủi ro đầu-cuối: provision, JWT, `/me`...) không có màn 
 | 19 | Addlink Box | Viết Kudos | P6 | 1002:12917 | `docs/figma-refs/user/write-kudo-addlink-box.png` | F005 FR-203,209 · SC-004 | Done (PASS) | 1 | 7a31bbd |
 | 20 | Ẩn danh | Viết Kudos | P6 | 2099:9148 | `docs/figma-refs/user/write-kudo-anonymous.png` | F005 FR-207,404,604 · BR-005 · SC-006,007 | Done (PASS) | 0 | 7a31bbd |
 | 21 | Màn sửa bài viết - edit mode | Viết Kudos | P6 | 1949:13746 | `docs/figma-refs/user/write-kudo-edit-mode.png` | F005 FR-102,403,404,406,602 · BR-006,008 · SC-003,008 | Done (PASS) | 1 | 7a31bbd |
-| 22 | U5 Sun* Kudos - Live board | Sun* Kudos | P7 | 2940:13431 | `docs/figma-refs/user/kudos-live-board.png` | F006 FR-001,101,201..211,403,601 · BR-001,003,004,005 · SC-001,003,004,009 | Pending | 0 | - |
-| 23 | U7 View Kudo | Sun* Kudos | P7 | 520:18779 | `docs/figma-refs/user/view-kudo.png` | F006 FR-102,104,401,404,405 · BR-006,007 · SC-006 | Pending | 0 | - |
-| 24 | Dropdown Hashtag filter | Sun* Kudos | P7 | 721:5580 | `docs/figma-refs/user/kudos-dropdown-hashtag-filter.png` | F006 FR-203 · BR-003 · SC-004 | Pending | 0 | - |
-| 25 | Dropdown Phòng ban | Sun* Kudos | P7 | 721:5684 | `docs/figma-refs/user/kudos-dropdown-department.png` | F006 FR-204 · BR-003 · SC-004 | Pending | 0 | - |
-| 26 | Hover Avatar info user | Sun* Kudos | P7 | 721:5827 | `docs/figma-refs/user/hover-avatar-info.png` | F006 FR-103,402 · BR-002 · SC-002 | Pending | 0 | - |
-| 27 | Infor - HoverAvatar | Sun* Kudos | P7 | 2268:35101 | `docs/figma-refs/user/hover-avatar-info-2.png` | F006 FR-103,402 · BR-002 · SC-002,007 | Pending | 0 | - |
-| 28 | Hashtag group | Sun* Kudos | P7 | 1002:13094 | `docs/figma-refs/user/hashtag-group.png` | F006 FR-002 · F005 FR-002,205 · BR-002 | Pending | 0 | - |
-| 29 | KUDO card (component, không có trong SCREENFLOW) | Sun* Kudos | P7 | - | `docs/figma-refs/user/kudo-card.png` | F006 FR-002,003,211 · BR-001,002 · SC-002,008 · F008 FR-401,408 | Pending | 0 | - |
+| 22 | U5 Sun* Kudos - Live board | Sun* Kudos | P7 | 2940:13431 | `docs/figma-refs/user/kudos-live-board.png` | F006 FR-001,101,201..211,403,601 · BR-001,003,004,005 · SC-001,003,004,009 | Done (PASS) | 0 | 2f44032 |
+| 23 | U7 View Kudo | Sun* Kudos | P7 | 520:18779 | `docs/figma-refs/user/view-kudo.png` | F006 FR-102,104,401,404,405 · BR-006,007 · SC-006 | Done (PASS) | 1 | 2f44032 |
+| 24 | Dropdown Hashtag filter | Sun* Kudos | P7 | 721:5580 | `docs/figma-refs/user/kudos-dropdown-hashtag-filter.png` | F006 FR-203 · BR-003 · SC-004 | Done (PASS) | 0 | 2f44032 |
+| 25 | Dropdown Phòng ban | Sun* Kudos | P7 | 721:5684 | `docs/figma-refs/user/kudos-dropdown-department.png` | F006 FR-204 · BR-003 · SC-004 | Done (PASS) | 0 | 2f44032 |
+| 26 | Hover Avatar info user | Sun* Kudos | P7 | 721:5827 | `docs/figma-refs/user/hover-avatar-info.png` | F006 FR-103,402 · BR-002 · SC-002 | Done (PASS) | 0 | 2f44032 |
+| 27 | Infor - HoverAvatar | Sun* Kudos | P7 | 2268:35101 | `docs/figma-refs/user/hover-avatar-info-2.png` | F006 FR-103,402 · BR-002 · SC-002,007 | Done (PASS) | 0 | 2f44032 |
+| 28 | Hashtag group | Sun* Kudos | P7 | 1002:13094 | `docs/figma-refs/user/hashtag-group.png` | F006 FR-002 · F005 FR-002,205 · BR-002 | Done (PASS) | 1 | 2f44032 |
+| 29 | KUDO card (component, không có trong SCREENFLOW) | Sun* Kudos | P7 | - | `docs/figma-refs/user/kudo-card.png` | F006 FR-002,003,211 · BR-001,002 · SC-002,008 · F008 FR-401,408 | Done (PASS) | 1 | 2f44032 |
 | 30 | Hover campaign (x2 heart) | Like Kudos | P8 | 3241:15021 | `docs/figma-refs/user/hover-campaign.png` | F008 FR-204,401,402,408 · BR-001,002,003,004 · SC-001,002,003 | Pending | 0 | - |
 | 31 | Thể lệ UPDATE (rules panel) | Sun* Kudos | P8 | 3204:6051 | `docs/figma-refs/user/rules-panel.png` | F008 FR-101,103,201,202 · BR-005,009 · SC-005,008 | Pending | 0 | - |
 | 32 | Hover danh hiệu New Hero | (ngoài checklist) | P8 | 3241:14991 [H] | `docs/figma-refs/user/hover-badge-new-hero.png` | F008 FR-002,203 · BR-005 · SC-005 | Pending | 0 | - |

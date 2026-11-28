@@ -151,7 +151,7 @@ Commit `7a31bbd` (pushed to `origin/feat/saa-screens`). Screen tracker rows 13â€
 | # | Item | Owner | Done when |
 |---|------|-------|-----------|
 | 1 | Pending upload quota is 20 per 24 h (`backend/internal/upload/upload_handler.go:31`), not in spec. Abandoned windows block compose for up to 24 h with no UI to clear it (hit during verify run) | User (product decision) | Quota written into the spec, or purge-on-close chosen; decision in `clarifications.md`; verify C1 closed |
-| 2 | Board part of FR-401; FR-102 entry from detail view; FR-404, FR-604 and SC-007 read side | P7 owner (main agent until P7 starts) | `GET /kudos` returns 200 with the saved kudo; detail pencil calls `runAction("compose", {kudoId})`; read-side e2e passes |
+| 2 | Board part of FR-401; FR-102 entry from detail view; FR-404, FR-604 and SC-007 read side | P7 owner (main agent until P7 starts) | **Partly closed in P7 (2f44032):** board part of FR-401 and detail-view entry point (pencil calls `runAction("compose", {kudoId})`, `kudo-card.tsx:80`; e2e test 15). Still open: FR-604 and SC-007 read side, which no P7 report shows as verified |
 | 3 | FR-602 spam refusal (PATCH on spam kudo â†’ 409); F011 admin spam action not built | P12 owner (F011 admin) | Admin spam action sets the flag; e2e shows the edit refused |
 | 4 | Hint alignment: centred in frame 13, left in variants | User (designer acceptance) | Designer accepts left alignment in `clarifications.md`, or implementation is changed to centred |
 | 5 | Review S2: client-authored mention text can spoof a name. Review S3: user search lets callers probe email fragments | Main agent (P6 implementer) | Each applied, or closed with reason, in this table |

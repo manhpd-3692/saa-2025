@@ -1,7 +1,7 @@
 # System Architecture
 
-State after Phase 5 (Homepage, Awards and Community Standards on top of the Phase 4 launch gate and Phase 3
-shell). Items marked **planned (Phase N)** do not exist in code yet. Backend detail lives in [`backend/README.md`](../backend/README.md).
+State after Phase 7 (Kudos Live board and View Kudo on top of Phase 6 compose, Phase 5 Homepage and Awards,
+the Phase 4 launch gate and the Phase 3 shell). Items marked **planned (Phase N)** do not exist in code yet. Backend detail lives in [`backend/README.md`](../backend/README.md).
 
 ## Components
 
@@ -58,7 +58,7 @@ an `/api/v1/*` route answers anything other than 401 without a token (except lis
 ## Database
 
 - Schema in `supabase/migrations` (also the sqlc schema source); `supabase/seed.sql` seeds `units`.
-  Demo data comes from `go run ./cmd/seed` (local only; refuses non-loopback hosts).
+  Demo data comes from `go run ./cmd/seed` (local only; refuses non-loopback database and Storage hosts; also uploads the demo kudo images).
 - The Go API connects as role `saa_api` (`DATABASE_URL`): created NOLOGIN by migration, given a login
   locally by `backend/scripts/dev-db-role.sql`. It has `BYPASSRLS` and DML on business tables.
 - RLS is enabled on business tables with no policies (deny-all); `anon`, `authenticated` and
@@ -80,6 +80,7 @@ Migrations (`supabase/migrations`, in order):
 | `kudos_moderation_columns` | kudo moderation columns |
 | `rls_deny_all_and_grants` | RLS deny-all and grants |
 | `kudo_uploads_unsaved_pending_delete` | an unsaved upload may become `pending_delete` |
+| `kudo_board_read_indexes` | partial indexes `kudos_public_receiver_idx` (public kudos per receiver) and `secret_boxes_opened_user_idx` (latest opened box per user) |
 
 ## Frontend structure
 
@@ -90,6 +91,7 @@ Migrations (`supabase/migrations`, in order):
 | `src/app/(minimal)/layout.tsx` | `MinimalChrome` (language switch and copyright, no Go call) for Login |
 | `src/app/admin/layout.tsx` | Role gate plus `AdminChrome`; nav items in `src/features/admin/admin-nav-items.ts` |
 | `src/app/not-found.tsx` | Localized 404 in the minimal chrome (`src/components/errors/`) |
+| `src/app/(shell)/kudos/`, `src/features/kudos-board/` | Live board, View Kudo overlay and page, KudoCard UI ([Kudos Live board](#kudos-live-board-f006)) |
 | `src/components/shell/` | Header, avatar and language menus, nav links, FAB, footer, bell slot |
 | `src/app/countdown/page.tsx` | Prelaunch countdown: bare route (no header or footer), reads Go fresh per request |
 | `src/features/countdown/` | Shared countdown: clock store, `useCountdown`, `CountdownDisplay`; launch wrapper `LaunchCountdown` |
@@ -142,7 +144,7 @@ Supported: `vi`, `en` (`src/i18n/locale-config.ts`). Order, in `resolveLocale`:
 3. `vi` (master language and last fallback).
 
 `getRequestLocale()` reads cookies and headers; dictionaries load per namespace from
-`src/i18n/dictionaries/{locale}/{namespace}.json` (namespaces `common`, `shell`, `auth`, `errors`, `countdown`, `home`, `awards`, `standards`; the root layout sends `common` and `shell` to the client). A key missing in `en` shows the `vi` text; typed content (award catalog, community rules) uses `pickLocalized` with the same fallback (see [Homepage, Awards and Community Standards](system-architecture-homepage-awards.md)).
+`src/i18n/dictionaries/{locale}/{namespace}.json` (namespaces `common`, `shell`, `auth`, `errors`, `countdown`, `home`, `awards`, `standards`, `kudo-compose`, `kudos-board`; the root layout sends `common` and `shell` to the client). A key missing in `en` shows the `vi` text; typed content (award catalog, community rules) uses `pickLocalized` with the same fallback (see [Homepage, Awards and Community Standards](system-architecture-homepage-awards.md)).
 
 ## Rendering decision: `instant = false`
 
@@ -219,11 +221,55 @@ details and error codes in [`backend/README.md`](../backend/README.md). The visi
 shared by Go and Vitest through `backend/internal/kudo/testdata/visible_text_vectors.json`. Tests:
 `e2e/write-kudo.spec.ts`. Dictionary namespace `kudo-compose` (vi and en).
 
+## Kudos Live board (F006)
+
+`/kudos` (`src/app/(shell)/kudos/page.tsx`) reads five sections in parallel on the server for the first
+paint (`loadBoardSections`), then each section refetches on its own in the browser (filters, scroll,
+refocus, Retry) with its own loading, empty and error state. Dictionary namespace `kudos-board`.
+
+**Read endpoints** (all PROFILE, registered in `cmd/api/wire_kudo_board.go`; the literal
+`/kudos/<name>` patterns win over `/kudos/{id}`). Fields and errors: [`backend/README.md`](../backend/README.md).
+
+| Route | Feeds |
+|---|---|
+| `GET /api/v1/kudos` | All Kudos feed, keyset paged |
+| `GET /api/v1/kudos/highlight` | Highlight top 5, optional hashtag and unit filter |
+| `GET /api/v1/kudos/filter-options` | Hashtag and department choices |
+| `GET /api/v1/kudos/spotlight` | Public kudo total, receivers by count, latest receivers |
+| `GET /api/v1/kudos/sidebar` | Viewer's own stats, latest gift recipients |
+| `GET /api/v1/users/{id}/hover-card` | Avatar hover card |
+
+**KudoCard read path** (`kudo_read_service.go`, `kudo_card_builder.go`). Detail, feed and Highlight
+queries select one row shape (`cardRow`); `buildCards` then reads hashtags, images and hero tiers for the
+whole page in three queries, signs the image keys in one batch (URL TTL 1 h) and passes every card through
+`maskSender`. A missing kudo and one the viewer may not see give the same 404 `kudo_not_found`.
+
+**Keyset cursor** (`keyset_cursor.go`). `nextCursor` is base64url of `created_at|id` of the last row. The
+service reads `limit + 1` rows to know whether another page exists (default 10, max 50). A cursor the API
+did not issue answers 400 `invalid_cursor`. Highlight is not paged (`nextCursor` always null).
+
+**View Kudo, two entries to one card.** `kudos/layout.tsx` renders `children` plus a `@modal` slot. A soft
+navigation from the board to `/kudos/[id]` is intercepted by `@modal/(.)[id]/page.tsx`: the card shows as an
+overlay over the still-mounted board, so closing returns to the same scroll position. A copied link or a
+refresh renders `kudos/[id]/page.tsx` as a page. `@modal/default.tsx` and `@modal/page.tsx` render nothing.
+
+**Not-found inside the shell.** `kudos/not-found.tsx` (missing, non-uuid or not-viewable id) draws
+`MinimalChrome` itself (`bodyAs="div"`, the shell already provides `<main>`) and marks its root
+`data-minimal-page`. `(shell)/layout.tsx` wraps header, footer, compose host and FAB in `FULL_CHROME`, hidden
+by CSS (`group-has`) when a `[data-minimal-page]` is inside, so the chrome is drawn once.
+
+**Images.** `next.config.ts` allows only `/storage/v1/object/sign/kudo-images/**` of
+`NEXT_PUBLIC_SUPABASE_URL` in `images.remotePatterns`; components render them `unoptimized` (short-lived,
+per-viewer URLs).
+
+Tests: `e2e/kudos-board.spec.ts`, `e2e/kudos-board-images-and-actions.spec.ts`; Go integration tests
+`kudo_board_reads_integration_test.go`, `kudo_read_integration_test.go`, `api_kudo_board_integration_test.go`.
+
 ## Planned (not yet in code)
 
 | Item | Phase |
 |---|---|
-| Feature routes and screens | 7 to 13 |
+| Feature routes and screens | 8 to 13 |
 | Final integration, E2E, docs | 14 |
 
 Source of truth for phases: `plans/261109-1626-saa-2025-website/plan.md`.

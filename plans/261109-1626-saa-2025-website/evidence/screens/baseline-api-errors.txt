@@ -1,0 +1,3 @@
+4:{"time":"2026-11-27T18:27:16.878255297+07:00","level":"ERROR","msg":"refresh Supabase JWKS","url":"http://127.0.0.1:54321/auth/v1/.well-known/jwks.json","error":"failed to perform HTTP request for JWK Set refresh: Get \"http://127.0.0.1:54321/auth/v1/.well-known/jwks.json\": context deadline exceeded"}
+5:{"time":"2026-11-27T22:46:42.172497182+07:00","level":"ERROR","msg":"read current event","error":"read current event: context canceled"}
+17:{"time":"2026-11-28T07:31:25.452221409+07:00","level":"ERROR","msg":"refresh Supabase JWKS","url":"http://127.0.0.1:54321/auth/v1/.well-known/jwks.json","error":"failed to perform HTTP request for JWK Set refresh: Get \"http://127.0.0.1:54321/auth/v1/.well-known/jwks.json\": context deadline exceeded"}

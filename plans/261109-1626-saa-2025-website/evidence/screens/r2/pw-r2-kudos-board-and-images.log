@@ -1,0 +1,22 @@
+
+Running 17 tests using 1 worker
+
+  ok  1 [chromium] › e2e\kudos-board-images-and-actions.spec.ts:25:1 › a kudo's thumbnails load from opaque keys in the sender's order (FR-002, FR-603, R01) (1.8s)
+  ok  2 [chromium] › e2e\kudos-board-images-and-actions.spec.ts:34:1 › an anonymous kudo with images exposes no sender identifier in its markup or image links (SC-007, R01) (1.9s)
+  ok  3 [chromium] › e2e\kudos-board-images-and-actions.spec.ts:46:1 › a thumbnail that fails to load makes the card fetch fresh links once, then it shows (FR-002 edge, INT-001) (5.0s)
+  ok  4 [chromium] › e2e\kudos-board-images-and-actions.spec.ts:71:1 › a thumbnail that still fails after the reload shows 'Ảnh không khả dụng.' as text (FR-002 edge, D010) (2.9s)
+  ok  5 [chromium] › e2e\kudos-board-images-and-actions.spec.ts:86:1 › 'Gửi KUDO' on a hover card opens a new kudo with that Sunner preselected, still changeable (3.4s)
+  ok  6 [chromium] › e2e\kudos-board-images-and-actions.spec.ts:104:1 › a chosen filter value shows on the chip of Figma 1002:13094: white fill, #998C5F outline (FR-203) (813ms)
+  ok  7 [chromium] › e2e\kudos-board.spec.ts:32:1 › the board opens with its key visual and four sections filled from the database (US001, FR-201..210, BR-001) (2.9s)
+  ok  8 [chromium] › e2e\kudos-board.spec.ts:66:1 › Hashtag and Phòng ban filters re-rank inside the filtered set, reset to the first card and can be cleared (FR-203, FR-204, SC-004) (2.3s)
+  ok  9 [chromium] › e2e\kudos-board.spec.ts:98:1 › Spotlight search ignores case and accents and says when nothing matches (FR-206, BR-004) (1.2s)
+  ok 10 [chromium] › e2e\kudos-board.spec.ts:108:1 › All Kudos loads every public kudo newest first while scrolling, once each, then an end marker; a failed page offers Retry (FR-207, BR-005, SM-001) (2.1s)
+  ok 11 [chromium] › e2e\kudos-board.spec.ts:126:1 › a card opens the detail over the board; Đóng and Esc return to the same place (FR-102, FR-404, D005) (1.7s)
+  ok 12 [chromium] › e2e\kudos-board.spec.ts:148:1 › a copied link opens the kudo as a page; Copy Link puts its plain address on the clipboard (FR-401, BR-007, US007) (2.3s)
+  ok 13 [chromium] › e2e\kudos-board.spec.ts:173:1 › a missing id, a non-uuid id and someone else's spam kudo show the same 404 in the minimal chrome (FR-405, BR-006, SC-006, C01) (4.7s)
+  ok 14 [chromium] › e2e\kudos-board.spec.ts:194:1 › hovering a named avatar shows the info card after a short delay; an anonymous sender has no card and no link (FR-402, FR-103, DEC-002) (2.6s)
+  ok 15 [chromium] › e2e\kudos-board.spec.ts:219:1 › an anonymous kudo hides its sender from the page markup; the sender's own kudo carries the edit pencil (FR-003, SC-007, FR-104) (2.3s)
+  ok 16 [chromium] › e2e\kudos-board.spec.ts:232:1 › the Homepage, Awards and header links land on the board; a signed-out kudo link asks to sign in first (FR-101, FR-601) (2.6s)
+  ok 17 [chromium] › e2e\kudos-board.spec.ts:254:3 › as an admin › the real sender of an anonymous kudo shows with the anonymous marker (G04, FR-003) (1.3s)
+
+  17 passed (42.5s)

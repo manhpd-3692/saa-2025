@@ -1,0 +1,16 @@
+
+Running 11 tests using 1 worker
+
+  ok  1 [chromium] › e2e\kudos-board.spec.ts:32:1 › the board opens with its key visual and four sections filled from the database (US001, FR-201..210, BR-001) (2.8s)
+  ok  2 [chromium] › e2e\kudos-board.spec.ts:66:1 › Hashtag and Phòng ban filters re-rank inside the filtered set, reset to the first card and can be cleared (FR-203, FR-204, SC-004) (2.2s)
+  ok  3 [chromium] › e2e\kudos-board.spec.ts:98:1 › Spotlight search ignores case and accents and says when nothing matches (FR-206, BR-004) (976ms)
+  ok  4 [chromium] › e2e\kudos-board.spec.ts:108:1 › All Kudos loads every public kudo newest first while scrolling, once each, then an end marker; a failed page offers Retry (FR-207, BR-005, SM-001) (1.9s)
+  ok  5 [chromium] › e2e\kudos-board.spec.ts:126:1 › a card opens the detail over the board; Đóng and Esc return to the same place (FR-102, FR-404, D005) (1.4s)
+  ok  6 [chromium] › e2e\kudos-board.spec.ts:148:1 › a copied link opens the kudo as a page; Copy Link puts its plain address on the clipboard (FR-401, BR-007, US007) (1.4s)
+  ok  7 [chromium] › e2e\kudos-board.spec.ts:161:1 › a missing id, a non-uuid id and someone else's spam kudo show the same not-found page (FR-405, BR-006, SC-006) (1.8s)
+  ok  8 [chromium] › e2e\kudos-board.spec.ts:175:1 › hovering a named avatar shows the info card after a short delay; an anonymous sender has no card and no link (FR-402, FR-103, DEC-002) (2.2s)
+  ok  9 [chromium] › e2e\kudos-board.spec.ts:200:1 › an anonymous kudo hides its sender from the page markup; the sender's own kudo carries the edit pencil (FR-003, SC-007, FR-104) (1.8s)
+  ok 10 [chromium] › e2e\kudos-board.spec.ts:213:1 › the Homepage, Awards and header links land on the board; a signed-out kudo link asks to sign in first (FR-101, FR-601) (2.4s)
+  ok 11 [chromium] › e2e\kudos-board.spec.ts:235:3 › as an admin › the real sender of an anonymous kudo shows with the anonymous marker (G04, FR-003) (1.2s)
+
+  11 passed (20.7s)

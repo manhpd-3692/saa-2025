@@ -167,6 +167,25 @@ All are PROFILE routes.
 | `PATCH /api/v1/kudos/{id}` | Edit a kudo (content, hashtags, images, anonymity) | 200 `{kudo_id}`; 422 `validation_failed` or invalid attachment; 403, 409, 404 as above; sends no notification; going anonymous redacts the existing notifications |
 | `DELETE /api/v1/uploads/{uploadId}` | Remove one of the caller's unsaved uploads | 204; 404 `upload_not_found` (missing or foreign); 409 `upload_attached` (attached or already `pending_delete`) |
 
+## Kudo board read endpoints (F006, `wire_kudo_board.go`)
+
+All are PROFILE routes, reads only. Cards are `KudoCard`s: sender masked per viewer, weighted heart total,
+Go-signed image URLs.
+
+| Route | Answer | Notable errors |
+|---|---|---|
+| `GET /api/v1/kudos?cursor=&limit=` | `{items, nextCursor}`, public kudos newest first; `limit` default 10, max 50 | 400 `invalid_cursor` |
+| `GET /api/v1/kudos/highlight?hashtagId=&unitId=` | `{items (at most 5), nextCursor: null}`; `unitId` is the receiver's unit; empty means all | 400 `invalid_filter` (not a uuid) |
+| `GET /api/v1/kudos/filter-options` | `{hashtags: [{id, name}], units: [{id, name, code}]}` | |
+| `GET /api/v1/kudos/spotlight` | `{total, names: [{userId, name, count}], recent: [{receiverId, receiverName, createdAt}]}`; up to 100 names, 6 recent | |
+| `GET /api/v1/kudos/sidebar` | `{stats: {kudosReceived, kudosSent, heartsReceived, boxesOpened, boxesUnopened}, latestRecipients}` (10 rows); stats are the caller's own | |
+| `GET /api/v1/users/{id}/hover-card` | `{id, name, avatarUrl, unitCode, unitName, heroTier, receivedCount, sentCount, isSelf}`; `sentCount` counts anonymous kudos only for an admin or the user | 404 `user_not_found` (unknown or non-uuid id) |
+
+`GET /api/v1/kudos/{id}` (detail) answers 404 `kudo_not_found` for a missing, non-uuid or non-viewable id.
+`nextCursor` is opaque (base64url of the last row's `created_at|id`): pass it back unchanged. Migration
+`20261128070000_kudo_board_read_indexes` adds partial indexes for public kudos per receiver and for the
+latest opened secret box per user.
+
 ## Upload lifecycle and cleanup
 
 `kudo_uploads.state`: `pending` (uploaded, not in a kudo) -> `attached` (saved with a kudo). Removing

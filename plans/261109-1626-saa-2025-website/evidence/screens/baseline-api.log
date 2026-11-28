@@ -1,0 +1,49 @@
+{"time":"2026-11-27T09:18:45.671246691+07:00","level":"INFO","msg":"api listening","addr":":8080"}
+{"time":"2026-11-27T10:26:59.167522615+07:00","level":"INFO","msg":"api shutting down"}
+{"time":"2026-11-27T10:27:11.768939731+07:00","level":"INFO","msg":"api listening","addr":":8080"}
+{"time":"2026-11-27T18:27:16.878255297+07:00","level":"ERROR","msg":"refresh Supabase JWKS","url":"http://127.0.0.1:54321/auth/v1/.well-known/jwks.json","error":"failed to perform HTTP request for JWK Set refresh: Get \"http://127.0.0.1:54321/auth/v1/.well-known/jwks.json\": context deadline exceeded"}
+{"time":"2026-11-27T22:46:42.172497182+07:00","level":"ERROR","msg":"read current event","error":"read current event: context canceled"}
+{"time":"2026-11-27T22:50:12.26971228+07:00","level":"INFO","msg":"api shutting down"}
+{"time":"2026-11-27T22:50:13.037073607+07:00","level":"INFO","msg":"api listening","addr":":8080"}
+{"time":"2026-11-27T22:57:08.661392041+07:00","level":"WARN","msg":"current event request cancelled by the caller","error":"read current event: context canceled"}
+{"time":"2026-11-27T23:17:20.683652395+07:00","level":"WARN","msg":"current event request cancelled by the caller","error":"read current event: context canceled"}
+{"time":"2026-11-27T23:31:19.898065787+07:00","level":"INFO","msg":"api shutting down"}
+{"time":"2026-11-27T23:31:20.473587731+07:00","level":"INFO","msg":"api listening","addr":":8080"}
+{"time":"2026-11-27T23:37:23.465412463+07:00","level":"WARN","msg":"current event request cancelled by the caller","error":"read current event: context canceled"}
+{"time":"2026-11-27T23:40:44.260883166+07:00","level":"WARN","msg":"current event request cancelled by the caller","error":"read current event: context canceled"}
+{"time":"2026-11-27T23:47:51.715561531+07:00","level":"WARN","msg":"current event request cancelled by the caller","error":"read current event: context canceled"}
+{"time":"2026-11-28T00:01:30.400405284+07:00","level":"WARN","msg":"current event request cancelled by the caller","error":"read current event: context canceled"}
+{"time":"2026-11-28T07:00:26.980343934+07:00","level":"WARN","msg":"current event request cancelled by the caller","error":"read current event: context canceled"}
+{"time":"2026-11-28T07:31:25.452221409+07:00","level":"ERROR","msg":"refresh Supabase JWKS","url":"http://127.0.0.1:54321/auth/v1/.well-known/jwks.json","error":"failed to perform HTTP request for JWK Set refresh: Get \"http://127.0.0.1:54321/auth/v1/.well-known/jwks.json\": context deadline exceeded"}
+{"time":"2026-11-28T08:00:38.943051353+07:00","level":"ERROR","msg":"read current event","error":"read current event: context deadline exceeded"}
+{"time":"2026-11-28T10:08:02.516715497+07:00","level":"INFO","msg":"api listening","addr":":8080"}
+{"time":"2026-11-28T10:12:47.572502869+07:00","level":"WARN","msg":"current event request cancelled by the caller","error":"read current event: context canceled"}
+{"time":"2026-11-28T10:13:47.56296098+07:00","level":"WARN","msg":"current event request cancelled by the caller","error":"read current event: context canceled"}
+{"time":"2026-11-28T10:23:46.434321043+07:00","level":"ERROR","msg":"read current event","error":"read current event: timeout: context deadline exceeded"}
+{"time":"2026-11-28T10:33:10.194806552+07:00","level":"WARN","msg":"current event request cancelled by the caller","error":"read current event: context canceled"}
+{"time":"2026-11-28T10:35:33.029990335+07:00","level":"ERROR","msg":"read current event","error":"read current event: timeout: context deadline exceeded"}
+{"time":"2026-11-28T10:39:13.278446386+07:00","level":"WARN","msg":"current event request cancelled by the caller","error":"read current event: context canceled"}
+{"time":"2026-11-28T10:43:03.563853623+07:00","level":"ERROR","msg":"read current event","error":"read current event: timeout: context deadline exceeded"}
+{"time":"2026-11-28T10:48:02.004966674+07:00","level":"WARN","msg":"current event request cancelled by the caller","error":"read current event: context canceled"}
+{"time":"2026-11-28T10:48:58.502844837+07:00","level":"WARN","msg":"current event request cancelled by the caller","error":"read current event: context canceled"}
+{"time":"2026-11-28T11:19:16.53614541+07:00","level":"INFO","msg":"api shutting down"}
+{"time":"2026-11-28T11:19:24.313278411+07:00","level":"INFO","msg":"api listening","addr":":8080"}
+{"time":"2026-11-28T11:46:48.42040682+07:00","level":"WARN","msg":"current event request cancelled by the caller","error":"read current event: context canceled"}
+{"time":"2026-11-28T11:47:45.077602536+07:00","level":"WARN","msg":"current event request cancelled by the caller","error":"read current event: context canceled"}
+{"time":"2026-11-28T12:02:55.862606193+07:00","level":"WARN","msg":"kudo upload quota reached","user_id":"d0000000-0000-4000-8000-000000000001","pending":22}
+{"time":"2026-11-28T12:18:28.535420474+07:00","level":"WARN","msg":"current event request cancelled by the caller","error":"read current event: context canceled"}
+{"time":"2026-11-28T12:19:22.930039225+07:00","level":"ERROR","msg":"read current event","error":"read current event: timeout: context deadline exceeded"}
+{"time":"2026-11-28T12:38:22.15636624+07:00","level":"INFO","msg":"api shutting down"}
+{"time":"2026-11-28T12:38:29.942753731+07:00","level":"INFO","msg":"api listening","addr":":8080"}
+{"time":"2026-11-28T12:41:44.989056709+07:00","level":"WARN","msg":"current event request cancelled by the caller","error":"read current event: context canceled"}
+{"time":"2026-11-28T12:42:39.239366814+07:00","level":"ERROR","msg":"read current event","error":"read current event: timeout: context deadline exceeded"}
+{"time":"2026-11-28T12:51:24.946457768+07:00","level":"INFO","msg":"api shutting down"}
+{"time":"2026-11-28T12:51:33.664682741+07:00","level":"INFO","msg":"api listening","addr":":8080"}
+{"time":"2026-11-28T12:53:31.620267383+07:00","level":"INFO","msg":"api shutting down"}
+{"time":"2026-11-28T12:53:37.611876835+07:00","level":"INFO","msg":"api listening","addr":":8080"}
+{"time":"2026-11-28T12:56:27.97685338+07:00","level":"WARN","msg":"current event request cancelled by the caller","error":"read current event: context canceled"}
+{"time":"2026-11-28T12:57:22.654033053+07:00","level":"ERROR","msg":"read current event","error":"read current event: timeout: context deadline exceeded"}
+{"time":"2026-11-28T13:24:55.503347176+07:00","level":"INFO","msg":"api shutting down"}
+{"time":"2026-11-28T13:25:00.747605+07:00","level":"INFO","msg":"api listening","addr":":8080"}
+{"time":"2026-11-28T13:56:54.810764356+07:00","level":"WARN","msg":"current event request cancelled by the caller","error":"read current event: context canceled"}
+{"time":"2026-11-28T13:57:49.265724415+07:00","level":"ERROR","msg":"read current event","error":"read current event: timeout: context deadline exceeded"}
