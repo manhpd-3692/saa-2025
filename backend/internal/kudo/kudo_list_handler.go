@@ -1,7 +1,6 @@
 package kudo
 
 import (
-	"log/slog"
 	"net/http"
 	"strconv"
 
@@ -38,7 +37,7 @@ func (h ListHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 	page, err := h.reads.List(r.Context(), viewer, after, feedLimit(query.Get("limit")))
 	if err != nil {
-		slog.ErrorContext(r.Context(), "list kudos", "error", err)
+		httpx.LogRequestFailure(r, err, "list kudos")
 		httpx.WriteInternalError(w)
 		return
 	}

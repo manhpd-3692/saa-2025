@@ -56,7 +56,8 @@ func (h SecretBoxOpenHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) 
 	case errors.Is(err, ErrIdempotencyKeyInUse):
 		httpx.WriteError(w, http.StatusConflict, CodeIdempotencyKeyInUse, "Use a new Idempotency-Key for this opening.")
 	default:
-		slog.ErrorContext(r.Context(), "open secret box", "user_id", viewer.UserID, "error", err)
+		// A caller who hung up is INFO: the open committed or rolled back whole; a retry replays (R12).
+		httpx.LogRequestFailure(r, err, "open secret box", "user_id", viewer.UserID)
 		httpx.WriteInternalError(w)
 	}
 }

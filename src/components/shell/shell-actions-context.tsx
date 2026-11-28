@@ -4,12 +4,13 @@ import { createContext, useCallback, useContext, useMemo, useRef, useState, type
 
 /**
  * Mount point between the full shell and the features that plug into it
- * (F001 RISK-02): the FAB items call openers that F008 (rules panel, phase 8)
- * and F005 (write-kudo modal, KudoComposeHost) register here, and F005 raises
- * `localeLocked` while its form is open so the language switch is disabled (D005).
- * Until a feature registers, its FAB item only closes the FAB.
+ * (F001 RISK-02): the FAB items call openers that F008 (rules panel) and F005
+ * (write-kudo modal, KudoComposeHost) register here; "Mở Secret Box" buttons
+ * (board sidebar, later the profile) call F008's secret box window the same
+ * way. F005 raises `localeLocked` while its form is open so the language
+ * switch is disabled (D005). Until a feature registers, its action does nothing.
  */
-export type ShellAction = "rules" | "compose";
+export type ShellAction = "rules" | "compose" | "secretBox";
 
 /** A Sunner offered as the recipient of a new kudo (same shape as F005's recipient options). */
 export interface ShellRecipient {

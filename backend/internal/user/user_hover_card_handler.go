@@ -79,7 +79,7 @@ func (h HoverCardHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		tiers, err = gamification.HeroTiersFor(ctx, h.queries, []uuid.UUID{id})
 	}
 	if err != nil {
-		slog.ErrorContext(r.Context(), "read user hover card", "user_id", id, "error", err)
+		httpx.LogRequestFailure(r, err, "read user hover card", "user_id", id)
 		httpx.WriteInternalError(w)
 		return
 	}

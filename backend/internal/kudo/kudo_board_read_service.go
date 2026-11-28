@@ -9,13 +9,15 @@ import (
 
 	"github.com/manhpd-3692/saa-2025/backend/internal/db"
 	"github.com/manhpd-3692/saa-2025/backend/internal/dbx"
+	"github.com/manhpd-3692/saa-2025/backend/internal/gamification"
 )
 
 // Board aggregates configuration (F006 § 4.6).
 const (
 	SpotlightMaxNames = 100 // SPOTLIGHT_MAX_NAMES
 	SpotlightRecent   = 6   // lines of the Spotlight ticker
-	SidebarRecipients = 10  // SIDEBAR_RECIPIENTS (FR-210)
+	// SidebarRecipients is SIDEBAR_RECIPIENTS (FR-210): F008's GIFT_RECIPIENTS_LIMIT.
+	SidebarRecipients = gamification.GiftRecipientsLimit
 )
 
 // FilterOptions is F006 A3: the Highlight Hashtag and Phòng ban choices.
@@ -60,10 +62,10 @@ type SpotlightEvent struct {
 }
 
 // Sidebar is F006 A6: the viewer's own numbers (never another user's) and the
-// Sunners who most recently opened a secret box (D006).
+// Sunners who most recently opened a secret box (D006, F008 A7).
 type Sidebar struct {
-	Stats            ViewerStats     `json:"stats"`
-	LatestRecipients []GiftRecipient `json:"latestRecipients"`
+	Stats            ViewerStats                  `json:"stats"`
+	LatestRecipients []gamification.GiftRecipient `json:"latestRecipients"`
 }
 
 // ViewerStats is FR-208; heartsReceived is the weighted total (G08, X07).
@@ -73,15 +75,6 @@ type ViewerStats struct {
 	HeartsReceived int64 `json:"heartsReceived"`
 	BoxesOpened    int32 `json:"boxesOpened"`
 	BoxesUnopened  int32 `json:"boxesUnopened"`
-}
-
-// GiftRecipient is one row of "10 Sunner nhận quà mới nhất" with the icon of
-// the box they opened last.
-type GiftRecipient struct {
-	UserID    uuid.UUID `json:"userId"`
-	Name      string    `json:"name"`
-	AvatarURL *string   `json:"avatarUrl"`
-	Icon      *string   `json:"icon"`
 }
 
 // BoardReadService reads the board aggregates (A3, A4, A6); public kudos only (BR-001).
@@ -154,24 +147,15 @@ func (s *BoardReadService) Sidebar(ctx context.Context, viewer Viewer) (Sidebar,
 	if err != nil {
 		return Sidebar{}, fmt.Errorf("count secret boxes: %w", err)
 	}
-	rows, err := s.queries.ListLatestGiftRecipients(ctx, SidebarRecipients)
+	recipients, err := gamification.LatestGiftRecipients(ctx, s.queries, SidebarRecipients)
 	if err != nil {
-		return Sidebar{}, fmt.Errorf("list latest gift recipients: %w", err)
+		return Sidebar{}, err
 	}
-	sidebar := Sidebar{
+	return Sidebar{
 		Stats: ViewerStats{
 			KudosReceived: stats.KudosReceived, KudosSent: stats.KudosSent, HeartsReceived: stats.HeartsReceived,
 			BoxesOpened: boxes.Opened, BoxesUnopened: boxes.Unopened,
 		},
-		LatestRecipients: make([]GiftRecipient, len(rows)),
-	}
-	for i, row := range rows {
-		recipient := GiftRecipient{UserID: row.ID, Name: row.Name, AvatarURL: row.AvatarUrl}
-		if row.Icon != nil {
-			icon := string(*row.Icon)
-			recipient.Icon = &icon
-		}
-		sidebar.LatestRecipients[i] = recipient
-	}
-	return sidebar, nil
+		LatestRecipients: recipients,
+	}, nil
 }

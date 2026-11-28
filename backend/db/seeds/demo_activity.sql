@@ -1,5 +1,5 @@
--- Demo activity for LOCAL development (Codex R16): Sunners, kudos, hearts and secret boxes,
--- all dated within the last 14 days so the admin Overview's last-30-days default shows data.
+-- Demo activity for LOCAL development (Codex R16): Sunners, kudos, hearts, a running x2 heart
+-- campaign and secret boxes, all dated within the last 14 days so the admin Overview's last-30-days default shows data.
 -- Run by `go run ./cmd/seed` after the scenario file, in the same transaction.
 -- Idempotent: the previous demo rows are removed first. Writes auth.users (users.id references
 -- it), so it needs the local owner connection and must never run against a hosted project.
@@ -29,7 +29,16 @@ insert into demo_people (n, id, email, name, unit_code) values
   (13, 'd0000000-0000-4000-8000-000000000013', 'sunner13.demo@sun-asterisk.com', 'Dương Thùy An', 'CECV5'),
   (14, 'd0000000-0000-4000-8000-000000000014', 'sunner14.demo@sun-asterisk.com', 'Mai Phương Thúy', 'CECV2'),
   (15, 'd0000000-0000-4000-8000-000000000015', 'sunner15.demo@sun-asterisk.com', 'Lê Kiều Trang', 'CECV3'),
-  (16, 'd0000000-0000-4000-8000-000000000016', 'sunner16.demo@sun-asterisk.com', 'Nguyễn Bá Chức', 'CECV4');
+  (16, 'd0000000-0000-4000-8000-000000000016', 'sunner16.demo@sun-asterisk.com', 'Nguyễn Bá Chức', 'CECV4'),
+  -- More senders, so one Sunner can reach Legend Hero (more than 20 different senders, F008 BR-005).
+  (17, 'd0000000-0000-4000-8000-000000000017', 'sunner17.demo@sun-asterisk.com', 'Phan Gia Bảo', 'CECV1'),
+  (18, 'd0000000-0000-4000-8000-000000000018', 'sunner18.demo@sun-asterisk.com', 'Võ Minh Tuấn', 'CECV2'),
+  (19, 'd0000000-0000-4000-8000-000000000019', 'sunner19.demo@sun-asterisk.com', 'Lý Thanh Tâm', 'CECV3'),
+  (20, 'd0000000-0000-4000-8000-000000000020', 'sunner20.demo@sun-asterisk.com', 'Ngô Hải Yến', 'CECV4'),
+  (21, 'd0000000-0000-4000-8000-000000000021', 'sunner21.demo@sun-asterisk.com', 'Đinh Quang Huy', 'CECV5'),
+  (22, 'd0000000-0000-4000-8000-000000000022', 'sunner22.demo@sun-asterisk.com', 'Hà Ngọc Ánh', 'CECV1'),
+  (23, 'd0000000-0000-4000-8000-000000000023', 'sunner23.demo@sun-asterisk.com', 'Tô Việt Hoàng', 'CECV2'),
+  (24, 'd0000000-0000-4000-8000-000000000024', 'sunner24.demo@sun-asterisk.com', 'Lâm Khánh Vy', 'CECV3');
 
 -- 1. Remove the previous demo activity, children before parents.
 delete from public.notifications where recipient_id in (select id from demo_people);
@@ -40,6 +49,7 @@ delete from public.kudo_images where kudo_id in (
   where sender_id in (select id from demo_people) or receiver_id in (select id from demo_people)
 );
 delete from public.kudo_uploads where owner_id in (select id from demo_people);
+delete from public.campaigns where created_by in (select id from demo_people);
 delete from public.kudos
 where sender_id in (select id from demo_people) or receiver_id in (select id from demo_people);
 delete from auth.users where id in (select id from demo_people); -- cascades public.users
@@ -65,6 +75,14 @@ select p.id, p.email, p.name, null, 'user', u.id, now() - make_interval(hours =>
        now() - interval '13 days'
 from demo_people p
 join public.units u on u.code = p.unit_code;
+
+-- 3b. A running "x2 heart" campaign (F012 data, F008 G14): started a day ago and ends with the
+-- `live` event window, so a heart given now weighs 2 (BR-004). Its name is the hover headline
+-- (Figma 3241:15021). Admins come only from ADMIN_EMAILS, so a demo Sunner is the recorded author.
+insert into public.campaigns (name, starts_at, ends_at, multiplier, created_by)
+select 'Ngày x2 tim – lan tỏa gấp đôi yêu thương!', now() - interval '1 day', now() + interval '13 days', 2, p.id
+from demo_people p
+where p.n = 1;
 
 -- 4. Kudos between demo Sunners (public, sanitized HTML), 30 minutes to 13 days old: enough for
 -- three pages of the Live board feed. `likes` = hearts given (step 5), so the Highlight ranking
@@ -114,6 +132,30 @@ insert into demo_kudos (n, sender_n, receiver_n, title, content, is_anonymous, a
   (29, 14, 2, 'Ấm áp như mùa xuân', '<p>Bình luôn hỏi han và giúp đỡ các bạn mới vào team.</p>', false, interval '2 hours', '{teamwork}', 3),
   (30, 15, 9, 'Cảm ơn vì luôn có mặt', '<p>Linh đã cùng mình chạy demo cho khách hàng ngay trong cuối tuần.</p>', false, interval '30 minutes', '{customerfirst,dedication}', 2);
 
+-- 4a. Hero tier spread (F008 BR-005), so every badge shows on the board: Huỳnh Dương Xuân Nhật (10)
+-- receives from 22 different Sunners (21 senders here plus kudo 15 above: Legend Hero), Nguyễn
+-- Hoàng Linh (9) from 10 (7 here plus kudos 16, 22, 30: Super Hero), Hoàng Thu Hà (5) from 5 (2 here
+-- plus kudos 4, 10, 26: Rising Hero); everyone else stays New Hero or has no badge. Every 6th
+-- of these kudos is anonymous (its sender still counts once, D008). The kudos of Nguyễn Văn An (1)
+-- get 10 hearts each, so the signed-in e2e user has secret boxes to open.
+insert into demo_kudos (n, sender_n, receiver_n, title, content, is_anonymous, age, tags, likes)
+select 100 + row_number() over w, g.sender_n, g.receiver_n,
+       (array['Cảm ơn vì đã đồng hành', 'Người truyền cảm hứng', 'Tinh thần trách nhiệm', 'Luôn sẵn lòng giúp đỡ'])[1 + ((row_number() over w) % 4)::int],
+       '<p>' || (array['Cảm ơn bạn đã hỗ trợ mình rất nhiệt tình trong dự án vừa qua.',
+                       'Sự tận tâm của bạn giúp cả team vượt qua giai đoạn nước rút.',
+                       'Mình học được rất nhiều từ cách bạn giải quyết vấn đề.',
+                       'Cảm ơn vì luôn lắng nghe và chia sẻ cùng mọi người.'])[1 + ((row_number() over w) % 4)::int] || '</p>',
+       (row_number() over w) % 6 = 0,
+       make_interval(hours => (26 + ((row_number() over w) * 7) % 280)::int),
+       (array['{teamwork}', '{inspiring}', '{dedication,teamwork}', '{mentor}'])[1 + ((row_number() over w) % 4)::int]::text[],
+       case when g.sender_n = 1 then 10 else (g.sender_n + g.receiver_n) % 4 end
+from (
+  select s as sender_n, 10 as receiver_n from generate_series(1, 23) s where s not in (9, 10)
+  union all select s, 9 from generate_series(1, 7) s
+  union all select s, 5 from (values (1), (6)) v(s)
+) g
+window w as (order by g.receiver_n, g.sender_n);
+
 insert into public.kudos (id, sender_id, receiver_id, title, content, is_anonymous, created_at, updated_at)
 select k.id, s.id, r.id, k.title, k.content, k.is_anonymous, now() - k.age, now() - k.age
 from demo_kudos k
@@ -157,17 +199,24 @@ select k.id, i.upload_id, i.position
 from demo_images i
 join demo_kudos k on k.n = i.kudo_n;
 
--- 5. Hearts (weight 1, no campaign): `likes` per kudo from a rotating set of demo Sunners, never
--- the kudo's sender (G06), one per Sunner per kudo.
-insert into public.hearts (kudo_id, user_id, weight, created_at)
-select k.id, voters.id, 1, now() - k.age + interval '10 minutes'
+-- 5. Hearts: `likes` per kudo from a rotating set of demo Sunners, never the kudo's sender (G06),
+-- one per Sunner per kudo, given 10 minutes after the kudo. A heart given while the campaign runs
+-- carries its multiplier and id, as HeartService stores them (BR-004); older hearts weigh 1.
+insert into public.hearts (kudo_id, user_id, weight, campaign_id, created_at)
+select k.id, voters.id, coalesce(c.multiplier, 1), c.id, now() - k.age + interval '10 minutes'
 from demo_kudos k
 cross join lateral (
   select p.id from demo_people p
   where p.n <> k.sender_n
   order by (p.n * 5 + k.n * 3) % 16, p.n
   limit k.likes
-) voters;
+) voters
+left join lateral (
+  select id, multiplier from public.campaigns
+  where starts_at <= now() - k.age + interval '10 minutes' and now() - k.age + interval '10 minutes' < ends_at
+  order by multiplier desc
+  limit 1
+) c on true;
 
 -- 6. Secret boxes: high-water mark floor(weighted hearts on a Sunner's sent kudos / 5) (BR-006).
 insert into public.secret_boxes (user_id, seq, earned_at)
@@ -188,3 +237,11 @@ set opened_at = b.earned_at + make_interval(mins => 10 + p.n * 13),
     icon = (enum_range(null::public.secret_box_icon))[1 + (p.n % 6)]
 from demo_people p
 where b.user_id = p.id and b.seq = 1;
+
+-- Nguyễn Văn An (the e2e user) has also opened his 2nd and 3rd box: three different icons
+-- collected, the rest of his boxes wait unopened for the Secret Box window.
+update public.secret_boxes b
+set opened_at = b.earned_at + interval '20 minutes',
+    icon = case b.seq when 2 then 'REVIVAL'::public.secret_box_icon else 'ROOT_FURTHER'::public.secret_box_icon end
+from demo_people p
+where b.user_id = p.id and p.n = 1 and b.seq in (2, 3);

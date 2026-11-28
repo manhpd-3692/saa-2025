@@ -1,9 +1,12 @@
 package gamification
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"slices"
+
+	"github.com/google/uuid"
 
 	"github.com/manhpd-3692/saa-2025/backend/internal/db"
 )
@@ -51,4 +54,23 @@ func iconsAfter(before []db.SecretBoxIcon, drawn db.SecretBoxIcon) []db.SecretBo
 		}
 	}
 	return after
+}
+
+type iconLister interface {
+	ListCollectedIcons(ctx context.Context, userID uuid.UUID) ([]*db.SecretBoxIcon, error)
+}
+
+// collectedIcons is the caller's distinct opened icons in enum order, never nil.
+func collectedIcons(ctx context.Context, q iconLister, userID uuid.UUID) ([]db.SecretBoxIcon, error) {
+	rows, err := q.ListCollectedIcons(ctx, userID)
+	if err != nil {
+		return nil, fmt.Errorf("list collected icons: %w", err)
+	}
+	icons := make([]db.SecretBoxIcon, 0, len(rows))
+	for _, icon := range rows {
+		if icon != nil {
+			icons = append(icons, *icon)
+		}
+	}
+	return icons, nil
 }

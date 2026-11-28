@@ -89,7 +89,7 @@ func (h UploadHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	cancelCount()
 	switch {
 	case err != nil:
-		slog.ErrorContext(r.Context(), "count pending kudo uploads", "error", err)
+		httpx.LogRequestFailure(r, err, "count pending kudo uploads")
 		httpx.WriteInternalError(w)
 		return
 	case pending >= PendingUploadQuota:
@@ -113,7 +113,7 @@ func (h UploadHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if err := h.queries.InsertKudoUpload(ctx, db.InsertKudoUploadParams{
 		ID: uploadID, OwnerID: viewer.UserID, ObjectPath: objectPath, Mime: req.ContentType, SizeBytes: req.Size,
 	}); err != nil {
-		slog.ErrorContext(r.Context(), "insert kudo upload", "error", err)
+		httpx.LogRequestFailure(r, err, "insert kudo upload")
 		httpx.WriteInternalError(w)
 		return
 	}
@@ -122,7 +122,7 @@ func (h UploadHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 // writeStorageError answers 503 when Storage is not configured, else 500.
 func writeStorageError(w http.ResponseWriter, r *http.Request, action string, err error) {
-	slog.ErrorContext(r.Context(), action, "error", err)
+	httpx.LogRequestFailure(r, err, action)
 	if errors.Is(err, ErrStorageUnavailable) {
 		httpx.WriteError(w, http.StatusServiceUnavailable, CodeStorageUnavailable, "Image storage is not available.")
 		return

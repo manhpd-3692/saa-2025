@@ -76,7 +76,7 @@ func (m *Middleware) RequireProfile(next http.Handler) http.Handler {
 				"No profile exists for this account; provision it first.")
 			return
 		case err != nil:
-			slog.ErrorContext(r.Context(), "load profile role", "user_id", identity.UserID, "error", err)
+			httpx.LogRequestFailure(r, err, "load profile role", "user_id", identity.UserID)
 			httpx.WriteInternalError(w)
 			return
 		}

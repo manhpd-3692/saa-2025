@@ -186,6 +186,24 @@ Go-signed image URLs.
 `20261128070000_kudo_board_read_indexes` adds partial indexes for public kudos per receiver and for the
 latest opened secret box per user.
 
+## Gamification endpoints (F008, `wire_gamification.go`, `wire_gamification_reads.go`)
+
+All are PROFILE routes. The caller always comes from the token; no user id is accepted.
+
+| Route | Answer | Notable errors |
+|---|---|---|
+| `PUT` / `DELETE /api/v1/kudos/{id}/heart` | `{heartTotal, viewerHearted}`; idempotent setters; the weight is the highest active campaign multiplier, else 1 | 403 `cannot_heart_own_kudo`; 409 `kudo_not_public`; 404 `kudo_not_found`; 500 `campaign_lookup_failed` (nothing written, R09) |
+| `GET /api/v1/campaigns/active` | `{name, multiplier, startsAt, endsAt}` or `null` | 500 `campaign_lookup_failed` (the client only hides the badge) |
+| `GET /api/v1/me/secret-boxes` | `{unopened, opened, collectedIcons, totalIcons: 6, completed}`; icons in enum order | |
+| `POST /api/v1/me/secret-boxes/open` | `{boxId, icon, summary: {unopened, opened, distinctIcons}}`; header `Idempotency-Key` (uuid); a repeated key replays the stored body | 400 `invalid_idempotency_key`; 409 `no_unopened_box`; 409 `idempotency_key_in_use` |
+
+Hero tiers reach the browser inside every `KudoCard` (`heroTier`) and the latest gift recipients inside
+`GET /api/v1/kudos/sidebar`. The open that completes the icon set stores its `icons_completed` notice in
+the same transaction as `users.icons_completed_at` (under a savepoint, so a notice failure never undoes
+the open) and also hands it to the post-commit notifier, which the once-ever dedupe makes a no-op.
+Handlers log a request the caller abandoned at INFO, not ERROR. The `live` seed runs an x2 heart campaign ("Ngày x2 tim – lan tỏa gấp đôi yêu
+thương!", now - 1 day to now + 13 days); the integration suite clears active campaigns, so reseed afterwards.
+
 ## Upload lifecycle and cleanup
 
 `kudo_uploads.state`: `pending` (uploaded, not in a kudo) -> `attached` (saved with a kudo). Removing

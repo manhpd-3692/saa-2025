@@ -18,8 +18,9 @@ WHERE k.id = $1
 FOR NO KEY UPDATE OF k;
 
 -- name: GetActiveCampaignWithMaxMultiplier :one
--- F008 INT-001 (BR-004): the highest multiplier among campaigns active at transaction time.
-SELECT id, multiplier
+-- F008 INT-001 (BR-004): the highest multiplier among campaigns active at transaction time. The
+-- heart transaction (A1) stores its weight; the badge read (A3) shows the same row.
+SELECT id, name, multiplier, starts_at, ends_at
 FROM campaigns
 WHERE starts_at <= now() AND now() < ends_at
 ORDER BY multiplier DESC, starts_at DESC, id
@@ -114,3 +115,23 @@ UPDATE secret_boxes
 SET opened_at = now(), icon = @icon, open_request_id = @open_request_id, open_result = @open_result
 WHERE id = @id
 RETURNING open_result;
+
+-- name: GetIconsCompleted :one
+-- F008 A5 (R11): whether the Sunner's icon set was completed (set once by the completing open).
+SELECT (icons_completed_at IS NOT NULL)::boolean AS completed
+FROM users
+WHERE id = $1;
+
+-- name: ListLatestGiftRecipients :many
+-- F008 A7 (FR-407, F006 FR-210 D006): the Sunners who most recently opened a secret box
+-- ("gift" = opened box), newest first, with the icon of that latest box.
+SELECT u.id, u.name, u.avatar_url, latest.icon, latest.opened_at
+FROM (
+  SELECT DISTINCT ON (b.user_id) b.user_id, b.icon, b.opened_at
+  FROM secret_boxes b
+  WHERE b.opened_at IS NOT NULL
+  ORDER BY b.user_id, b.opened_at DESC, b.id DESC
+) latest
+JOIN users u ON u.id = latest.user_id
+ORDER BY latest.opened_at DESC, u.id
+LIMIT @row_limit::int;

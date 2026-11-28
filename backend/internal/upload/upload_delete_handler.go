@@ -73,7 +73,7 @@ func (h UploadDeleteHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		httpx.WriteError(w, http.StatusConflict, CodeUploadAttached, "This image is already part of a kudo.")
 		return
 	case err != nil:
-		slog.ErrorContext(r.Context(), "delete kudo upload", "error", err)
+		httpx.LogRequestFailure(r, err, "delete kudo upload")
 		httpx.WriteInternalError(w)
 		return
 	}

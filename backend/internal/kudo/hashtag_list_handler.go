@@ -2,7 +2,6 @@ package kudo
 
 import (
 	"context"
-	"log/slog"
 	"net/http"
 
 	"github.com/google/uuid"
@@ -52,7 +51,7 @@ func (h HashtagListHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	defer cancel()
 	rows, err := h.queries.ListHashtags(ctx, db.ListHashtagsParams{Pattern: dbx.PrefixPattern(prefix), RowLimit: HashtagListLimit})
 	if err != nil {
-		slog.ErrorContext(r.Context(), "list hashtags", "error", err)
+		httpx.LogRequestFailure(r, err, "list hashtags")
 		httpx.WriteInternalError(w)
 		return
 	}

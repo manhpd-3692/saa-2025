@@ -1,7 +1,6 @@
 package kudo
 
 import (
-	"log/slog"
 	"net/http"
 
 	"github.com/manhpd-3692/saa-2025/backend/internal/httpx"
@@ -25,7 +24,7 @@ func (h SidebarHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 	sidebar, err := h.board.Sidebar(r.Context(), viewer)
 	if err != nil {
-		slog.ErrorContext(r.Context(), "read board sidebar", "error", err)
+		httpx.LogRequestFailure(r, err, "read board sidebar")
 		httpx.WriteInternalError(w)
 		return
 	}

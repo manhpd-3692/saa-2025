@@ -1,7 +1,6 @@
 package kudo
 
 import (
-	"log/slog"
 	"net/http"
 
 	"github.com/google/uuid"
@@ -36,7 +35,7 @@ func (h HighlightHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 	page, err := h.reads.Highlight(r.Context(), viewer, HighlightFilter{HashtagID: hashtagID, UnitID: unitID})
 	if err != nil {
-		slog.ErrorContext(r.Context(), "list highlight kudos", "error", err)
+		httpx.LogRequestFailure(r, err, "list highlight kudos")
 		httpx.WriteInternalError(w)
 		return
 	}

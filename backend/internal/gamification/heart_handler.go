@@ -58,11 +58,11 @@ func (h HeartHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		httpx.WriteError(w, http.StatusForbidden, CodeCannotHeartOwnKudo, "You cannot heart a kudo you sent.")
 	case errors.Is(err, ErrKudoNotPublic):
 		httpx.WriteError(w, http.StatusConflict, CodeKudoNotPublic, "Hearts are accepted on public kudos only.")
-	case errors.Is(err, ErrCampaignLookup):
-		slog.ErrorContext(r.Context(), "heart campaign lookup", "kudo_id", kudoID, "error", err)
+	case errors.Is(err, ErrCampaignLookup) && !httpx.CanceledByCaller(r, err):
+		httpx.LogRequestFailure(r, err, "heart campaign lookup", "kudo_id", kudoID)
 		httpx.WriteError(w, http.StatusInternalServerError, CodeCampaignLookupFailed, "The heart was not recorded; please retry.")
 	default:
-		slog.ErrorContext(r.Context(), "set heart", "kudo_id", kudoID, "error", err)
+		httpx.LogRequestFailure(r, err, "set heart", "kudo_id", kudoID)
 		httpx.WriteInternalError(w)
 	}
 }

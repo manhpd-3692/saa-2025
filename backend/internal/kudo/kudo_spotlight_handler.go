@@ -1,7 +1,6 @@
 package kudo
 
 import (
-	"log/slog"
 	"net/http"
 
 	"github.com/manhpd-3692/saa-2025/backend/internal/httpx"
@@ -21,7 +20,7 @@ func NewSpotlightHandler(board *BoardReadService) SpotlightHandler {
 func (h SpotlightHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	spotlight, err := h.board.Spotlight(r.Context())
 	if err != nil {
-		slog.ErrorContext(r.Context(), "read spotlight", "error", err)
+		httpx.LogRequestFailure(r, err, "read spotlight")
 		httpx.WriteInternalError(w)
 		return
 	}

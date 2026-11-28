@@ -144,17 +144,3 @@ SELECT
   (SELECT count(*) FROM kudos WHERE sender_id = @viewer_id::uuid AND status = 'public')::int AS kudos_sent,
   (SELECT coalesce(sum(hs.heart_total), 0) FROM kudos k JOIN kudo_heart_state hs ON hs.kudo_id = k.id
     WHERE k.receiver_id = @viewer_id::uuid AND k.status = 'public')::bigint AS hearts_received;
-
--- name: ListLatestGiftRecipients :many
--- F008 A7 read for the F006 sidebar (FR-210, D006): the Sunners who most recently opened a
--- secret box ("gift" = opened box), newest first, with the icon of that latest box.
-SELECT u.id, u.name, u.avatar_url, latest.icon, latest.opened_at
-FROM (
-  SELECT DISTINCT ON (b.user_id) b.user_id, b.icon, b.opened_at
-  FROM secret_boxes b
-  WHERE b.opened_at IS NOT NULL
-  ORDER BY b.user_id, b.opened_at DESC, b.id DESC
-) latest
-JOIN users u ON u.id = latest.user_id
-ORDER BY latest.opened_at DESC, u.id
-LIMIT @row_limit::int;

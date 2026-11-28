@@ -80,7 +80,7 @@ func (h DecisionHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			Current: decision.Kudo,
 		})
 	default:
-		slog.ErrorContext(r.Context(), "moderation decision", "kudo_id", kudoID, "error", err)
+		httpx.LogRequestFailure(r, err, "moderation decision", "kudo_id", kudoID)
 		httpx.WriteInternalError(w)
 	}
 }

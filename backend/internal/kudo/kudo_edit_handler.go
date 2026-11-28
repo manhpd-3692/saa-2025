@@ -102,7 +102,7 @@ func writeKudoWriteError(w http.ResponseWriter, r *http.Request, action string, 
 		slog.ErrorContext(r.Context(), action+": storage unavailable", "error", err)
 		httpx.WriteError(w, http.StatusServiceUnavailable, upload.CodeStorageUnavailable, "Image storage is not available.")
 	default:
-		slog.ErrorContext(r.Context(), action, "path", r.URL.Path, "error", err)
+		httpx.LogRequestFailure(r, err, action, "path", r.URL.Path)
 		httpx.WriteInternalError(w)
 	}
 }

@@ -41,7 +41,7 @@ func (h DetailHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	case errors.Is(err, ErrKudoNotFound):
 		httpx.WriteError(w, http.StatusNotFound, CodeKudoNotFound, "Kudo not found.")
 	default:
-		slog.ErrorContext(r.Context(), "read kudo", "kudo_id", id, "error", err)
+		httpx.LogRequestFailure(r, err, "read kudo", "kudo_id", id)
 		httpx.WriteInternalError(w)
 	}
 }

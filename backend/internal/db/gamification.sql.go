@@ -7,6 +7,7 @@ package db
 
 import (
 	"context"
+	"time"
 
 	"github.com/google/uuid"
 )
@@ -86,7 +87,7 @@ func (q *Queries) DeleteHeart(ctx context.Context, arg DeleteHeartParams) (int64
 }
 
 const getActiveCampaignWithMaxMultiplier = `-- name: GetActiveCampaignWithMaxMultiplier :one
-SELECT id, multiplier
+SELECT id, name, multiplier, starts_at, ends_at
 FROM campaigns
 WHERE starts_at <= now() AND now() < ends_at
 ORDER BY multiplier DESC, starts_at DESC, id
@@ -95,15 +96,39 @@ LIMIT 1
 
 type GetActiveCampaignWithMaxMultiplierRow struct {
 	ID         uuid.UUID
+	Name       string
 	Multiplier int32
+	StartsAt   time.Time
+	EndsAt     time.Time
 }
 
-// F008 INT-001 (BR-004): the highest multiplier among campaigns active at transaction time.
+// F008 INT-001 (BR-004): the highest multiplier among campaigns active at transaction time. The
+// heart transaction (A1) stores its weight; the badge read (A3) shows the same row.
 func (q *Queries) GetActiveCampaignWithMaxMultiplier(ctx context.Context) (GetActiveCampaignWithMaxMultiplierRow, error) {
 	row := q.db.QueryRow(ctx, getActiveCampaignWithMaxMultiplier)
 	var i GetActiveCampaignWithMaxMultiplierRow
-	err := row.Scan(&i.ID, &i.Multiplier)
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.Multiplier,
+		&i.StartsAt,
+		&i.EndsAt,
+	)
 	return i, err
+}
+
+const getIconsCompleted = `-- name: GetIconsCompleted :one
+SELECT (icons_completed_at IS NOT NULL)::boolean AS completed
+FROM users
+WHERE id = $1
+`
+
+// F008 A5 (R11): whether the Sunner's icon set was completed (set once by the completing open).
+func (q *Queries) GetIconsCompleted(ctx context.Context, id uuid.UUID) (bool, error) {
+	row := q.db.QueryRow(ctx, getIconsCompleted, id)
+	var completed bool
+	err := row.Scan(&completed)
+	return completed, err
 }
 
 const getKudoForHeartForUpdate = `-- name: GetKudoForHeartForUpdate :one
@@ -248,6 +273,55 @@ func (q *Queries) ListCollectedIcons(ctx context.Context, userID uuid.UUID) ([]*
 			return nil, err
 		}
 		items = append(items, icon)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const listLatestGiftRecipients = `-- name: ListLatestGiftRecipients :many
+SELECT u.id, u.name, u.avatar_url, latest.icon, latest.opened_at
+FROM (
+  SELECT DISTINCT ON (b.user_id) b.user_id, b.icon, b.opened_at
+  FROM secret_boxes b
+  WHERE b.opened_at IS NOT NULL
+  ORDER BY b.user_id, b.opened_at DESC, b.id DESC
+) latest
+JOIN users u ON u.id = latest.user_id
+ORDER BY latest.opened_at DESC, u.id
+LIMIT $1::int
+`
+
+type ListLatestGiftRecipientsRow struct {
+	ID        uuid.UUID
+	Name      string
+	AvatarUrl *string
+	Icon      *SecretBoxIcon
+	OpenedAt  *time.Time
+}
+
+// F008 A7 (FR-407, F006 FR-210 D006): the Sunners who most recently opened a secret box
+// ("gift" = opened box), newest first, with the icon of that latest box.
+func (q *Queries) ListLatestGiftRecipients(ctx context.Context, rowLimit int32) ([]ListLatestGiftRecipientsRow, error) {
+	rows, err := q.db.Query(ctx, listLatestGiftRecipients, rowLimit)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []ListLatestGiftRecipientsRow
+	for rows.Next() {
+		var i ListLatestGiftRecipientsRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.Name,
+			&i.AvatarUrl,
+			&i.Icon,
+			&i.OpenedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
 	}
 	if err := rows.Err(); err != nil {
 		return nil, err

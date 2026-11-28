@@ -5,6 +5,7 @@ import { ShellActionsProvider } from "@/components/shell/shell-actions-context";
 import { SiteFooter } from "@/components/shell/site-footer";
 import { SiteHeader } from "@/components/shell/site-header";
 import { ProfileRecoveryRedirect } from "@/features/auth/profile-recovery-redirect";
+import { GamificationShellHost } from "@/features/gamification/gamification-shell-host";
 import { KudoComposeHost } from "@/features/kudo-compose/kudo-compose-host";
 import { getRequestLocale } from "@/i18n/get-request-locale";
 import { loadDictionaries } from "@/i18n/load-dictionary";
@@ -22,14 +23,17 @@ const FULL_CHROME = "contents group-has-[[data-minimal-page]]/shell:hidden";
  * avatar menu and bell; 401 or an error/timeout → links and language only;
  * a failed missing-profile recovery → only `ProfileRecoveryRedirect`, which
  * signs out in the browser and opens Login (F002 R22, N06). A signed-in
- * Sunner also gets the write-kudo host (F005), which the FAB opens.
+ * Sunner also gets the write-kudo host (F005), which the FAB opens, and the
+ * F008 host: the Thể lệ panel (FAB) and the secret box window ("Mở Secret Box").
  */
 export default async function ShellLayout({ children }: { children: ReactNode }) {
   const summary = await getSessionSummary();
   if (summary.kind === "profile-missing") return <ProfileRecoveryRedirect />;
   const signedIn = summary.kind === "signed-in";
   const locale = await getRequestLocale();
-  const composeDictionary = signedIn ? await loadDictionaries(locale, ["common", "kudo-compose"]) : null;
+  const [composeDictionary, gamificationDictionary] = signedIn
+    ? await Promise.all([loadDictionaries(locale, ["common", "kudo-compose"]), loadDictionaries(locale, ["common", "gamification"])])
+    : [null, null];
 
   return (
     <ShellActionsProvider>
@@ -45,6 +49,7 @@ export default async function ShellLayout({ children }: { children: ReactNode })
             <SiteFooter />
             {/* Same z-layer as header and FAB: after the header (covered by the window), before the FAB (stays usable). */}
             {composeDictionary && <KudoComposeHost locale={locale} dictionary={composeDictionary} />}
+            {gamificationDictionary && <GamificationShellHost locale={locale} dictionary={gamificationDictionary} />}
             <FloatingActionButton />
           </div>
         </div>

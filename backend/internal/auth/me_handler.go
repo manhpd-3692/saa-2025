@@ -35,7 +35,7 @@ func (h MeHandler) Get(w http.ResponseWriter, r *http.Request) {
 		httpx.WriteError(w, http.StatusForbidden, CodeProfileNotProvisioned,
 			"No profile exists for this account; provision it first.")
 	default:
-		slog.ErrorContext(r.Context(), "read me", "user_id", ac.UserID, "error", err)
+		httpx.LogRequestFailure(r, err, "read me", "user_id", ac.UserID)
 		httpx.WriteInternalError(w)
 	}
 }
@@ -62,7 +62,7 @@ func (h MeHandler) Provision(w http.ResponseWriter, r *http.Request) {
 		httpx.WriteError(w, http.StatusConflict, CodeProfileConflict,
 			"This email already belongs to another profile. Please contact support.")
 	default:
-		slog.ErrorContext(r.Context(), "provision profile", "user_id", identity.UserID, "error", err)
+		httpx.LogRequestFailure(r, err, "provision profile", "user_id", identity.UserID)
 		httpx.WriteInternalError(w)
 	}
 }

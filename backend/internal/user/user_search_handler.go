@@ -67,7 +67,7 @@ func (h SearchHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		RowLimit: searchLimit(query.Get("limit")),
 	})
 	if err != nil {
-		slog.ErrorContext(r.Context(), "search users", "error", err)
+		httpx.LogRequestFailure(r, err, "search users")
 		httpx.WriteInternalError(w)
 		return
 	}

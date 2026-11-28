@@ -309,55 +309,6 @@ func (q *Queries) ListKudoHashtagNames(ctx context.Context, kudoID uuid.UUID) ([
 	return items, nil
 }
 
-const listLatestGiftRecipients = `-- name: ListLatestGiftRecipients :many
-SELECT u.id, u.name, u.avatar_url, latest.icon, latest.opened_at
-FROM (
-  SELECT DISTINCT ON (b.user_id) b.user_id, b.icon, b.opened_at
-  FROM secret_boxes b
-  WHERE b.opened_at IS NOT NULL
-  ORDER BY b.user_id, b.opened_at DESC, b.id DESC
-) latest
-JOIN users u ON u.id = latest.user_id
-ORDER BY latest.opened_at DESC, u.id
-LIMIT $1::int
-`
-
-type ListLatestGiftRecipientsRow struct {
-	ID        uuid.UUID
-	Name      string
-	AvatarUrl *string
-	Icon      *SecretBoxIcon
-	OpenedAt  *time.Time
-}
-
-// F008 A7 read for the F006 sidebar (FR-210, D006): the Sunners who most recently opened a
-// secret box ("gift" = opened box), newest first, with the icon of that latest box.
-func (q *Queries) ListLatestGiftRecipients(ctx context.Context, rowLimit int32) ([]ListLatestGiftRecipientsRow, error) {
-	rows, err := q.db.Query(ctx, listLatestGiftRecipients, rowLimit)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []ListLatestGiftRecipientsRow
-	for rows.Next() {
-		var i ListLatestGiftRecipientsRow
-		if err := rows.Scan(
-			&i.ID,
-			&i.Name,
-			&i.AvatarUrl,
-			&i.Icon,
-			&i.OpenedAt,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
 const listLatestPublicKudoReceivers = `-- name: ListLatestPublicKudoReceivers :many
 SELECT k.receiver_id, u.name AS receiver_name, k.created_at
 FROM kudos k
