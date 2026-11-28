@@ -1,0 +1,16 @@
+
+Running 11 tests using 1 worker
+
+  ok  1 [chromium] › e2e\sunner-profiles.spec.ts:62:3 › as a Sunner › Profile in the avatar menu opens my profile: identity, collected icons, five counts and my received kudos (row 51, FR-101, FR-201..204, FR-403, SC-001, SC-008) (8.8s)
+  ok  2 [chromium] › e2e\sunner-profiles.spec.ts:95:3 › as a Sunner › Mở Secret Box opens the F008 window from my profile; closing it refreshes counts and icons without a reload (row 51, FR-203, FR-404, US005, SC-008) (9.2s)
+  ok  3 [chromium] › e2e\sunner-profiles.spec.ts:118:3 › as a Sunner › the received/sent dropdown switches to my sent kudos, keeps the choice in the address and after a reload (rows 51 + 53, FR-205, FR-401, SC-002, D002) (3.8s)
+  ok  4 [chromium] › e2e\sunner-profiles.spec.ts:140:3 › as a Sunner › a teammate's avatar opens their read-only profile: no box action or figure, no email, and the send button preselects them (row 52, FR-102, FR-301, FR-605, SC-007, US003, US004) (6.6s)
+  ok  5 [chromium] › e2e\sunner-profiles.spec.ts:161:3 › as a Sunner › a kudo sent from a teammate's profile shows at the top of their received list and the count follows, without a reload (FR-403, FR-404 refresh) (4.9s)
+  ok  6 [chromium] › e2e\sunner-profiles.spec.ts:191:3 › as a Sunner › my own id on the teammate address opens my profile with the filter kept; unknown and malformed ids show Not found (row 52, FR-103, FR-104, DEC-001, SC-003) (1.6s)
+  ok  7 [chromium] › e2e\sunner-profiles.spec.ts:205:3 › as a Sunner › load more appends the next 10 cards until the end; an empty filter shows the empty state (FR-206, FR-302, FR-402, BR-005) (2.7s)
+  ok  8 [chromium] › e2e\sunner-profiles.spec.ts:223:3 › as a Sunner › a failed list request keeps the cards shown, says so and retries; the address follows only a loaded filter (US002 error path) (1.7s)
+  ok  9 [chromium] › e2e\sunner-profiles.spec.ts:238:3 › as a Sunner › anonymous kudos stay anonymous on teammates' profiles: masked sender without a link, anonymous sends out of the list and the count (row 52, FR-602, FR-603, BR-001, BR-002, SC-005, SC-011) (4.1s)
+  ok 10 [chromium] › e2e\sunner-profiles.spec.ts:267:3 › signed out › both profile addresses send an anonymous visitor to Login with the way back (FR-601) (945ms)
+  ok 11 [chromium] › e2e\sunner-profiles.spec.ts:279:3 › as an admin › an admin sees a teammate's anonymous sends, with the real sender and the anonymous marker (D010, G04) (3.8s)
+
+  11 passed (49.1s)

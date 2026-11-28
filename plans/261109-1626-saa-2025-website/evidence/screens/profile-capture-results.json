@@ -1,0 +1,88 @@
+{
+  "profile-own": {
+    "finalUrl": "http://localhost:3000/profile",
+    "status": 200,
+    "title": "Sun* Annual Awards 2025",
+    "h1": [
+      "Nguyễn Văn An"
+    ],
+    "consoleErr": [],
+    "badResponses": [],
+    "emailInHtml": [],
+    "maiLinhIdInHtml": false,
+    "bodyTextSample": "About SAA 2025\nAward Information\nSun* Kudos\nVN\nN\nNguyễn Văn An\n\nCECV1\n\nREVIVAL\nTOUCH OF LIGHT\nSTAY GOLD\nFLOW TO HORIZON\nBEYOND THE BOUNDARY\nROOT FURTHER\n\nBộ sưu tập icon của tôi\n\nSố Kudos bạn nhận được:\n4\nSố Kudos bạn đã gửi:\n20\nSố tim bạn nhận được:\n10\nSố Secret Box bạn đã mở:\n9\nSố Secret Box chưa mở:\n0\nMở Secret Box\n\nBạn chưa có Secret Box nào để mở.\n\nSun* Annual Awards 2025\n\nKUDOS\nĐã nhận (4)\n\nV\nVũ Đức Khang\nCECV3\n•\ngửi đến\nN\nNguyễn Văn An\nCECV1\n•\n14:57 - 11/28/2026\nTHỦ LĨNH THẦM LẶNG\n\nAn luôn âm thầm dọn dẹp tech debt cho cả team.\n\n#dedication#rootfurther\n4\nx2\nCopy Link\nN\nNguyễn Hoàng Linh\nCECV2\n•\ngửi đến\nN\nNguyễn Văn An\nCECV1\n•\n11:57 - 11/24/2026\nCẢM ƠN ANH AN\n\nAnh An đã review giúp em bản thiết kế hệ thống rất chi tiết.\n\n#mentor\n1\nx2\nCopy Link\nB\nBùi Thanh Nam\nCECV5\n•\ngửi đến\nN\nNguyễn Văn An\nCECV1\n•\n17:57 - 11/22/2026\nNGƯỜI TRUYỀN LỬA\n\nAnh An luôn truyền cảm hứng trong mỗi buổi sprint review.\n\n#teamwork\n1\nx2\nCopy Link\nẨn danh\nNgười gửi ẩn danh\ngửi đến\nN\nNguyễn Văn An\nCECV1\n•\n17:57 - 11/17/2026\nGIẢI CỨU DEADLINE\n\nAn đã ở lại cùng team để fix bug production kịp thời.\n\n#customerfirst#dedication\n4\nx2\nCopy Link\nAbout SAA 2025\nAward Information\nSun* Kudos\nTiêu chuẩn chung\n\nBản quyền thuộc về Sun* © 2025\n\n/"
+  },
+  "profile-other": {
+    "finalUrl": "http://localhost:3000/profile/d0000000-0000-4000-8000-000000000002",
+    "status": 200,
+    "title": "Sun* Annual Awards 2025",
+    "h1": [
+      "Trần Thị Bình"
+    ],
+    "consoleErr": [],
+    "badResponses": [],
+    "emailInHtml": [],
+    "maiLinhIdInHtml": false,
+    "bodyTextSample": "About SAA 2025\nAward Information\nSun* Kudos\nVN\nT\nTrần Thị Bình\n\nCECV1\n\nSTAY GOLD\n\nBộ sưu tập icon của Trần Thị Bình\n\nGửi lời cảm ơn và ghi nhận tới Trần Thị Bình\nSố Kudos đã nhận:\n17\nSố Kudos đã gửi:\n4\nSố tim đã nhận:\n15\n\nSun* Annual Awards 2025\n\nKUDOS\nĐã nhận (17)\n\nẨn danh\nNgười gửi ẩn danh\ngửi đến\nT\nTrần Thị Bình\nCECV1\n•\n18:10 - 11/28/2026\nE2E ĐÃ SỬA\n\nCảm ơn bạn đã luôn đồng hành!\n\n#e2e-kudos\n0\nx2\nCopy Link\nẨn danh\nNgười gửi ẩn danh\ngửi đến\nT\nTrần Thị Bình\nCECV1\n•\n18:10 - 11/28/2026\nE2E GỬI LẠI SAU LỖI\n\nCảm ơn bạn đã luôn đồng hành!\n\n#e2e-kudos\n0\nx2\nCopy Link\nN\nNguyễn Văn An\nCECV1\n•\ngửi đến\nT\nTrần Thị Bình\nCECV1\n•\n18:10 - 11/28/2026\nE2E BẤM GỬI HAI LẦN\n\nCảm ơn bạn đã luôn đồng hành!\n\n#e2e-kudos\n0\nx2\nCopy Link\nẨn danh\nNgười gửi ẩn danh\ngửi đến\nT\nTrần Thị Bình\nCECV1\n•\n18:10 - 11/28/2026\nE2E KUDO ẨN DANH\n\nCảm ơn bạn đã luôn đồng hành!\n\n#e2e-kudos\n0\nx2\nCopy Link\nN\nNguyễn Văn An\nCECV1\n•\ngửi đến\nT\nTrần Thị Bình\nCECV1\n•\n18:10 - 11/28/2026\nE2E KUDO CÓ ẢNH\n\nCảm ơn bạn đã luôn đồng hành!\n\n#e2e-kudos\n0\nx2\nCopy Link\nN\nNguyễn Văn An\nCECV1\n•\ngửi đến\nT\nTrần Thị Bình\nCECV1\n•\n18:10 - 11/28/2026\nE2E GIỚI HẠN KÝ TỰ\n\naaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  },
+  "profile-dropdown-received-sent": {
+    "finalUrl": "http://localhost:3000/profile",
+    "status": 200,
+    "title": "Sun* Annual Awards 2025",
+    "h1": [
+      "Nguyễn Văn An"
+    ],
+    "consoleErr": [],
+    "badResponses": [],
+    "emailInHtml": [],
+    "maiLinhIdInHtml": false,
+    "bodyTextSample": "About SAA 2025\nAward Information\nSun* Kudos\nVN\nN\nNguyễn Văn An\n\nCECV1\n\nREVIVAL\nTOUCH OF LIGHT\nSTAY GOLD\nFLOW TO HORIZON\nBEYOND THE BOUNDARY\nROOT FURTHER\n\nBộ sưu tập icon của tôi\n\nSố Kudos bạn nhận được:\n4\nSố Kudos bạn đã gửi:\n20\nSố tim bạn nhận được:\n10\nSố Secret Box bạn đã mở:\n9\nSố Secret Box chưa mở:\n0\nMở Secret Box\n\nBạn chưa có Secret Box nào để mở.\n\nSun* Annual Awards 2025\n\nKUDOS\nĐã nhận (4)\n\nV\nVũ Đức Khang\nCECV3\n•\ngửi đến\nN\nNguyễn Văn An\nCECV1\n•\n14:57 - 11/28/2026\nTHỦ LĨNH THẦM LẶNG\n\nAn luôn âm thầm dọn dẹp tech debt cho cả team.\n\n#dedication#rootfurther\n4\nx2\nCopy Link\nN\nNguyễn Hoàng Linh\nCECV2\n•\ngửi đến\nN\nNguyễn Văn An\nCECV1\n•\n11:57 - 11/24/2026\nCẢM ƠN ANH AN\n\nAnh An đã review giúp em bản thiết kế hệ thống rất chi tiết.\n\n#mentor\n1\nx2\nCopy Link\nB\nBùi Thanh Nam\nCECV5\n•\ngửi đến\nN\nNguyễn Văn An\nCECV1\n•\n17:57 - 11/22/2026\nNGƯỜI TRUYỀN LỬA\n\nAnh An luôn truyền cảm hứng trong mỗi buổi sprint review.\n\n#teamwork\n1\nx2\nCopy Link\nẨn danh\nNgười gửi ẩn danh\ngửi đến\nN\nNguyễn Văn An\nCECV1\n•\n17:57 - 11/17/2026\nGIẢI CỨU DEADLINE\n\nAn đã ở lại cùng team để fix bug production kịp thời.\n\n#customerfirst#dedication\n4\nx2\nCopy Link\nAbout SAA 2025\nAward Information\nSun* Kudos\nTiêu chuẩn chung\n\nBản quyền thuộc về Sun* © 2025\n\n/"
+  },
+  "profile-not-found-unknown": {
+    "finalUrl": "http://localhost:3000/profile/6b0f3c55-0000-4000-8000-00000000dead",
+    "status": 404,
+    "title": "Sun* Annual Awards 2025",
+    "h1": [
+      "KHÔNG TÌM THẤY"
+    ],
+    "consoleErr": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "badResponses": [
+      "404 GET http://localhost:3000/profile/6b0f3c55-0000-4000-8000-00000000dead"
+    ],
+    "emailInHtml": [],
+    "maiLinhIdInHtml": false,
+    "bodyTextSample": "VN\nKHÔNG TÌM THẤY\n\nNội dung bạn tìm không tồn tại hoặc đã bị gỡ bỏ.\n\nVề trang chủ\nBản quyền thuộc về Sun* © 2025"
+  },
+  "profile-not-found-malformed": {
+    "finalUrl": "http://localhost:3000/profile/not-a-uuid",
+    "status": 404,
+    "title": "Sun* Annual Awards 2025",
+    "h1": [
+      "KHÔNG TÌM THẤY"
+    ],
+    "consoleErr": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "badResponses": [
+      "404 GET http://localhost:3000/profile/not-a-uuid"
+    ],
+    "emailInHtml": [],
+    "maiLinhIdInHtml": false,
+    "bodyTextSample": "VN\nKHÔNG TÌM THẤY\n\nNội dung bạn tìm không tồn tại hoặc đã bị gỡ bỏ.\n\nVề trang chủ\nBản quyền thuộc về Sun* © 2025"
+  },
+  "profile-anon-masked-khang": {
+    "finalUrl": "http://localhost:3000/profile/d0000000-0000-4000-8000-000000000006",
+    "status": 200,
+    "title": "Sun* Annual Awards 2025",
+    "h1": [
+      "Vũ Đức Khang"
+    ],
+    "consoleErr": [],
+    "badResponses": [],
+    "emailInHtml": [],
+    "maiLinhIdInHtml": false,
+    "bodyTextSample": "About SAA 2025\nAward Information\nSun* Kudos\nVN\nV\nVũ Đức Khang\n\nCECV3\n\nREVIVAL\n\nBộ sưu tập icon của Vũ Đức Khang\n\nGửi lời cảm ơn và ghi nhận tới Vũ Đức Khang\nSố Kudos đã nhận:\n2\nSố Kudos đã gửi:\n5\nSố tim đã nhận:\n7\n\nSun* Annual Awards 2025\n\nKUDOS\nĐã nhận (2)\n\nL\nLê Minh Châu\nCECV2\n•\ngửi đến\nV\nVũ Đức Khang\nCECV3\n•\n17:57 - 11/25/2026\nĐỒNG HÀNH CÙNG DỰ ÁN\n\nCảm ơn Khang đã gánh phần việc khó nhất của sprint.\n\n#rootfurther\n0\nx2\nCopy Link\nẨn danh\nNgười gửi ẩn danh\ngửi đến\nV\nVũ Đức Khang\nCECV3\n•\n17:57 - 11/21/2026\nTINH THẦN HỌC HỎI\n\nKhang tự học Go và chia sẻ lại cho cả team, quá đỉnh!\n\n#innovation#mentor\n7\nx2\nCopy Link\nAbout SAA 2025\nAward Information\nSun* Kudos\nTiêu chuẩn chung\n\nBản quyền thuộc về Sun* © 2025\n\n/"
+  }
+}

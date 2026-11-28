@@ -205,6 +205,23 @@ Handlers log through `httpx.LogRequestFailure`: a request the caller abandoned i
 or any other failure is ERROR. The `live` seed runs an x2 heart campaign ("Ngày x2 tim – lan tỏa gấp đôi yêu
 thương!", now - 1 day to now + 13 days); the integration suite clears active campaigns, so reseed afterwards.
 
+## Sunner profile endpoints (F007, `wire_profile.go`)
+
+Both are PROFILE routes, reads only. A non-uuid `{id}` answers like an unknown one.
+
+| Route | Answer | Notable errors |
+|---|---|---|
+| `GET /api/v1/users/{id}/profile` | `{user: {id, name, avatarUrl, unitCode}, counts: {kudosReceived, kudosSent, heartsReceived, boxesOpened?, boxesUnopened?} \| null, countsUnavailable, collectedIcons \| null, isOwner}` | 404 `user_not_found` |
+| `GET /api/v1/users/{id}/kudos?filter=received\|sent&cursor=` | `{items: KudoCard[], nextCursor}`; 10 per page, newest first | 400 `invalid_filter` (missing or unknown); 400 `invalid_cursor` (malformed, or issued for the other filter); 404 `user_not_found` |
+
+`boxesOpened` / `boxesUnopened` are present only when `isOwner` (the keys are absent otherwise). `kudosSent`
+and the sent list include anonymous kudos only for the owner or an admin. Spam kudos are never listed or
+counted. `heartsReceived` is the weighted total over the received public kudos. If the counts or the F008
+summary cannot be read the answer is still 200 with `counts: null` and `countsUnavailable: true`
+(`collectedIcons` is null when the summary failed). `email` is never returned. Cards come from
+`kudo.ReadService.CardsFromRows`, so masking is the board's. `nextCursor` is opaque (base64url of
+`<filter>:<kudo cursor>`): pass it back unchanged with the same `filter`.
+
 ## Upload lifecycle and cleanup
 
 `kudo_uploads.state`: `pending` (uploaded, not in a kudo) -> `attached` (saved with a kudo). Removing

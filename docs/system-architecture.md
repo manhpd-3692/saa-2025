@@ -1,6 +1,6 @@
 # System Architecture
 
-State after Phase 8 (hearts, hero badges, rules panel and secret box on top of Phase 7 Kudos Live board, Phase 6 compose, Phase 5 Homepage and Awards,
+State after Phase 9 (Sunner profiles on top of Phase 8 hearts, hero badges, rules panel and secret box, Phase 7 Kudos Live board, Phase 6 compose, Phase 5 Homepage and Awards,
 the Phase 4 launch gate and the Phase 3 shell). Items marked **planned (Phase N)** do not exist in code yet. Backend detail lives in [`backend/README.md`](../backend/README.md).
 
 ## Components
@@ -309,11 +309,45 @@ Tests: `e2e/like-kudos-and-secret-box.spec.ts`, `e2e/secret-box-open-and-retry.s
 `gamification_reads_integration_test.go`, `secret_box_completion_notice_integration_test.go`,
 `api_gamification_cancellation_integration_test.go`.
 
+## Sunner profiles (F007)
+
+Code in `src/features/profile/`; routes `src/app/(shell)/profile/page.tsx` (`/profile`, own, opened from the
+avatar menu) and `profile/[userId]/page.tsx` (`/profile/[userId]`, opened from a card avatar). `profile/layout.tsx`
+loads the dictionaries (`profile` plus `kudos-board`, `gamification` for the cards) and `ActiveCampaignProvider`.
+`?filter=sent` picks the sent list, anything else the received one. A non-uuid id is not-found at once; the
+viewer's own id on `/profile/[userId]` redirects to `/profile` keeping the filter; an id Go does not know is
+not-found (`profile/not-found.tsx`). First paint reads the profile and the first list page in parallel
+(`loadProfilePage`); a failed list keeps the header and shows its own retry. Fields and errors:
+[`backend/README.md`](../backend/README.md).
+
+| Route (PROFILE, `wire_profile.go`) | Feeds |
+|---|---|
+| `GET /api/v1/users/{id}/profile` | Header, counts, collected icons |
+| `GET /api/v1/users/{id}/kudos?filter=received\|sent&cursor=` | One page of the received or sent list |
+
+**Card reuse.** The lists select exactly the `GetKudoForRead` columns and `kudo.ReadService.CardsFromRows`
+(`kudo_cards_from_rows.go`) builds the cards, so hashtags, signed images, hero tiers, hearts and `maskSender`
+are the board's own code: a profile never masks a card itself. Counts use the same predicates as the lists
+(spam never; a teammate's anonymous sends only for the owner or an admin).
+
+**Filter-tagged cursor** (`profile_list_cursor.go`). `nextCursor` is base64url of `<filter>:<kudo cursor>`;
+a cursor issued for the other filter, or malformed, answers 400 `invalid_cursor`. Pages are 10, newest first.
+
+**List state** (`profile-kudos-list-state.ts`, pure, Vitest-covered). The filter shown changes only once its
+first page has loaded; a "Xem thêm" answer for an older list (generation) is dropped; a server refresh after a
+kudo is written or edited or a box opened merges a fresh first page into the shown list.
+
+**Nav highlight.** `NavItem.alsoUnder` (`nav-active-item.ts`): `/profile/` is under Sun* Kudos, so a
+teammate's profile selects Kudos; the own profile `/profile` selects nothing.
+
+Tests: `e2e/sunner-profiles.spec.ts`; Vitest `profile-kudos-list-state.test.ts`, `nav-active-item.test.ts`; Go
+integration tests `profile_integration_test.go`, `api_profile_integration_test.go`.
+
 ## Planned (not yet in code)
 
 | Item | Phase |
 |---|---|
-| Feature routes and screens | 9 to 13 |
+| Feature routes and screens | 10 to 13 |
 | Final integration, E2E, docs | 14 |
 
 Source of truth for phases: `plans/261109-1626-saa-2025-website/plan.md`.

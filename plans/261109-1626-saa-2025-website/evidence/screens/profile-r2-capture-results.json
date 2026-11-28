@@ -1,0 +1,66 @@
+{
+  "nav-own": {
+    "url": "/profile",
+    "nav": {
+      "about": {
+        "bg": "rgba(0, 0, 0, 0)",
+        "color": "rgb(255, 255, 255)",
+        "border": "rgb(255, 255, 255)",
+        "weight": "700",
+        "underline": "none",
+        "after": "rgba(0, 0, 0, 0)"
+      },
+      "kudos": {
+        "bg": "rgba(0, 0, 0, 0)",
+        "color": "rgb(255, 255, 255)",
+        "border": "rgb(255, 255, 255)",
+        "weight": "700",
+        "underline": "none",
+        "after": "rgba(0, 0, 0, 0)"
+      }
+    },
+    "errs": [],
+    "bad": []
+  },
+  "nav-other": {
+    "url": "/profile/d0000000-0000-4000-8000-000000000002",
+    "nav": {
+      "about": {
+        "bg": "rgba(0, 0, 0, 0)",
+        "color": "rgb(255, 255, 255)",
+        "border": "rgb(255, 255, 255)",
+        "weight": "700",
+        "underline": "none",
+        "after": "rgba(0, 0, 0, 0)"
+      },
+      "kudos": {
+        "bg": "rgba(0, 0, 0, 0)",
+        "color": "rgb(255, 234, 158)",
+        "border": "rgb(255, 234, 158)",
+        "weight": "700",
+        "underline": "none",
+        "after": "rgb(255, 234, 158)"
+      }
+    },
+    "errs": [],
+    "bad": []
+  },
+  "srOnly": {
+    "count": 0,
+    "info": null,
+    "ariaDesc": {
+      "describedby": null,
+      "descText": null,
+      "disabled": false
+    }
+  },
+  "filterDuringLoadMore": {
+    "afterMore": 20,
+    "sentCount": 2,
+    "sentFirst10Length": 2,
+    "url": "http://localhost:3000/profile/d0000000-0000-4000-8000-000000000010?filter=sent",
+    "label": "Đã gửi (2)",
+    "errs": [],
+    "bad": []
+  }
+}

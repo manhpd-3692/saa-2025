@@ -1,11 +1,8 @@
 {
-  "task": "Phase 8: hearts with x2 campaign badge, hero badges, rules panel and secret box (F008)",
+  "task": "Phase 9: own and other Sunner profiles (F007)",
   "mode": "code",
-  "acceptanceCriteria": [
-    "Hover campaign", "The le rules panel", "Hover danh hieu New Hero", "Hover danh hieu Rising Hero", "Hover danh hieu Super Hero", "Hover danh hieu Legend Hero",
-    "Open secret box chua mo", "Open secret box action bam mo", "Open Giftbox ket qua", "Open secret box Standby"
-  ],
-  "touchpoints": ["backend/internal/gamification/", "backend/internal/notification/notification_service.go", "backend/internal/httpx/request_failure_log.go", "backend/internal/auth/", "backend/cmd/api/wire_gamification_reads.go", "backend/db/queries/{gamification,kudo_read}.sql", "backend/db/seeds/demo_activity.sql", "src/features/gamification/", "src/features/kudos-board/{heart-slot,hero-badge-slot,board-sidebar}.tsx", "src/app/(shell)/layout.tsx", "src/app/(shell)/kudos/layout.tsx", "src/components/shell/shell-actions-context.tsx", "e2e/like-kudos-and-secret-box.spec.ts", "e2e/secret-box-open-and-retry.spec.ts"],
-  "blastRadius": ["P7 board slots and sidebar", "notification writes from the secret box transaction", "log level policy across ~20 handlers incl. auth middleware", "FAB and shell layout"],
-  "contracts": ["PUT/DELETE /api/v1/kudos/{id}/heart with campaign weight", "POST /api/v1/me/secret-boxes/open Idempotency-Key", "GET active campaign", "GET secret box summary", "icons_completed notice exactly once", "R02 masking on new reads"]
+  "acceptanceCriteria": ["U8 Profile ban than", "U9 Profile nguoi khac", "Dropdown-filter da nhan/gui"],
+  "touchpoints": ["backend/internal/profile/", "backend/db/queries/profile.sql", "backend/cmd/api/wire_profile.go", "backend/internal/kudo/kudo_cards_from_rows.go", "src/app/(shell)/profile/", "src/features/profile/", "src/components/shell/nav-active-item.ts", "src/i18n/", "e2e/sunner-profiles.spec.ts"],
+  "blastRadius": ["avatar menu profile link", "kudo card avatar links", "compose receiver prefill", "secret box modal refresh", "header nav active rule"],
+  "contracts": ["GET /api/v1/users/{id}/profile", "GET /api/v1/users/{id}/kudos?filter&cursor", "R02 anonymous masking with owner/admin exceptions", "box figures owner only", "uniform 404 user_not_found"]
 }

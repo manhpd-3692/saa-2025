@@ -4,6 +4,23 @@ What each delivered phase changed, newest first. Phase scope and status live in
 [`plans/261109-1626-saa-2025-website/plan.md`](../plans/261109-1626-saa-2025-website/plan.md);
 current structure in [`system-architecture.md`](system-architecture.md).
 
+## Phase 9: own and other Sunner profiles, F007 (commit `8073e25`, 2026-11-28)
+
+- Added: `/profile` (own, from the avatar menu) and `/profile/[userId]` (teammate, from a card avatar): header
+  with unit and collected icons, kudos / hearts counts, box figures and "Mở Secret Box" for the owner only,
+  received / sent dropdown kept in `?filter=`, "Xem thêm" paging, send-kudo button preselecting the teammate.
+  The own id on the teammate address redirects to `/profile`; unknown or malformed ids show Not found.
+- Added: Go routes `GET /api/v1/users/{id}/profile` and `GET /api/v1/users/{id}/kudos?filter=&cursor=`
+  (`wire_profile.go`, `internal/profile`); `kudo.ReadService.CardsFromRows` so the lists reuse the board's
+  card assembly and sender masking; filter-tagged cursor (400 `invalid_cursor` for the other filter).
+- Added: anonymous sends stay out of a teammate's sent list and count unless the viewer is the owner or an
+  admin; spam is never listed or counted.
+- Changed: header nav keeps Sun* Kudos selected on `/profile/<id>` (`NavItem.alsoUnder`); the own profile
+  selects nothing.
+- Added: Playwright spec `e2e/sunner-profiles.spec.ts`; Vitest for the list state and nav rule; Go integration
+  tests for the endpoints.
+- Docs: F007 section in `system-architecture.md`; profile route table in `backend/README.md`.
+
 ## Phase 8: hearts, hero badges, rules panel and secret box, F008 (commit `a9f3c68`, 2026-11-28)
 
 - Added: heart toggle on every KudoCard with an optimistic weighted total, one shared state per kudo across
