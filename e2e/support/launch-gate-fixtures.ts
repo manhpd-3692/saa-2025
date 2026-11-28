@@ -14,7 +14,7 @@ const DB_CONTAINER = process.env.SAA_DB_CONTAINER ?? "supabase_db_saa-2025";
 /** The proxy launch gate keeps a successful read for 60 s (AD13). */
 export const GATE_CACHE_MS = 60_000;
 
-export type SeedScenario = "prelaunch" | "live";
+export type SeedScenario = "prelaunch" | "live" | "after-ceremony";
 
 /** Applies the event part of a seed scenario (`delete` + `insert` of the `events` row). */
 export function applyEventScenario(scenario: SeedScenario): void {

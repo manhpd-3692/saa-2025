@@ -195,5 +195,6 @@ test("live: the countdown address lands on the Homepage and renders no countdown
   expect(await response.text()).not.toContain("data-unit");
   await page.goto("/countdown");
   await expect(page).toHaveURL("/");
-  await expect(page.locator("[data-unit]")).toHaveCount(0);
+  await expect(page.locator("[data-unit]:not([data-testid=ceremony-countdown] [data-unit])")).toHaveCount(0); // ceremony countdown stays (FR-102)
+  await expect(page.getByTestId("ceremony-countdown").locator("[data-unit]")).toHaveCount(3);
 });
