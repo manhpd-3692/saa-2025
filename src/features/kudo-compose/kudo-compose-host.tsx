@@ -49,7 +49,10 @@ function ComposeController() {
       const active = document.activeElement;
       opener.current = active instanceof HTMLElement && active !== document.body ? active : null;
     }
-    setMode((current) => current ?? (payload?.kudoId ? { kind: "edit", kudoId: payload.kudoId } : { kind: "create" }));
+    setMode(
+      (current) =>
+        current ?? (payload?.kudoId ? { kind: "edit", kudoId: payload.kudoId } : { kind: "create", recipient: payload?.receiver }),
+    );
     setToast(null);
   }, []);
 

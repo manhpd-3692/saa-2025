@@ -11,9 +11,22 @@ import { createContext, useCallback, useContext, useMemo, useRef, useState, type
  */
 export type ShellAction = "rules" | "compose";
 
-/** `compose` with a `kudoId` opens the write-kudo form on the author's own kudo (F005 FR-102). */
+/** A Sunner offered as the recipient of a new kudo (same shape as F005's recipient options). */
+export interface ShellRecipient {
+  id: string;
+  name: string;
+  avatarUrl: string | null;
+  unitCode: string | null;
+}
+
+/**
+ * `compose` with a `kudoId` opens the write-kudo form on the author's own kudo (F005 FR-102);
+ * with a `receiver` it opens a new kudo with that Sunner preselected, still changeable
+ * (F006 hover card "Gửi KUDO"). `receiver.id` is the receiverId sent on create.
+ */
 export interface ShellActionPayload {
   kudoId?: string;
+  receiver?: ShellRecipient;
 }
 
 type ShellActionOpener = (payload?: ShellActionPayload) => void;

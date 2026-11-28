@@ -1,6 +1,9 @@
 package main
 
-import "testing"
+import (
+	"strings"
+	"testing"
+)
 
 func TestResolveScenario(t *testing.T) {
 	tests := map[string]struct {
@@ -19,6 +22,25 @@ func TestResolveScenario(t *testing.T) {
 				t.Fatalf("resolveScenario(%q) = %q, %q, %v", tc.value, scenario, file, err)
 			}
 		})
+	}
+}
+
+// The seed overwrites Storage objects (the demo kudo images): only a local Storage API.
+func TestLocalStorageRefusesNonLoopbackHosts(t *testing.T) {
+	for _, raw := range []string{"http://127.0.0.1:54321", "http://localhost:54321/"} {
+		if s, err := localStorage(raw, "key"); err != nil || s.base != strings.TrimRight(raw, "/")+"/storage/v1" {
+			t.Errorf("localStorage(%q) = %+v, %v; want accepted", raw, s, err)
+		}
+	}
+	for _, tc := range []struct{ url, key string }{
+		{"https://abc.supabase.co", "key"},
+		{"http://127.0.0.1:54321", ""},
+		{"", "key"},
+		{"not a url", "key"},
+	} {
+		if _, err := localStorage(tc.url, tc.key); err == nil {
+			t.Errorf("localStorage(%q, %q) accepted", tc.url, tc.key)
+		}
 	}
 }
 

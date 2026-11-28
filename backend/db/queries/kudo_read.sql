@@ -27,11 +27,134 @@ JOIN hashtags h ON h.id = kh.hashtag_id
 WHERE kh.kudo_id = $1
 ORDER BY h.name;
 
--- name: ListKudoImageObjectPaths :many
+-- name: ListPublicKudoCards :many
+-- F006 A5 (ALG-001, BR-005): public kudos newest first, keyset on (created_at, id). The columns
+-- match GetKudoForRead exactly, so every list builds its cards through the same Go code.
+-- The weighted total is read from kudo_heart_state per page row: the OFFSET 0 fence keeps the
+-- LATERAL subquery from being flattened into a join that aggregates every kudo and heart
+-- (EXPLAIN at 20k kudos / 100k hearts: 40.9 ms -> 0.17 ms, reviewer W2).
+SELECT k.id, k.sender_id, k.receiver_id, k.title, k.content, k.is_anonymous, k.status, k.created_at,
+       s.name AS sender_name, s.avatar_url AS sender_avatar_url, su.code AS sender_unit_code,
+       r.name AS receiver_name, r.avatar_url AS receiver_avatar_url, ru.code AS receiver_unit_code,
+       hs.heart_total,
+       EXISTS (
+         SELECT 1 FROM hearts h WHERE h.kudo_id = k.id AND h.user_id = @viewer_id::uuid
+       ) AS viewer_hearted
+FROM kudos k
+JOIN users s ON s.id = k.sender_id
+LEFT JOIN units su ON su.id = s.unit_id
+JOIN users r ON r.id = k.receiver_id
+LEFT JOIN units ru ON ru.id = r.unit_id
+JOIN LATERAL (
+  SELECT v.heart_total FROM kudo_heart_state v WHERE v.kudo_id = k.id OFFSET 0
+) hs ON true
+WHERE k.status = 'public'
+  AND (sqlc.narg(cursor_created_at)::timestamptz IS NULL
+       OR (k.created_at, k.id) < (sqlc.narg(cursor_created_at)::timestamptz, sqlc.narg(cursor_id)::uuid))
+ORDER BY k.created_at DESC, k.id DESC
+LIMIT @row_limit::int;
+
+-- name: ListHighlightKudoCards :many
+-- F006 A2 (BR-003, G12, SC-009): the Kudos Quốc Dân ranking. Every public kudo is a candidate,
+-- zero-heart ones included; the filters (AND; unit = the receiver's unit) apply first and the
+-- ranking is taken inside the filtered set: weighted hearts desc, newer first, then id.
+-- Ranking needs every candidate's total, so this one keeps the aggregate join (RISK-02).
+SELECT k.id, k.sender_id, k.receiver_id, k.title, k.content, k.is_anonymous, k.status, k.created_at,
+       s.name AS sender_name, s.avatar_url AS sender_avatar_url, su.code AS sender_unit_code,
+       r.name AS receiver_name, r.avatar_url AS receiver_avatar_url, ru.code AS receiver_unit_code,
+       hs.heart_total,
+       EXISTS (
+         SELECT 1 FROM hearts h WHERE h.kudo_id = k.id AND h.user_id = @viewer_id::uuid
+       ) AS viewer_hearted
+FROM kudos k
+JOIN users s ON s.id = k.sender_id
+LEFT JOIN units su ON su.id = s.unit_id
+JOIN users r ON r.id = k.receiver_id
+LEFT JOIN units ru ON ru.id = r.unit_id
+JOIN kudo_heart_state hs ON hs.kudo_id = k.id
+WHERE k.status = 'public'
+  AND (sqlc.narg(hashtag_id)::uuid IS NULL OR EXISTS (
+         SELECT 1 FROM kudo_hashtags kh WHERE kh.kudo_id = k.id AND kh.hashtag_id = sqlc.narg(hashtag_id)::uuid))
+  AND (sqlc.narg(unit_id)::uuid IS NULL OR r.unit_id = sqlc.narg(unit_id)::uuid)
+ORDER BY hs.heart_total DESC, k.created_at DESC, k.id DESC
+LIMIT @row_limit::int;
+
+-- name: ListHashtagNamesForKudos :many
+-- Card chips for a page of kudos in one round trip.
+SELECT kh.kudo_id, h.name
+FROM kudo_hashtags kh
+JOIN hashtags h ON h.id = kh.hashtag_id
+WHERE kh.kudo_id = ANY(@kudo_ids::uuid[])
+ORDER BY kh.kudo_id, h.name;
+
+-- name: ListImageObjectPathsForKudos :many
 -- The current kudo_images rows are the only source of a kudo's images; only attached uploads
--- are signed (Codex N02).
-SELECT u.object_path
+-- are signed (Codex N02). Opaque keys only, in the sender's order (Codex R01).
+SELECT ki.kudo_id, u.object_path
 FROM kudo_images ki
 JOIN kudo_uploads u ON u.id = ki.upload_id
-WHERE ki.kudo_id = $1 AND u.state = 'attached'
-ORDER BY ki.position;
+WHERE ki.kudo_id = ANY(@kudo_ids::uuid[]) AND u.state = 'attached'
+ORDER BY ki.kudo_id, ki.position;
+
+-- name: ListPublicKudoHashtags :many
+-- F006 A3: hashtags on at least one public kudo, for the Highlight Hashtag filter.
+SELECT h.id, h.name
+FROM hashtags h
+WHERE EXISTS (
+  SELECT 1 FROM kudo_hashtags kh JOIN kudos k ON k.id = kh.kudo_id
+  WHERE kh.hashtag_id = h.id AND k.status = 'public'
+)
+ORDER BY h.name;
+
+-- name: ListUnits :many
+-- F006 A3: every unit for the Phòng ban filter (the design lists unit codes).
+SELECT id, name, code
+FROM units
+ORDER BY code;
+
+-- name: ListSpotlightReceivers :many
+-- F006 A4 (ALG-002): the receivers of the most public kudos, for the Spotlight word cloud.
+SELECT u.id, u.name, count(*)::int AS kudos
+FROM kudos k
+JOIN users u ON u.id = k.receiver_id
+WHERE k.status = 'public'
+GROUP BY u.id, u.name
+ORDER BY kudos DESC, u.name, u.id
+LIMIT @row_limit::int;
+
+-- name: CountPublicKudos :one
+-- F006 A4: the "388 KUDOS" counter (public only, BR-001).
+SELECT count(*)::int FROM kudos WHERE status = 'public';
+
+-- name: ListLatestPublicKudoReceivers :many
+-- F006 A4: the Spotlight ticker "<time> <receiver> đã nhận được một Kudos mới". Receivers are
+-- never masked, and no sender column is selected.
+SELECT k.receiver_id, u.name AS receiver_name, k.created_at
+FROM kudos k
+JOIN users u ON u.id = k.receiver_id
+WHERE k.status = 'public'
+ORDER BY k.created_at DESC, k.id DESC
+LIMIT @row_limit::int;
+
+-- name: GetViewerKudoStats :one
+-- F006 A6 (FR-208, X07): the viewer's own public kudos received and sent (anonymous ones
+-- included: they are the viewer's own) and the weighted hearts on the kudos received.
+SELECT
+  (SELECT count(*) FROM kudos WHERE receiver_id = @viewer_id::uuid AND status = 'public')::int AS kudos_received,
+  (SELECT count(*) FROM kudos WHERE sender_id = @viewer_id::uuid AND status = 'public')::int AS kudos_sent,
+  (SELECT coalesce(sum(hs.heart_total), 0) FROM kudos k JOIN kudo_heart_state hs ON hs.kudo_id = k.id
+    WHERE k.receiver_id = @viewer_id::uuid AND k.status = 'public')::bigint AS hearts_received;
+
+-- name: ListLatestGiftRecipients :many
+-- F008 A7 read for the F006 sidebar (FR-210, D006): the Sunners who most recently opened a
+-- secret box ("gift" = opened box), newest first, with the icon of that latest box.
+SELECT u.id, u.name, u.avatar_url, latest.icon, latest.opened_at
+FROM (
+  SELECT DISTINCT ON (b.user_id) b.user_id, b.icon, b.opened_at
+  FROM secret_boxes b
+  WHERE b.opened_at IS NOT NULL
+  ORDER BY b.user_id, b.opened_at DESC, b.id DESC
+) latest
+JOIN users u ON u.id = latest.user_id
+ORDER BY latest.opened_at DESC, u.id
+LIMIT @row_limit::int;

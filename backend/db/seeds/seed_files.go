@@ -12,6 +12,15 @@ var Files embed.FS
 // DemoActivityFile is applied after every scenario file.
 const DemoActivityFile = "demo_activity.sql"
 
+// DemoKudoPhoto is the team photo the seed stores at every demo kudo image key: a
+// thumbnail cropped from the Figma kudo card (docs/figma-refs/user/kudo-card.png).
+//
+//go:embed kudo-images/team-photo.png
+var DemoKudoPhoto []byte
+
+// DemoKudoPhotoType is the content type of DemoKudoPhoto (bucket allows JPEG/PNG/WebP).
+const DemoKudoPhotoType = "image/png"
+
 // Scenarios maps SEED_SCENARIO values to their SQL file.
 var Scenarios = map[string]string{
 	"prelaunch":      "prelaunch.sql",

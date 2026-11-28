@@ -10,7 +10,11 @@ import { SaaLogo } from "./saa-logo";
  * context, so a page may paint full-bleed artwork behind the translucent bar
  * with an `absolute inset-0` layer.
  */
-export async function MinimalChrome({ children }: { children: ReactNode }) {
+export async function MinimalChrome({ children, bodyAs: Body = "main" }: {
+  children: ReactNode;
+  /** `div` when an outer layout already provides the `<main>` landmark (F006 kudo not-found, C01). */
+  bodyAs?: "main" | "div";
+}) {
   const { t } = await getRequestTranslator("common", "shell");
   return (
     // overflow-x-clip: wide artwork layers never widen the page (desktop min width, R17).
@@ -20,7 +24,7 @@ export async function MinimalChrome({ children }: { children: ReactNode }) {
         <LocaleSwitcher />
       </header>
       {/* Not positioned: a page's `absolute inset-0` art layer spans the whole root. */}
-      <main className="flex flex-1 flex-col">{children}</main>
+      <Body className="flex flex-1 flex-col">{children}</Body>
       <footer className="relative z-10 border-t border-divider py-8 text-center text-base font-bold leading-6">
         {t("shell.copyright")}
       </footer>

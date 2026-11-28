@@ -14,7 +14,8 @@ import {
 } from "./kudo-compose-api";
 import { IMAGES_MAX, imageFileProblem, normalizeHashtags, validateKudoInput, type FieldError, type KudoField } from "./kudo-input-schema";
 
-export type ComposeMode = { kind: "create" } | { kind: "edit"; kudoId: string };
+/** `create` may preselect a recipient (hover card "Gửi KUDO"); it stays changeable. */
+export type ComposeMode = { kind: "create"; recipient?: SunnerOption } | { kind: "edit"; kudoId: string };
 
 /** One thumbnail. `committed` = part of the saved kudo (edit prefill): removing it only drops it from the save (R04). */
 export interface ComposeImage {
@@ -35,8 +36,8 @@ export interface ComposeValues {
   isAnonymous: boolean;
 }
 
-export function initialComposeValues(form?: KudoEditForm): ComposeValues {
-  if (!form) return { recipient: null, title: "", contentHtml: "", hashtags: [], images: [], isAnonymous: false };
+export function initialComposeValues(form?: KudoEditForm, recipient?: SunnerOption): ComposeValues {
+  if (!form) return { recipient: recipient ?? null, title: "", contentHtml: "", hashtags: [], images: [], isAnonymous: false };
   return {
     recipient: form.receiver,
     title: form.title,

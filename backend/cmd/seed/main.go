@@ -3,7 +3,8 @@
 // activity dated within the last 14 days. Units come from supabase/seed.sql.
 //
 // It connects with LOCAL_OWNER_DATABASE_URL (the local `postgres` owner role,
-// needed to write auth.users) and refuses any non-loopback host.
+// needed to write auth.users) and stores the demo kudo images through the local
+// Storage API (SUPABASE_URL, SUPABASE_SERVICE_KEY); both must be loopback hosts.
 package main
 
 import (
@@ -42,6 +43,10 @@ func run() error {
 	if err != nil {
 		return err
 	}
+	storage, err := localStorage(os.Getenv(envSupabaseURL), os.Getenv(envSupabaseServiceKey))
+	if err != nil {
+		return err
+	}
 	ctx, cancel := context.WithTimeout(context.Background(), seedTimeout)
 	defer cancel()
 
@@ -67,6 +72,11 @@ func run() error {
 	if err != nil {
 		return err
 	}
+	images, err := uploadDemoKudoImages(ctx, conn, storage)
+	if err != nil {
+		return err
+	}
+	slog.Info("demo kudo images stored", "objects", images)
 	return report(ctx, conn, scenario)
 }
 

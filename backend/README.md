@@ -44,7 +44,7 @@ All commands from the repo root unless noted.
    ```
 2. Google OAuth (only sign-in method): copy `supabase/.env.example` to `supabase/.env` and fill the
    client id/secret. Authorized redirect URI: `http://127.0.0.1:54321/auth/v1/callback`.
-3. `supabase start` — applies the 10 migrations, seeds `units` from `supabase/seed.sql`, creates the
+3. `supabase start` — applies the 11 migrations, seeds `units` from `supabase/seed.sql`, creates the
    private `kudo-images` bucket (5 MB, JPEG/PNG/WebP).
 4. Copy `backend/.env.example` to `backend/.env` (gitignored) and fill it. Local values:
    `SUPABASE_URL=http://127.0.0.1:54321`, `SUPABASE_SERVICE_KEY` = `SECRET_KEY` from
@@ -59,8 +59,11 @@ All commands from the repo root unless noted.
    `supabase db reset` recreates the cluster: re-run step 5 after every reset.
 6. Seed: `cd backend && set -a && . ./.env && set +a && go run ./cmd/seed`
    (`SEED_SCENARIO=prelaunch|live|after-ceremony`, default `live`). Re-runnable; it replaces the
-   event row and the demo Sunners' activity (8 users, kudos/hearts/boxes in the last 14 days).
-   It refuses a non-loopback database host.
+   event row and the demo Sunners' activity (16 users, 30 kudos with hearts and boxes in the last
+   14 days: three Live board feed pages, a clear Highlight top 5, ten gift recipients) and
+   stores 16 demo kudo images (a Figma-cropped team photo, `db/seeds/kudo-images/`) at fixed
+   opaque keys through the Storage API, so it also needs `SUPABASE_URL` and
+   `SUPABASE_SERVICE_KEY`. It refuses a non-loopback database or Storage host.
 
 ## Run and verify
 

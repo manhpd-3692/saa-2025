@@ -54,7 +54,7 @@ export function KudoComposeModal({ mode, onClose, onSaved }: { mode: ComposeMode
     };
   }, []);
 
-  const initial = mode.kind === "create" ? initialComposeValues() : edit.status === "ready" ? edit.initial : null;
+  const initial = mode.kind === "create" ? initialComposeValues(undefined, mode.recipient) : edit.status === "ready" ? edit.initial : null;
 
   return (
     <div className="fixed inset-0 z-40 overflow-y-auto bg-overlay">
