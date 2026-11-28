@@ -7,6 +7,7 @@ package db
 
 import (
 	"context"
+	"time"
 
 	"github.com/google/uuid"
 )
@@ -47,12 +48,26 @@ WHERE owner_id = $1 AND state = 'pending' AND created_at > now() - interval '24 
 `
 
 // Upload quota (reviewer W2): pending uploads the owner created in the last 24 h.
-// Older pending rows belong to the purge job (phase 06), not to the quota.
+// Older pending rows belong to the manual purge (cmd/purge-uploads), not to the quota.
 func (q *Queries) CountRecentPendingUploadsByOwner(ctx context.Context, ownerID uuid.UUID) (int32, error) {
 	row := q.db.QueryRow(ctx, countRecentPendingUploadsByOwner, ownerID)
 	var pending int32
 	err := row.Scan(&pending)
 	return pending, err
+}
+
+const deletePendingDeleteUpload = `-- name: DeletePendingDeleteUpload :execrows
+DELETE FROM kudo_uploads
+WHERE id = $1 AND state = 'pending_delete'
+`
+
+// After commit, once the object is gone (edit cleanup, A8 DELETE, purge; R04, N02): only pending_delete rows.
+func (q *Queries) DeletePendingDeleteUpload(ctx context.Context, id uuid.UUID) (int64, error) {
+	result, err := q.db.Exec(ctx, deletePendingDeleteUpload, id)
+	if err != nil {
+		return 0, err
+	}
+	return result.RowsAffected(), nil
 }
 
 const insertKudoUpload = `-- name: InsertKudoUpload :exec
@@ -121,6 +136,62 @@ func (q *Queries) ListKudoUploadsByIDs(ctx context.Context, ids []uuid.UUID) ([]
 	return items, nil
 }
 
+const listPurgeableUploads = `-- name: ListPurgeableUploads :many
+SELECT id
+FROM kudo_uploads
+WHERE (state = 'pending' AND created_at < $1) OR state = 'pending_delete'
+ORDER BY created_at, id
+`
+
+// Manual purge (R04, N02): pending uploads created before @created_before (24 h ago) and every
+// leftover pending_delete upload. Attached uploads are never listed.
+func (q *Queries) ListPurgeableUploads(ctx context.Context, createdBefore time.Time) ([]uuid.UUID, error) {
+	rows, err := q.db.Query(ctx, listPurgeableUploads, createdBefore)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []uuid.UUID
+	for rows.Next() {
+		var id uuid.UUID
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const lockKudoUploadForDelete = `-- name: LockKudoUploadForDelete :one
+SELECT id, owner_id, object_path, state
+FROM kudo_uploads
+WHERE id = $1
+FOR UPDATE
+`
+
+type LockKudoUploadForDeleteRow struct {
+	ID         uuid.UUID
+	OwnerID    uuid.UUID
+	ObjectPath string
+	State      KudoUploadState
+}
+
+// F005 A8 (R04, N02): the upload row, locked; owner and state decide 404 / 409 / 204 in Go.
+func (q *Queries) LockKudoUploadForDelete(ctx context.Context, id uuid.UUID) (LockKudoUploadForDeleteRow, error) {
+	row := q.db.QueryRow(ctx, lockKudoUploadForDelete, id)
+	var i LockKudoUploadForDeleteRow
+	err := row.Scan(
+		&i.ID,
+		&i.OwnerID,
+		&i.ObjectPath,
+		&i.State,
+	)
+	return i, err
+}
+
 const lockKudoUploadsForUpdate = `-- name: LockKudoUploadsForUpdate :many
 SELECT id, owner_id, state, kudo_id
 FROM kudo_uploads
@@ -160,4 +231,87 @@ func (q *Queries) LockKudoUploadsForUpdate(ctx context.Context, ids []uuid.UUID)
 		return nil, err
 	}
 	return items, nil
+}
+
+const lockPurgeableUpload = `-- name: LockPurgeableUpload :one
+SELECT id, object_path, state
+FROM kudo_uploads
+WHERE id = $1 AND ((state = 'pending' AND created_at < $2) OR state = 'pending_delete')
+FOR UPDATE SKIP LOCKED
+`
+
+type LockPurgeableUploadParams struct {
+	ID            uuid.UUID
+	CreatedBefore time.Time
+}
+
+type LockPurgeableUploadRow struct {
+	ID         uuid.UUID
+	ObjectPath string
+	State      KudoUploadState
+}
+
+// Manual purge: re-checks the row under its lock (an attach may have won); SKIP LOCKED leaves rows
+// a live request is working on.
+func (q *Queries) LockPurgeableUpload(ctx context.Context, arg LockPurgeableUploadParams) (LockPurgeableUploadRow, error) {
+	row := q.db.QueryRow(ctx, lockPurgeableUpload, arg.ID, arg.CreatedBefore)
+	var i LockPurgeableUploadRow
+	err := row.Scan(&i.ID, &i.ObjectPath, &i.State)
+	return i, err
+}
+
+const markKudoUploadsPendingDelete = `-- name: MarkKudoUploadsPendingDelete :many
+UPDATE kudo_uploads
+SET state = 'pending_delete'
+WHERE id = ANY($1::uuid[]) AND kudo_id = $2 AND state = 'attached'
+RETURNING id, object_path
+`
+
+type MarkKudoUploadsPendingDeleteParams struct {
+	Ids    []uuid.UUID
+	KudoID *uuid.UUID
+}
+
+type MarkKudoUploadsPendingDeleteRow struct {
+	ID         uuid.UUID
+	ObjectPath string
+}
+
+// F005 A7 (N02): attachments removed in an edit become pending_delete in the edit transaction.
+// pending_delete is terminal: never attached, kept or deleted through the API again.
+func (q *Queries) MarkKudoUploadsPendingDelete(ctx context.Context, arg MarkKudoUploadsPendingDeleteParams) ([]MarkKudoUploadsPendingDeleteRow, error) {
+	rows, err := q.db.Query(ctx, markKudoUploadsPendingDelete, arg.Ids, arg.KudoID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []MarkKudoUploadsPendingDeleteRow
+	for rows.Next() {
+		var i MarkKudoUploadsPendingDeleteRow
+		if err := rows.Scan(&i.ID, &i.ObjectPath); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const markUnsavedUploadPendingDelete = `-- name: MarkUnsavedUploadPendingDelete :execrows
+UPDATE kudo_uploads
+SET state = 'pending_delete'
+WHERE id = $1 AND state = 'pending'
+`
+
+// F005 A8 and the manual purge (R04, N02): claims a pending (never attached) upload under its row
+// lock. After commit the object, then the row, are deleted; a failed object delete leaves the row
+// pending_delete for the purge, so no object is ever left without a row.
+func (q *Queries) MarkUnsavedUploadPendingDelete(ctx context.Context, id uuid.UUID) (int64, error) {
+	result, err := q.db.Exec(ctx, markUnsavedUploadPendingDelete, id)
+	if err != nil {
+		return 0, err
+	}
+	return result.RowsAffected(), nil
 }

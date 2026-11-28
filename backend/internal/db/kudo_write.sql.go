@@ -25,6 +25,59 @@ func (q *Queries) CountDistinctPublicSenders(ctx context.Context, receiverID uui
 	return senders, err
 }
 
+const deleteKudoImages = `-- name: DeleteKudoImages :exec
+DELETE FROM kudo_images
+WHERE kudo_id = $1
+`
+
+// F005 A7: the edit rewrites the ordered attachment list after finalizing the uploads.
+func (q *Queries) DeleteKudoImages(ctx context.Context, kudoID uuid.UUID) error {
+	_, err := q.db.Exec(ctx, deleteKudoImages, kudoID)
+	return err
+}
+
+const getKudoForEdit = `-- name: GetKudoForEdit :one
+SELECT k.id, k.sender_id, k.status, k.title, k.content, k.is_anonymous,
+       r.id AS receiver_id, r.name AS receiver_name, r.avatar_url AS receiver_avatar_url,
+       ru.code AS receiver_unit_code
+FROM kudos k
+JOIN users r ON r.id = k.receiver_id
+LEFT JOIN units ru ON ru.id = r.unit_id
+WHERE k.id = $1
+`
+
+type GetKudoForEditRow struct {
+	ID                uuid.UUID
+	SenderID          uuid.UUID
+	Status            KudoStatus
+	Title             string
+	Content           string
+	IsAnonymous       bool
+	ReceiverID        uuid.UUID
+	ReceiverName      string
+	ReceiverAvatarUrl *string
+	ReceiverUnitCode  *string
+}
+
+// F005 A6 prefill and the cheap pre-check of A7: author and status are compared in Go.
+func (q *Queries) GetKudoForEdit(ctx context.Context, id uuid.UUID) (GetKudoForEditRow, error) {
+	row := q.db.QueryRow(ctx, getKudoForEdit, id)
+	var i GetKudoForEditRow
+	err := row.Scan(
+		&i.ID,
+		&i.SenderID,
+		&i.Status,
+		&i.Title,
+		&i.Content,
+		&i.IsAnonymous,
+		&i.ReceiverID,
+		&i.ReceiverName,
+		&i.ReceiverAvatarUrl,
+		&i.ReceiverUnitCode,
+	)
+	return i, err
+}
+
 const getKudoSenderBrief = `-- name: GetKudoSenderBrief :one
 SELECT id, name, avatar_url
 FROM users
@@ -105,6 +158,102 @@ func (q *Queries) LinkKudoHashtags(ctx context.Context, arg LinkKudoHashtagsPara
 	return err
 }
 
+const listHashtags = `-- name: ListHashtags :many
+SELECT id, name
+FROM hashtags
+WHERE name LIKE $1::text
+ORDER BY name
+LIMIT $2::int
+`
+
+type ListHashtagsParams struct {
+	Pattern  string
+	RowLimit int32
+}
+
+// F005 A3 (FR-002, BR-002): shared tags by name. @pattern is an escaped LIKE prefix of a
+// normalized name built in Go ('%' lists every tag).
+func (q *Queries) ListHashtags(ctx context.Context, arg ListHashtagsParams) ([]Hashtag, error) {
+	rows, err := q.db.Query(ctx, listHashtags, arg.Pattern, arg.RowLimit)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Hashtag
+	for rows.Next() {
+		var i Hashtag
+		if err := rows.Scan(&i.ID, &i.Name); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const listKudoEditImages = `-- name: ListKudoEditImages :many
+SELECT ki.upload_id, u.object_path
+FROM kudo_images ki
+JOIN kudo_uploads u ON u.id = ki.upload_id
+WHERE ki.kudo_id = $1 AND u.state = 'attached'
+ORDER BY ki.position
+`
+
+type ListKudoEditImagesRow struct {
+	UploadID   uuid.UUID
+	ObjectPath string
+}
+
+// F005 A6/A7 (N02): the current attachments, in order: kudo_images rows on attached uploads.
+func (q *Queries) ListKudoEditImages(ctx context.Context, kudoID uuid.UUID) ([]ListKudoEditImagesRow, error) {
+	rows, err := q.db.Query(ctx, listKudoEditImages, kudoID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []ListKudoEditImagesRow
+	for rows.Next() {
+		var i ListKudoEditImagesRow
+		if err := rows.Scan(&i.UploadID, &i.ObjectPath); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const lockKudoForEdit = `-- name: LockKudoForEdit :one
+SELECT id, sender_id, status, is_anonymous
+FROM kudos
+WHERE id = $1
+FOR NO KEY UPDATE
+`
+
+type LockKudoForEditRow struct {
+	ID          uuid.UUID
+	SenderID    uuid.UUID
+	Status      KudoStatus
+	IsAnonymous bool
+}
+
+// F005 A7 (R02, N01, N05): the only row lock an edit takes; author and spam are re-checked under it.
+func (q *Queries) LockKudoForEdit(ctx context.Context, id uuid.UUID) (LockKudoForEditRow, error) {
+	row := q.db.QueryRow(ctx, lockKudoForEdit, id)
+	var i LockKudoForEditRow
+	err := row.Scan(
+		&i.ID,
+		&i.SenderID,
+		&i.Status,
+		&i.IsAnonymous,
+	)
+	return i, err
+}
+
 const lockReceiverForKudoCreate = `-- name: LockReceiverForKudoCreate :one
 
 SELECT id
@@ -116,12 +265,65 @@ FOR NO KEY UPDATE
 // Kudo writes (F005). Row locks use FOR NO KEY UPDATE: it serializes the same writers as
 // FOR UPDATE but does not block the KEY SHARE locks taken by foreign-key checks, which would
 // otherwise let two crossing transactions deadlock. Global order: kudo row, then users row (N05).
+// Also the compose reads and the edit (A3, A6, A7): an edit locks only the kudo row (the receiver
+// is immutable, N05) and holds it to commit; F009's kudo-linked insert waits on it with FOR SHARE
+// (N01), which conflicts with FOR NO KEY UPDATE.
 // F005 A5 (R10, N05): the only lock create takes on an existing row; also proves the receiver exists.
 func (q *Queries) LockReceiverForKudoCreate(ctx context.Context, id uuid.UUID) (uuid.UUID, error) {
 	row := q.db.QueryRow(ctx, lockReceiverForKudoCreate, id)
 	var id_2 uuid.UUID
 	err := row.Scan(&id_2)
 	return id_2, err
+}
+
+const redactKudoNotificationSenders = `-- name: RedactKudoNotificationSenders :execrows
+UPDATE notifications
+SET params = params - 'senderId' - 'senderName' - 'senderAvatarUrl'
+WHERE kudo_id = $1
+  AND jsonb_exists_any(params, ARRAY['senderId', 'senderName', 'senderAvatarUrl'])
+`
+
+// F005 A7 (BR-008, R02, N01): a kudo turned anonymous loses the sender fields of every notice
+// linked to it, read or unread, in the edit transaction and under the kudo row lock.
+func (q *Queries) RedactKudoNotificationSenders(ctx context.Context, kudoID *uuid.UUID) (int64, error) {
+	result, err := q.db.Exec(ctx, redactKudoNotificationSenders, kudoID)
+	if err != nil {
+		return 0, err
+	}
+	return result.RowsAffected(), nil
+}
+
+const unlinkKudoHashtags = `-- name: UnlinkKudoHashtags :exec
+DELETE FROM kudo_hashtags
+WHERE kudo_id = $1
+`
+
+func (q *Queries) UnlinkKudoHashtags(ctx context.Context, kudoID uuid.UUID) error {
+	_, err := q.db.Exec(ctx, unlinkKudoHashtags, kudoID)
+	return err
+}
+
+const updateKudoContent = `-- name: UpdateKudoContent :exec
+UPDATE kudos
+SET title = $1, content = $2, is_anonymous = $3, updated_at = now()
+WHERE id = $4
+`
+
+type UpdateKudoContentParams struct {
+	Title       string
+	Content     string
+	IsAnonymous bool
+	ID          uuid.UUID
+}
+
+func (q *Queries) UpdateKudoContent(ctx context.Context, arg UpdateKudoContentParams) error {
+	_, err := q.db.Exec(ctx, updateKudoContent,
+		arg.Title,
+		arg.Content,
+		arg.IsAnonymous,
+		arg.ID,
+	)
+	return err
 }
 
 const upsertHashtags = `-- name: UpsertHashtags :exec

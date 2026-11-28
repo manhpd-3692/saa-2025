@@ -115,6 +115,20 @@ func (s *StorageObjectStore) SignReadURLs(ctx context.Context, objectPaths []str
 	return signed, nil
 }
 
+// DeleteObject removes one object with the service key (R04 cleanup paths).
+func (s *StorageObjectStore) DeleteObject(ctx context.Context, objectPath string) error {
+	name, err := objectName(objectPath)
+	if err != nil {
+		return err
+	}
+	resp, err := s.do(ctx, http.MethodDelete, "/object/"+Bucket+"/"+url.PathEscape(name), nil, nil)
+	if err != nil {
+		return fmt.Errorf("delete %s: %w", objectPath, err)
+	}
+	_ = resp.Body.Close()
+	return nil
+}
+
 // doJSON sends an optional JSON body and decodes a 2xx JSON answer into out.
 func (s *StorageObjectStore) doJSON(ctx context.Context, method, path string, headers http.Header, in, out any) error {
 	var body io.Reader

@@ -90,16 +90,8 @@ func (s *CreateService) insert(ctx context.Context, q *db.Queries, senderID uuid
 	if err != nil {
 		return createdKudo{}, fmt.Errorf("insert kudo: %w", err)
 	}
-	if err := q.UpsertHashtags(ctx, valid.hashtags); err != nil {
-		// Safety net for a future Go/ICU Unicode drift in lower-casing: a name
-		// the database check refuses is the caller's input, never a 500 (W1).
-		if dbx.IsConstraintViolation(err, dbx.CheckViolation, "hashtags_name_normalized") {
-			return createdKudo{}, &ValidationError{Fields: []FieldError{{"hashtags", fieldInvalid}}}
-		}
-		return createdKudo{}, fmt.Errorf("upsert hashtags: %w", err)
-	}
-	if err := q.LinkKudoHashtags(ctx, db.LinkKudoHashtagsParams{KudoID: kudoID, Names: valid.hashtags}); err != nil {
-		return createdKudo{}, fmt.Errorf("link hashtags: %w", err)
+	if err := linkHashtags(ctx, q, kudoID, valid.hashtags); err != nil {
+		return createdKudo{}, err
 	}
 	if err := s.finalizer.Attach(ctx, q, senderID, kudoID, inspected); err != nil {
 		return createdKudo{}, err
@@ -122,6 +114,23 @@ func (s *CreateService) insert(ctx context.Context, q *db.Queries, senderID uuid
 		created.sender = &sender
 	}
 	return created, nil
+}
+
+// linkHashtags creates the new names and links every name to the kudo (BR-002,
+// FR-002), on create and on edit.
+func linkHashtags(ctx context.Context, q *db.Queries, kudoID uuid.UUID, names []string) error {
+	if err := q.UpsertHashtags(ctx, names); err != nil {
+		// Safety net for a future Go/ICU Unicode drift in lower-casing: a name
+		// the database check refuses is the caller's input, never a 500 (W1).
+		if dbx.IsConstraintViolation(err, dbx.CheckViolation, "hashtags_name_normalized") {
+			return &ValidationError{Fields: []FieldError{{"hashtags", fieldInvalid}}}
+		}
+		return fmt.Errorf("upsert hashtags: %w", err)
+	}
+	if err := q.LinkKudoHashtags(ctx, db.LinkKudoHashtagsParams{KudoID: kudoID, Names: names}); err != nil {
+		return fmt.Errorf("link hashtags: %w", err)
+	}
+	return nil
 }
 
 // notifyAfterCommit: an anonymous kudo's notice carries no sender field at

@@ -68,8 +68,8 @@ test("authenticated browser calls reach Go through CORS for every method", async
 
   expect(results.me).toMatchObject({ reached: true, status: 200 });
   expect(results.create).toMatchObject({ reached: true, status: 422, code: "validation_failed" });
-  // PATCH /api/v1/kudos/{id} (edit) arrives with F005 in phase 6; the preflight already passes.
-  expect(results.edit).toMatchObject({ reached: true, status: 405 });
+  // PATCH /api/v1/kudos/{id} (edit, F005 phase 6) reaches the handler; an unknown id is 404.
+  expect(results.edit).toMatchObject({ reached: true, status: 404, code: "kudo_not_found" });
   expect(results.heart).toMatchObject({ reached: true, status: 404, code: "kudo_not_found" });
   expect(results.unheart).toMatchObject({ reached: true, status: 404, code: "kudo_not_found" });
   // The Idempotency-Key header passed the preflight and reached the handler.

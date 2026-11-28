@@ -52,6 +52,17 @@ type CreateInput struct {
 	IsAnonymous    bool        `json:"isAnonymous"`
 }
 
+// UpdateInput is the PATCH /api/v1/kudos/{id} body (F005 A7): the create
+// fields except the recipient, which is locked (a receiverId sent anyway is
+// ignored). ImageUploadIDs is the complete, ordered list to keep.
+type UpdateInput struct {
+	Title          string      `json:"title"`
+	ContentHTML    string      `json:"contentHtml"`
+	Hashtags       []string    `json:"hashtags"`
+	ImageUploadIDs []uuid.UUID `json:"imageUploadIds"`
+	IsAnonymous    bool        `json:"isAnonymous"`
+}
+
 // validKudo is the stored representation after every content rule passed.
 type validKudo struct {
 	title    string
@@ -69,15 +80,34 @@ func validateCreate(senderID uuid.UUID, in CreateInput) (validKudo, error) {
 	case in.ReceiverID == senderID:
 		fields = append(fields, FieldError{"receiverId", fieldSelfKudo}) // BR-001
 	}
-	title, code := checkTitle(in.Title)
+	valid, bodyFields := validateBody(in.Title, in.ContentHTML, in.Hashtags)
+	return validResult(valid, append(fields, bodyFields...))
+}
+
+// validateUpdate applies the same BR-002 and BR-004 rules as create (A7).
+func validateUpdate(in UpdateInput) (validKudo, error) {
+	return validResult(validateBody(in.Title, in.ContentHTML, in.Hashtags))
+}
+
+func validResult(valid validKudo, fields []FieldError) (validKudo, error) {
+	if len(fields) > 0 {
+		return validKudo{}, &ValidationError{Fields: fields}
+	}
+	return valid, nil
+}
+
+// validateBody checks title, content and hashtags, reporting every refused field.
+func validateBody(rawTitle, rawContent string, rawHashtags []string) (validKudo, []FieldError) {
+	var fields []FieldError
+	title, code := checkTitle(rawTitle)
 	if code != "" {
 		fields = append(fields, FieldError{"title", code})
 	}
-	content, code := checkContent(in.ContentHTML)
+	content, code := checkContent(rawContent)
 	if code != "" {
 		fields = append(fields, FieldError{"contentHtml", code})
 	}
-	hashtags, code := normalizeHashtags(in.Hashtags)
+	hashtags, code := normalizeHashtags(rawHashtags)
 	switch {
 	case code != "":
 		fields = append(fields, FieldError{"hashtags", code})
@@ -86,10 +116,7 @@ func validateCreate(senderID uuid.UUID, in CreateInput) (validKudo, error) {
 	case len(hashtags) > HashtagsMax:
 		fields = append(fields, FieldError{"hashtags", fieldTooMany})
 	}
-	if len(fields) > 0 {
-		return validKudo{}, &ValidationError{Fields: fields}
-	}
-	return validKudo{title: title, content: content, hashtags: hashtags}, nil
+	return validKudo{title: title, content: content, hashtags: hashtags}, fields
 }
 
 func checkTitle(raw string) (string, string) {

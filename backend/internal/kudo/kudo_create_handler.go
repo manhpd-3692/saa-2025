@@ -2,14 +2,11 @@ package kudo
 
 import (
 	"encoding/json"
-	"errors"
-	"log/slog"
 	"net/http"
 
 	"github.com/google/uuid"
 
 	"github.com/manhpd-3692/saa-2025/backend/internal/httpx"
-	"github.com/manhpd-3692/saa-2025/backend/internal/upload"
 )
 
 // Error codes of POST /api/v1/kudos (F005 DEC-001).
@@ -60,22 +57,9 @@ func (h CreateHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	kudoID, err := h.service.Create(r.Context(), viewer.ID, in)
-	var invalid *ValidationError
-	switch {
-	case err == nil:
-		httpx.WriteJSON(w, http.StatusCreated, createResponse{KudoID: kudoID})
-	case errors.As(err, &invalid):
-		httpx.WriteJSON(w, http.StatusUnprocessableEntity, validationEnvelope{Error: validationDetail{
-			Code: CodeValidationFailed, Message: "Some fields are missing or invalid.", Fields: invalid.Fields,
-		}})
-	case errors.Is(err, upload.ErrInvalidAttachment):
-		httpx.WriteError(w, http.StatusUnprocessableEntity, CodeInvalidAttachment,
-			"An image is missing, not yours, already used, or not a JPEG, PNG or WebP of at most 5 MB.")
-	case errors.Is(err, upload.ErrStorageUnavailable):
-		slog.ErrorContext(r.Context(), "create kudo: storage unavailable", "error", err)
-		httpx.WriteError(w, http.StatusServiceUnavailable, upload.CodeStorageUnavailable, "Image storage is not available.")
-	default:
-		slog.ErrorContext(r.Context(), "create kudo", "sender_id", viewer.ID, "error", err)
-		httpx.WriteInternalError(w)
+	if err != nil {
+		writeKudoWriteError(w, r, "create kudo", err)
+		return
 	}
+	httpx.WriteJSON(w, http.StatusCreated, createResponse{KudoID: kudoID})
 }

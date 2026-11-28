@@ -39,6 +39,9 @@ type ObjectStore interface {
 	// SignReadURLs returns object path -> signed URL; a path that cannot be
 	// signed is absent from the map (F006 INT-001: the card shows a placeholder).
 	SignReadURLs(ctx context.Context, objectPaths []string, ttl time.Duration) (map[string]string, error)
+	// DeleteObject removes one object; a missing object answers ErrObjectNotFound
+	// (callers deleting an upload treat that as already gone, Codex R04).
+	DeleteObject(ctx context.Context, objectPath string) error
 }
 
 // storageRequestTimeout bounds one Storage call made while serving a request.
@@ -102,4 +105,8 @@ func (UnavailableObjectStore) ReadPrefix(context.Context, string, int) ([]byte, 
 
 func (UnavailableObjectStore) SignReadURLs(context.Context, []string, time.Duration) (map[string]string, error) {
 	return nil, ErrStorageUnavailable
+}
+
+func (UnavailableObjectStore) DeleteObject(context.Context, string) error {
+	return ErrStorageUnavailable
 }

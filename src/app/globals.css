@@ -28,8 +28,16 @@
   --color-admin-header: #2c2f31;
   --color-admin-page: #999999;
 
+  /* Write-kudo window (F005, Figma 520:11602 and its states) */
+  --color-compose: #fff8e1; /* cream panel */
+  --color-compose-muted: #999999; /* placeholders, hints, counter, unchecked label */
+  --color-compose-link: #e46060; /* "Tiêu chuẩn cộng đồng" */
+  --color-compose-active: rgb(153 140 95 / 0.25); /* pressed toolbar button */
+  --color-overlay: rgb(0 16 26 / 0.8); /* backdrop behind a modal */
+
   --radius-control: 4px;
   --radius-panel: 8px;
+  --radius-dialog: 24px;
   --shadow-glow: 0 0 12px 2px rgb(255 234 158 / 0.45);
 }
 

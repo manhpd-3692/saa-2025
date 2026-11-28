@@ -36,6 +36,8 @@ export function FloatingActionButton() {
 
   function pick(action: ShellAction) {
     setOpen(false);
+    // Menu-button pattern: focus returns to the toggle, which the opened panel restores on close.
+    ref.current?.querySelector<HTMLElement>("[data-popover-trigger]")?.focus();
     actions?.runAction(action);
   }
 
