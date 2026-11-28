@@ -1,0 +1,67 @@
+[
+  {
+    "id": "base.page1",
+    "status": "PASS",
+    "detail": "rows=20"
+  },
+  {
+    "id": "D2.unitOptions",
+    "status": "INFO",
+    "detail": "[\"All\",\"CECV1\",\"CECV2\",\"CECV3\",\"CECV4\",\"CECV5\"]"
+  },
+  {
+    "id": "D2.unitFilterCECV1",
+    "status": "PASS",
+    "detail": "rows=5 (DB CECV1 users=5) names=[\"Hà Ngọc Ánh\",\"Nguyễn Văn An\",\"Nguyễn Văn Quy\",\"Phan Gia Bảo\",\"Trần Thị Bình\"]"
+  },
+  {
+    "id": "D4.roleOptions",
+    "status": "INFO",
+    "detail": "[\"All\",\"Admin\",\"User\"]"
+  },
+  {
+    "id": "D4.unitAndRoleAdminIntersection",
+    "status": "PASS",
+    "detail": "rows=0 (DB CECV1 admins=0)"
+  },
+  {
+    "id": "D4.unitAndRoleUserIntersection",
+    "status": "PASS",
+    "detail": "rows=5 (DB CECV1 users=5)"
+  },
+  {
+    "id": "D3.levelOptions",
+    "status": "INFO",
+    "detail": "[\"All\",\"New Hero\",\"Rising Hero\",\"Super Hero\",\"Legend Hero\"]"
+  },
+  {
+    "id": "D2.resetUnit",
+    "status": "PASS",
+    "detail": "rows=20 (expect 20 page1 when unit cleared, role cleared?)"
+  },
+  {
+    "id": "D1.suggestTwoChars",
+    "status": "FAIL",
+    "detail": "options=0 first=\"\""
+  },
+  {
+    "id": "D1.enterSearchesTypedText",
+    "status": "PASS",
+    "detail": "rows=17 names=[\"Đặng Mai Linh\",\"Đinh Quang Huy\",\"Đỗ Hoàng Hiệp\",\"Dương Thùy An\",\"Hà Ngọc Ánh\",\"Hoàng Thu Hà\",\"Huỳnh Dương Xuân Nhật\",\"Lê Kiều Trang\",\"Mai Phương Thúy\",\"Ngô Hải Yến\",\"Nguyễn Bá Chức\",\"Nguyễn Hoàng Linh\",\"Nguyễn Văn An\",\"Nguyễn Văn Quy\",\"Phạm Quốc Dũng\",\"Tô Việt Hoàng\",\"Vũ Đức Khang\"]"
+  },
+  {
+    "id": "A5.emptyNoMatch",
+    "status": "PASS",
+    "detail": "noMatchText=true clearFilters=1"
+  },
+  {
+    "id": "A5.clearRestoresList",
+    "status": "PASS",
+    "detail": "rows=20"
+  },
+  {
+    "id": "A4.viewProfileNavigates",
+    "status": "PASS",
+    "detail": "href=/profile/d0000000-0000-4000-8000-000000000001 url=/profile/d0000000-0000-4000-8000-000000000001"
+  }
+]

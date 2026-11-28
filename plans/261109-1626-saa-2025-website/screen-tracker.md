@@ -101,12 +101,12 @@ P2 (đường rủi ro đầu-cuối: provision, JWT, `/me`...) không có màn 
 | 53 | Dropdown-filter đã nhận/gửi | (ngoài checklist) | P9 | 763:4728 | `docs/figma-refs/user/profile-dropdown-received-sent.png` | F007 FR-205,401,603 · BR-002 · SC-002,005 | Done (PASS) | 0 | 8073e25 |
 | 54 | Tất cả thông báo (panel) | (ngoài checklist) | P10 | 589:9132 | `docs/figma-refs/user/notifications-panel.png` | F009 FR-101,201,202,203,204,205,402,403,404 · BR-004,005 · SC-003,006,007 | Done (PASS) | 1 | 6ea9069 |
 | 55 | View thông báo (chi tiết) | (ngoài checklist) | P10 | 589:9152 | `docs/figma-refs/user/notification-detail.png` | F009 FR-102,103,206,401,405 · BR-002,007 · SC-002,009 | Done (PASS) | 0 | 6ea9069 |
-| 56 | A1 Admin - Overview | (ngoài checklist) | P11 | 620:7712 | `docs/figma-refs/admin/admin-overview.png` | F010 FR-001,101,102,103,104,401,402,601 · BR-001,002,003,006,007 · SC-001,002,006 | Pending | 0 | - |
-| 57 | A4 Admin - User | (ngoài checklist) | P11 | 773:26403 | `docs/figma-refs/admin/admin-user.png` | F010 FR-201,202,203,204,205,206,207,403,601 · BR-005,008 · SC-003,007 | Pending | 0 | - |
-| 58 | Dropdown search user admin | (ngoài checklist) | P11 | 1002:15639 | `docs/figma-refs/admin/admin-dropdown-search-user.png` | F010 FR-203 · BR-005 · SC-003 | Pending | 0 | - |
-| 59 | Dropdown list phòng ban | (ngoài checklist) | P11 | 1002:15708 | `docs/figma-refs/admin/admin-dropdown-department.png` | F010 FR-202 · BR-005 · SC-003 | Pending | 0 | - |
-| 60 | Dropdown level | (ngoài checklist) | P11 | 1002:15711 | `docs/figma-refs/admin/admin-dropdown-level.png` | F010 FR-202 · BR-005 · SC-003 | Pending | 0 | - |
-| 61 | Dropdown Role | (ngoài checklist) | P11 | 1002:15714 | `docs/figma-refs/admin/admin-dropdown-role.png` | F010 FR-202,206 · BR-005 · SC-003 | Pending | 0 | - |
+| 56 | A1 Admin - Overview | (ngoài checklist) | P11 | 620:7712 | `docs/figma-refs/admin/admin-overview.png` | F010 FR-001,101,102,103,104,401,402,601 · BR-001,002,003,006,007 · SC-001,002,006 | Done (PASS) | 1 | 7e263ad |
+| 57 | A4 Admin - User | (ngoài checklist) | P11 | 773:26403 | `docs/figma-refs/admin/admin-user.png` | F010 FR-201,202,203,204,205,206,207,403,601 · BR-005,008 · SC-003,007 | Done (PASS) | 1 | 7e263ad |
+| 58 | Dropdown search user admin | (ngoài checklist) | P11 | 1002:15639 | `docs/figma-refs/admin/admin-dropdown-search-user.png` | F010 FR-203 · BR-005 · SC-003 | Done (PASS) | 1 | 7e263ad |
+| 59 | Dropdown list phòng ban | (ngoài checklist) | P11 | 1002:15708 | `docs/figma-refs/admin/admin-dropdown-department.png` | F010 FR-202 · BR-005 · SC-003 | Done (PASS) | 1 | 7e263ad |
+| 60 | Dropdown level | (ngoài checklist) | P11 | 1002:15711 | `docs/figma-refs/admin/admin-dropdown-level.png` | F010 FR-202 · BR-005 · SC-003 | Done (PASS) | 1 | 7e263ad |
+| 61 | Dropdown Role | (ngoài checklist) | P11 | 1002:15714 | `docs/figma-refs/admin/admin-dropdown-role.png` | F010 FR-202,206 · BR-005 · SC-003 | Done (PASS) | 1 | 7e263ad |
 | 62 | A2 Admin - Review content | (ngoài checklist) | P12 | 722:16251 | `docs/figma-refs/admin/admin-review-content.png` | F011 FR-101,102,103,206,601,602 · BR-004,007 · SC-001,002,007 | Pending | 0 | - |
 | 63 | A3 Admin - Review content - Search | (ngoài checklist) | P12 | 832:13197 | `docs/figma-refs/admin/admin-review-content-search.png` | F011 FR-205,206 · BR-001 · SC-001 | Pending | 0 | - |
 | 64 | Action - Spam | (ngoài checklist) | P12 | 773:26373 | `docs/figma-refs/admin/admin-action-spam.png` | F011 FR-301,303,304,305,603 · BR-002,003 · SC-003,004,005,009,011 | Pending | 0 | - |

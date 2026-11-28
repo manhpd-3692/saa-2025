@@ -1,8 +1,8 @@
 {
-  "task": "Phase 10: notification center (F009) - read APIs, bell, panel, full history, detail window, seven kinds in vi/en",
+  "task": "Phase 11: admin overview by unit with CSV export and user directory with filters, search and CSV export (F010)",
   "mode": "code",
-  "acceptanceCriteria": ["Tat ca thong bao panel", "View thong bao chi tiet"],
-  "touchpoints": ["backend/internal/notification/", "backend/db/queries/notifications.sql", "backend/cmd/api/wire_notification.go", "backend/db/seeds/demo_notifications.sql", "backend/db/seeds/demo_activity.sql", "backend/cmd/seed/main.go", "src/features/notifications/", "src/components/shell/notification-bell-slot.tsx", "src/lib/auth/session-summary.ts", "src/app/admin/layout.tsx", "src/i18n/", "e2e/notification-center.spec.ts"],
-  "blastRadius": ["shell header and admin chrome bell slot", "SessionUser shape (id added)", "admin layout secret box host", "seed icon completion and hashtag cleanup"],
-  "contracts": ["GET /api/v1/me/notifications", "GET /api/v1/me/notifications/unread-count", "POST /api/v1/me/notifications/{id}/read", "POST /api/v1/me/notifications/read-all", "R02 re-mask on read with admin exception", "uniform 404 notification_not_found"]
+  "acceptanceCriteria": ["A1 Admin Overview", "A4 Admin User", "Dropdown search user admin", "Dropdown list phong ban", "Dropdown level", "Dropdown Role"],
+  "touchpoints": ["backend/internal/admin/", "backend/db/queries/admin_reports.sql", "backend/cmd/api/wire_admin_reports.go", "backend/internal/gamification/hero_tier.go", "supabase/migrations/20261128080000_admin_user_directory_order_index.sql", "src/app/admin/", "src/features/admin/", "src/i18n/dictionaries/{vi,en}/{admin,shell}.json", "e2e/admin-overview-and-users.spec.ts", "e2e/login-and-admin-gate.spec.ts"],
+  "blastRadius": ["admin layout and nav copy", "hero tier thresholds shared with F008 (additive)", "CORS exposed Content-Disposition"],
+  "contracts": ["GET /api/v1/admin/overview (+ export)", "GET /api/v1/admin/users (+ export)", "ADMIN route class RequireAdmin", "CSV formula guard, BOM, streaming, 20 s deadline (R23)", "401 to Login, 403 Forbidden"]
 }

@@ -10,6 +10,7 @@ cmd/seed/           SEED_SCENARIO runner (local only)
 cmd/purge-uploads/  manual purge of abandoned kudo images (no scheduler)
 db/queries/         sqlc queries, one file per capability (auth.sql, events.sql, ...)
 db/seeds/           prelaunch.sql | live.sql | after-ceremony.sql + demo_activity.sql (embedded)
+internal/admin/     F010 admin Overview and user directory reads, streamed CSV exports
 internal/auth/      JWKS verifier, auth middleware (IDENTITY/PROFILE chains), RequireAdmin, AuthContext
 internal/config/    environment loading and validation
 internal/db/        sqlc output — generated, do not edit
@@ -44,7 +45,7 @@ All commands from the repo root unless noted.
    ```
 2. Google OAuth (only sign-in method): copy `supabase/.env.example` to `supabase/.env` and fill the
    client id/secret. Authorized redirect URI: `http://127.0.0.1:54321/auth/v1/callback`.
-3. `supabase start` — applies the 11 migrations, seeds `units` from `supabase/seed.sql`, creates the
+3. `supabase start` — applies the 12 migrations, seeds `units` from `supabase/seed.sql`, creates the
    private `kudo-images` bucket (5 MB, JPEG/PNG/WebP).
 4. Copy `backend/.env.example` to `backend/.env` (gitignored) and fill it. Local values:
    `SUPABASE_URL=http://127.0.0.1:54321`, `SUPABASE_SERVICE_KEY` = `SECRET_KEY` from
@@ -244,6 +245,36 @@ transaction (the last reads the temp tables of the second). It gives every kind 
 `heart_received`, `secret_box_received`, `hero_level_up`, `kudo_spam_warning`, `icons_completed`, `generic`),
 the spam kudo `d2000000-0000-4000-8000-000000000001` of `sunner01` with its warning, and `sunner01`'s completed
 icon set; `demo_activity.sql` also deletes hashtags no kudo uses.
+
+## Admin report endpoints (F010, `wire_admin_reports.go`)
+
+All four are ADMIN routes (401 without a token, 403 for a `user` role, before any query). Package
+`internal/admin`, queries in `db/queries/admin_reports.sql`. Report days are `YYYY-MM-DD` in
+`Asia/Ho_Chi_Minh`, both ends included; a missing or malformed `from`/`to`, or `from` after `to`, gives the
+last 30 days ending today instead of an error.
+
+| Route | Answer | Notes |
+|---|---|---|
+| `GET /api/v1/admin/overview?from&to` | Overview: an All row plus one row per unit | 5 s deadline |
+| `GET /api/v1/admin/overview/export?from&to` | CSV `saa-overview-{from}_{to}.csv`, same table | 20 s deadline |
+| `GET /api/v1/admin/users?unit&level&role&q&page&pageSize` | One page ordered by (name, id), match count, Unit choices; `pageSize` default 20, max 100 | 5 s deadline |
+| `GET /api/v1/admin/users/export?unit&level&role&q` | CSV `saa-users-{YYYY-MM-DD}.csv` of every match | 20 s deadline |
+
+**Export streaming** (`csv_stream_writer.go`): the first page (500 rows) is read before the status or any
+header is written, so a failure there is a plain 500 JSON error. Headers, UTF-8 BOM and rows go out only after
+that page; a later page that fails aborts the connection (no terminating chunk) rather than ending a short
+file normally. The whole export runs under `dbx.ExportTimeout` (20 s). Text cells (name, email, unit) that start
+with `=`, `+`, `-`, `@`, tab or CR get a leading apostrophe; rows end in CRLF. `Content-Disposition` is exposed
+through CORS so the browser can read the file name.
+
+**Migration** `20261128080000_admin_user_directory_order_index` adds `users_name_id_idx on users (name, id)`
+so the directory and the export keyset read users already in order. Scaled EXPLAIN (20,000 Sunners, 60,000
+kudos; `plans/261109-1626-saa-2025-website/evidence/p11-final/explain-users-scaled.txt`): first table page 859 ms to 1.8 ms, one 500-row export page after
+the 10,000th name 377 ms to 28 ms. Deep offset pages still cost (page 500: 809 ms to 482 ms).
+
+**Integration fixtures** create their own units and Sunners per test and date all activity in February 2003
+(including an `x2` campaign), so a report range of 2003-02-10 to 2003-02-12 never meets seed or other suites'
+data.
 
 ## Upload lifecycle and cleanup
 

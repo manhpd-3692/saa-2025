@@ -1,0 +1,23 @@
+const { chromium } = require('@playwright/test');
+const fs = require('fs');
+const ROOT = 'C:/Users/phan.duc.manh/sourcecode/saa-2025';
+(async () => {
+  const c = JSON.parse(fs.readFileSync(`${ROOT}/playwright/.auth/admin.json`, 'utf8')).cookies.find((x) => x.domain === 'localhost');
+  const b = await chromium.launch({ headless: true });
+  const ctx = await b.newContext({ viewport: { width: 1440, height: 1024 }, locale: 'en-US' });
+  await ctx.addCookies([{ name: c.name, value: c.value, url: 'http://localhost:3000' }, { name: 'saa_locale', value: 'en', url: 'http://localhost:3000' }]);
+  const p = await ctx.newPage();
+  const menu = p.locator('button[aria-haspopup="menu"]').filter({ hasText: /\S/ }).filter({ hasNotText: /^(VN|EN)$/ });
+  const rows = async () => (await p.getByRole('table').first().locator('tbody tr').count());
+  await p.goto('http://localhost:3000/admin/users'); await p.getByRole('table').first().waitFor({ timeout: 30000 });
+  console.log('start rows', await rows());
+  await menu.nth(0).click(); await p.waitForTimeout(300);
+  await p.getByRole('menuitemradio', { name: 'CECV1', exact: true }).click(); await p.waitForTimeout(1500);
+  console.log('after unit: url', p.url().replace('http://localhost:3000', ''), 'rows', await rows(), 'trigger', await menu.nth(0).innerText());
+  await menu.nth(2).click(); await p.waitForTimeout(300);
+  await p.getByRole('menuitemradio', { name: 'Admin', exact: true }).click(); await p.waitForTimeout(1800);
+  const thc = await p.getByRole('table').first().locator('tbody tr').evaluateAll((rs) => rs.map((r) => r.querySelectorAll('th').length + ':' + (r.textContent || '').trim().slice(0, 60)));
+  console.log('tbody rows (th count:text)', JSON.stringify(thc));
+  console.log('after role: url', p.url().replace('http://localhost:3000', ''), 'rows', await rows(), 'unitTrigger', await menu.nth(0).innerText(), 'roleTrigger', await menu.nth(2).innerText());
+  await b.close();
+})().catch((e) => { console.error('ERR', String(e.message).slice(0, 300)); process.exit(1); });

@@ -1,0 +1,600 @@
+Timing is off.
+BEGIN
+INSERT 0 20000
+INSERT 0 20000
+SELECT 20000
+INSERT 0 60000
+INSERT 0 30000
+INSERT 0 20000
+ANALYZE
+ANALYZE
+ANALYZE
+ANALYZE
+ users | kudos | hearts 
+-------+-------+--------
+ 20025 | 60068 |  30187
+(1 row)
+
+PREPARE
+###### BEFORE users_name_id_idx
+SET
+=== B1 table page 1 (20 rows, custom plan)
+                                                                      QUERY PLAN                                                                       
+-------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit (actual time=859.159..859.167 rows=20 loops=1)
+   ->  Sort (actual time=859.158..859.163 rows=20 loops=1)
+         Sort Key: u.name, u.id
+         Sort Method: top-N heapsort  Memory: 35kB
+         ->  Nested Loop (actual time=0.138..845.710 rows=20025 loops=1)
+               ->  Nested Loop (actual time=0.123..723.281 rows=20025 loops=1)
+                     ->  Nested Loop (actual time=0.067..271.306 rows=20025 loops=1)
+                           ->  Nested Loop (actual time=0.032..122.716 rows=20025 loops=1)
+                                 ->  Nested Loop Left Join (actual time=0.017..17.055 rows=20025 loops=1)
+                                       Join Filter: (un.id = u.unit_id)
+                                       Rows Removed by Join Filter: 40110
+                                       ->  Seq Scan on users u (actual time=0.007..3.230 rows=20025 loops=1)
+                                       ->  Materialize (actual time=0.000..0.000 rows=3 loops=20025)
+                                             ->  Seq Scan on units un (actual time=0.005..0.006 rows=5 loops=1)
+                                 ->  Aggregate (actual time=0.005..0.005 rows=1 loops=20025)
+                                       ->  Index Scan using kudos_sender_created_idx on kudos k (actual time=0.004..0.004 rows=3 loops=20025)
+                                             Index Cond: (sender_id = u.id)
+                                             Filter: (status = 'public'::kudo_status)
+                                             Rows Removed by Filter: 0
+                           ->  Aggregate (actual time=0.007..0.007 rows=1 loops=20025)
+                                 ->  Sort (actual time=0.006..0.006 rows=3 loops=20025)
+                                       Sort Key: k_1.sender_id
+                                       Sort Method: quicksort  Memory: 25kB
+                                       ->  Bitmap Heap Scan on kudos k_1 (actual time=0.004..0.004 rows=3 loops=20025)
+                                             Recheck Cond: ((receiver_id = u.id) AND (status = 'public'::kudo_status))
+                                             Heap Blocks: exact=20680
+                                             ->  Bitmap Index Scan on kudos_public_receiver_idx (actual time=0.002..0.002 rows=3 loops=20025)
+                                                   Index Cond: (receiver_id = u.id)
+                     ->  Aggregate (actual time=0.022..0.022 rows=1 loops=20025)
+                           ->  Nested Loop (actual time=0.008..0.021 rows=3 loops=20025)
+                                 ->  Bitmap Heap Scan on kudos k_2 (actual time=0.002..0.002 rows=3 loops=20025)
+                                       Recheck Cond: ((receiver_id = u.id) AND (status = 'public'::kudo_status))
+                                       Heap Blocks: exact=20680
+                                       ->  Bitmap Index Scan on kudos_public_receiver_idx (actual time=0.001..0.001 rows=3 loops=20025)
+                                             Index Cond: (receiver_id = u.id)
+                                 ->  Subquery Scan on v (actual time=0.006..0.006 rows=1 loops=60067)
+                                       ->  GroupAggregate (actual time=0.006..0.006 rows=1 loops=60067)
+                                             ->  Nested Loop Left Join (actual time=0.005..0.005 rows=1 loops=60067)
+                                                   ->  Index Only Scan using kudos_pkey on kudos k_3 (actual time=0.002..0.003 rows=1 loops=60067)
+                                                         Index Cond: (id = k_2.id)
+                                                         Heap Fetches: 60068
+                                                   ->  Index Scan using hearts_kudo_user_key on hearts h (actual time=0.002..0.002 rows=1 loops=60067)
+                                                         Index Cond: (kudo_id = k_2.id)
+               ->  Aggregate (actual time=0.006..0.006 rows=1 loops=20025)
+                     ->  GroupAggregate (actual time=0.005..0.005 rows=1 loops=20025)
+                           Group Key: sb.icon
+                           ->  Sort (actual time=0.004..0.004 rows=1 loops=20025)
+                                 Sort Key: sb.icon
+                                 Sort Method: quicksort  Memory: 25kB
+                                 ->  Index Scan using secret_boxes_opened_user_idx on secret_boxes sb (actual time=0.003..0.003 rows=1 loops=20025)
+                                       Index Cond: (user_id = u.id)
+ Planning Time: 1.186 ms
+ Execution Time: 859.282 ms
+(53 rows)
+
+=== B2 table page 500 (offset 9980)
+                                                                      QUERY PLAN                                                                       
+-------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit (actual time=809.234..809.252 rows=20 loops=1)
+   ->  Sort (actual time=807.720..808.996 rows=10000 loops=1)
+         Sort Key: u.name, u.id
+         Sort Method: external merge  Disk: 3184kB
+         ->  Nested Loop (actual time=0.098..775.843 rows=20025 loops=1)
+               ->  Nested Loop (actual time=0.085..662.393 rows=20025 loops=1)
+                     ->  Nested Loop (actual time=0.052..243.312 rows=20025 loops=1)
+                           ->  Nested Loop (actual time=0.036..110.486 rows=20025 loops=1)
+                                 ->  Nested Loop Left Join (actual time=0.020..15.506 rows=20025 loops=1)
+                                       Join Filter: (un.id = u.unit_id)
+                                       Rows Removed by Join Filter: 40110
+                                       ->  Seq Scan on users u (actual time=0.010..2.729 rows=20025 loops=1)
+                                       ->  Materialize (actual time=0.000..0.000 rows=3 loops=20025)
+                                             ->  Seq Scan on units un (actual time=0.005..0.007 rows=5 loops=1)
+                                 ->  Aggregate (actual time=0.004..0.004 rows=1 loops=20025)
+                                       ->  Index Scan using kudos_sender_created_idx on kudos k (actual time=0.003..0.004 rows=3 loops=20025)
+                                             Index Cond: (sender_id = u.id)
+                                             Filter: (status = 'public'::kudo_status)
+                                             Rows Removed by Filter: 0
+                           ->  Aggregate (actual time=0.006..0.006 rows=1 loops=20025)
+                                 ->  Sort (actual time=0.005..0.005 rows=3 loops=20025)
+                                       Sort Key: k_1.sender_id
+                                       Sort Method: quicksort  Memory: 25kB
+                                       ->  Bitmap Heap Scan on kudos k_1 (actual time=0.003..0.004 rows=3 loops=20025)
+                                             Recheck Cond: ((receiver_id = u.id) AND (status = 'public'::kudo_status))
+                                             Heap Blocks: exact=20680
+                                             ->  Bitmap Index Scan on kudos_public_receiver_idx (actual time=0.002..0.002 rows=3 loops=20025)
+                                                   Index Cond: (receiver_id = u.id)
+                     ->  Aggregate (actual time=0.020..0.020 rows=1 loops=20025)
+                           ->  Nested Loop (actual time=0.008..0.020 rows=3 loops=20025)
+                                 ->  Bitmap Heap Scan on kudos k_2 (actual time=0.002..0.002 rows=3 loops=20025)
+                                       Recheck Cond: ((receiver_id = u.id) AND (status = 'public'::kudo_status))
+                                       Heap Blocks: exact=20680
+                                       ->  Bitmap Index Scan on kudos_public_receiver_idx (actual time=0.001..0.001 rows=3 loops=20025)
+                                             Index Cond: (receiver_id = u.id)
+                                 ->  Subquery Scan on v (actual time=0.005..0.005 rows=1 loops=60067)
+                                       ->  GroupAggregate (actual time=0.005..0.005 rows=1 loops=60067)
+                                             ->  Nested Loop Left Join (actual time=0.004..0.005 rows=1 loops=60067)
+                                                   ->  Index Only Scan using kudos_pkey on kudos k_3 (actual time=0.002..0.002 rows=1 loops=60067)
+                                                         Index Cond: (id = k_2.id)
+                                                         Heap Fetches: 60067
+                                                   ->  Index Scan using hearts_kudo_user_key on hearts h (actual time=0.002..0.002 rows=1 loops=60067)
+                                                         Index Cond: (kudo_id = k_2.id)
+               ->  Aggregate (actual time=0.005..0.005 rows=1 loops=20025)
+                     ->  GroupAggregate (actual time=0.005..0.005 rows=1 loops=20025)
+                           Group Key: sb.icon
+                           ->  Sort (actual time=0.004..0.004 rows=1 loops=20025)
+                                 Sort Key: sb.icon
+                                 Sort Method: quicksort  Memory: 25kB
+                                 ->  Index Scan using secret_boxes_opened_user_idx on secret_boxes sb (actual time=0.003..0.003 rows=1 loops=20025)
+                                       Index Cond: (user_id = u.id)
+ Planning Time: 1.078 ms
+ Execution Time: 809.871 ms
+(53 rows)
+
+=== B3 export page after the 10,000th name (500 rows, keyset)
+                                                                               QUERY PLAN                                                                               
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit (actual time=376.948..377.003 rows=500 loops=1)
+   ->  Sort (actual time=376.946..376.976 rows=500 loops=1)
+         Sort Key: u.name, u.id
+         Sort Method: top-N heapsort  Memory: 244kB
+         ->  Nested Loop (actual time=0.103..367.934 rows=10024 loops=1)
+               ->  Nested Loop (actual time=0.091..314.598 rows=10024 loops=1)
+                     ->  Nested Loop (actual time=0.058..118.262 rows=10024 loops=1)
+                           ->  Nested Loop (actual time=0.041..56.317 rows=10024 loops=1)
+                                 ->  Nested Loop Left Join (actual time=0.027..10.848 rows=10024 loops=1)
+                                       Join Filter: (un.id = u.unit_id)
+                                       Rows Removed by Join Filter: 20018
+                                       ->  Seq Scan on users u (actual time=0.016..5.087 rows=10024 loops=1)
+                                             Filter: (ROW(name, id) > ROW('Load 80763f12d898d3bd078fd9e13b2950df'::text, 'a94a80be-5255-43ea-a111-2b581873a9cb'::uuid))
+                                             Rows Removed by Filter: 10001
+                                       ->  Materialize (actual time=0.000..0.000 rows=3 loops=10024)
+                                             ->  Seq Scan on units un (actual time=0.005..0.007 rows=5 loops=1)
+                                 ->  Aggregate (actual time=0.004..0.004 rows=1 loops=10024)
+                                       ->  Index Scan using kudos_sender_created_idx on kudos k (actual time=0.003..0.004 rows=3 loops=10024)
+                                             Index Cond: (sender_id = u.id)
+                                             Filter: (status = 'public'::kudo_status)
+                                             Rows Removed by Filter: 0
+                           ->  Aggregate (actual time=0.006..0.006 rows=1 loops=10024)
+                                 ->  Sort (actual time=0.005..0.005 rows=3 loops=10024)
+                                       Sort Key: k_1.sender_id
+                                       Sort Method: quicksort  Memory: 25kB
+                                       ->  Bitmap Heap Scan on kudos k_1 (actual time=0.003..0.004 rows=3 loops=10024)
+                                             Recheck Cond: ((receiver_id = u.id) AND (status = 'public'::kudo_status))
+                                             Heap Blocks: exact=10361
+                                             ->  Bitmap Index Scan on kudos_public_receiver_idx (actual time=0.002..0.002 rows=3 loops=10024)
+                                                   Index Cond: (receiver_id = u.id)
+                     ->  Aggregate (actual time=0.019..0.019 rows=1 loops=10024)
+                           ->  Nested Loop (actual time=0.007..0.018 rows=3 loops=10024)
+                                 ->  Bitmap Heap Scan on kudos k_2 (actual time=0.002..0.002 rows=3 loops=10024)
+                                       Recheck Cond: ((receiver_id = u.id) AND (status = 'public'::kudo_status))
+                                       Heap Blocks: exact=10361
+                                       ->  Bitmap Index Scan on kudos_public_receiver_idx (actual time=0.001..0.001 rows=3 loops=10024)
+                                             Index Cond: (receiver_id = u.id)
+                                 ->  Subquery Scan on v (actual time=0.005..0.005 rows=1 loops=30061)
+                                       ->  GroupAggregate (actual time=0.005..0.005 rows=1 loops=30061)
+                                             ->  Nested Loop Left Join (actual time=0.004..0.004 rows=1 loops=30061)
+                                                   ->  Index Only Scan using kudos_pkey on kudos k_3 (actual time=0.002..0.002 rows=1 loops=30061)
+                                                         Index Cond: (id = k_2.id)
+                                                         Heap Fetches: 30061
+                                                   ->  Index Scan using hearts_kudo_user_key on hearts h (actual time=0.002..0.002 rows=1 loops=30061)
+                                                         Index Cond: (kudo_id = k_2.id)
+               ->  Aggregate (actual time=0.005..0.005 rows=1 loops=10024)
+                     ->  GroupAggregate (actual time=0.004..0.004 rows=1 loops=10024)
+                           Group Key: sb.icon
+                           ->  Sort (actual time=0.004..0.004 rows=1 loops=10024)
+                                 Sort Key: sb.icon
+                                 Sort Method: quicksort  Memory: 25kB
+                                 ->  Index Scan using secret_boxes_opened_user_idx on secret_boxes sb (actual time=0.003..0.003 rows=1 loops=10024)
+                                       Index Cond: (user_id = u.id)
+ Planning Time: 2.602 ms
+ Execution Time: 377.149 ms
+(55 rows)
+
+SET
+=== B4 table page 1, generic plan (pgx after 5 runs)
+                                                                                                             QUERY PLAN                                                                                                             
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit (actual time=819.379..819.386 rows=20 loops=1)
+   ->  Sort (actual time=819.377..819.381 rows=20 loops=1)
+         Sort Key: u.name, u.id
+         Sort Method: top-N heapsort  Memory: 35kB
+         ->  Nested Loop (actual time=0.096..806.444 rows=20025 loops=1)
+               ->  Nested Loop (actual time=0.084..688.556 rows=20025 loops=1)
+                     ->  Nested Loop (actual time=0.053..257.670 rows=20025 loops=1)
+                           ->  Nested Loop (actual time=0.036..118.150 rows=20025 loops=1)
+                                 ->  Nested Loop Left Join (actual time=0.022..18.546 rows=20025 loops=1)
+                                       Join Filter: (un.id = u.unit_id)
+                                       Rows Removed by Join Filter: 40110
+                                       ->  Seq Scan on users u (actual time=0.012..6.473 rows=20025 loops=1)
+                                             Filter: ((($1 IS NULL) OR (unit_id = $1)) AND (($2 IS NULL) OR (role = $2)) AND (($3 IS NULL) OR (name ~~* $3) OR (email ~~* $3)) AND (($6 IS NULL) OR (ROW(name, id) > ROW($6, $7))))
+                                       ->  Materialize (actual time=0.000..0.000 rows=3 loops=20025)
+                                             ->  Seq Scan on units un (actual time=0.005..0.006 rows=5 loops=1)
+                                 ->  Aggregate (actual time=0.005..0.005 rows=1 loops=20025)
+                                       ->  Index Scan using kudos_sender_created_idx on kudos k (actual time=0.003..0.004 rows=3 loops=20025)
+                                             Index Cond: (sender_id = u.id)
+                                             Filter: (status = 'public'::kudo_status)
+                                             Rows Removed by Filter: 0
+                           ->  Aggregate (actual time=0.006..0.007 rows=1 loops=20025)
+                                 Filter: (($4 IS NULL) OR (((count(DISTINCT k_1.sender_id))::integer >= $4) AND ((count(DISTINCT k_1.sender_id))::integer <= $5)))
+                                 ->  Sort (actual time=0.005..0.005 rows=3 loops=20025)
+                                       Sort Key: k_1.sender_id
+                                       Sort Method: quicksort  Memory: 25kB
+                                       ->  Bitmap Heap Scan on kudos k_1 (actual time=0.004..0.004 rows=3 loops=20025)
+                                             Recheck Cond: ((receiver_id = u.id) AND (status = 'public'::kudo_status))
+                                             Heap Blocks: exact=20680
+                                             ->  Bitmap Index Scan on kudos_public_receiver_idx (actual time=0.002..0.002 rows=3 loops=20025)
+                                                   Index Cond: (receiver_id = u.id)
+                     ->  Aggregate (actual time=0.021..0.021 rows=1 loops=20025)
+                           ->  Nested Loop (actual time=0.008..0.020 rows=3 loops=20025)
+                                 ->  Bitmap Heap Scan on kudos k_2 (actual time=0.002..0.002 rows=3 loops=20025)
+                                       Recheck Cond: ((receiver_id = u.id) AND (status = 'public'::kudo_status))
+                                       Heap Blocks: exact=20680
+                                       ->  Bitmap Index Scan on kudos_public_receiver_idx (actual time=0.001..0.001 rows=3 loops=20025)
+                                             Index Cond: (receiver_id = u.id)
+                                 ->  Subquery Scan on v (actual time=0.005..0.006 rows=1 loops=60067)
+                                       ->  GroupAggregate (actual time=0.005..0.005 rows=1 loops=60067)
+                                             ->  Nested Loop Left Join (actual time=0.005..0.005 rows=1 loops=60067)
+                                                   ->  Index Only Scan using kudos_pkey on kudos k_3 (actual time=0.002..0.002 rows=1 loops=60067)
+                                                         Index Cond: (id = k_2.id)
+                                                         Heap Fetches: 60067
+                                                   ->  Index Scan using hearts_kudo_user_key on hearts h (actual time=0.002..0.002 rows=1 loops=60067)
+                                                         Index Cond: (kudo_id = k_2.id)
+               ->  Aggregate (actual time=0.005..0.005 rows=1 loops=20025)
+                     ->  GroupAggregate (actual time=0.005..0.005 rows=1 loops=20025)
+                           Group Key: sb.icon
+                           ->  Sort (actual time=0.004..0.004 rows=1 loops=20025)
+                                 Sort Key: sb.icon
+                                 Sort Method: quicksort  Memory: 25kB
+                                 ->  Index Scan using secret_boxes_opened_user_idx on secret_boxes sb (actual time=0.003..0.003 rows=1 loops=20025)
+                                       Index Cond: (user_id = u.id)
+ Planning Time: 0.849 ms
+ Execution Time: 819.487 ms
+(55 rows)
+
+=== B5 export keyset page, generic plan
+                                                                                                             QUERY PLAN                                                                                                             
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit (actual time=398.938..399.004 rows=500 loops=1)
+   ->  Sort (actual time=398.936..398.974 rows=500 loops=1)
+         Sort Key: u.name, u.id
+         Sort Method: top-N heapsort  Memory: 244kB
+         ->  Nested Loop (actual time=0.117..389.425 rows=10024 loops=1)
+               ->  Nested Loop (actual time=0.105..333.518 rows=10024 loops=1)
+                     ->  Nested Loop (actual time=0.067..126.669 rows=10024 loops=1)
+                           ->  Nested Loop (actual time=0.048..59.974 rows=10024 loops=1)
+                                 ->  Nested Loop Left Join (actual time=0.030..12.704 rows=10024 loops=1)
+                                       Join Filter: (un.id = u.unit_id)
+                                       Rows Removed by Join Filter: 20018
+                                       ->  Seq Scan on users u (actual time=0.018..6.743 rows=10024 loops=1)
+                                             Filter: ((($1 IS NULL) OR (unit_id = $1)) AND (($2 IS NULL) OR (role = $2)) AND (($3 IS NULL) OR (name ~~* $3) OR (email ~~* $3)) AND (($6 IS NULL) OR (ROW(name, id) > ROW($6, $7))))
+                                             Rows Removed by Filter: 10001
+                                       ->  Materialize (actual time=0.000..0.000 rows=3 loops=10024)
+                                             ->  Seq Scan on units un (actual time=0.006..0.008 rows=5 loops=1)
+                                 ->  Aggregate (actual time=0.004..0.004 rows=1 loops=10024)
+                                       ->  Index Scan using kudos_sender_created_idx on kudos k (actual time=0.003..0.004 rows=3 loops=10024)
+                                             Index Cond: (sender_id = u.id)
+                                             Filter: (status = 'public'::kudo_status)
+                                             Rows Removed by Filter: 0
+                           ->  Aggregate (actual time=0.006..0.006 rows=1 loops=10024)
+                                 Filter: (($4 IS NULL) OR (((count(DISTINCT k_1.sender_id))::integer >= $4) AND ((count(DISTINCT k_1.sender_id))::integer <= $5)))
+                                 ->  Sort (actual time=0.005..0.005 rows=3 loops=10024)
+                                       Sort Key: k_1.sender_id
+                                       Sort Method: quicksort  Memory: 25kB
+                                       ->  Bitmap Heap Scan on kudos k_1 (actual time=0.003..0.004 rows=3 loops=10024)
+                                             Recheck Cond: ((receiver_id = u.id) AND (status = 'public'::kudo_status))
+                                             Heap Blocks: exact=10361
+                                             ->  Bitmap Index Scan on kudos_public_receiver_idx (actual time=0.002..0.002 rows=3 loops=10024)
+                                                   Index Cond: (receiver_id = u.id)
+                     ->  Aggregate (actual time=0.020..0.020 rows=1 loops=10024)
+                           ->  Nested Loop (actual time=0.008..0.019 rows=3 loops=10024)
+                                 ->  Bitmap Heap Scan on kudos k_2 (actual time=0.002..0.002 rows=3 loops=10024)
+                                       Recheck Cond: ((receiver_id = u.id) AND (status = 'public'::kudo_status))
+                                       Heap Blocks: exact=10361
+                                       ->  Bitmap Index Scan on kudos_public_receiver_idx (actual time=0.001..0.001 rows=3 loops=10024)
+                                             Index Cond: (receiver_id = u.id)
+                                 ->  Subquery Scan on v (actual time=0.005..0.005 rows=1 loops=30061)
+                                       ->  GroupAggregate (actual time=0.005..0.005 rows=1 loops=30061)
+                                             ->  Nested Loop Left Join (actual time=0.004..0.005 rows=1 loops=30061)
+                                                   ->  Index Only Scan using kudos_pkey on kudos k_3 (actual time=0.002..0.002 rows=1 loops=30061)
+                                                         Index Cond: (id = k_2.id)
+                                                         Heap Fetches: 30061
+                                                   ->  Index Scan using hearts_kudo_user_key on hearts h (actual time=0.002..0.002 rows=1 loops=30061)
+                                                         Index Cond: (kudo_id = k_2.id)
+               ->  Aggregate (actual time=0.005..0.005 rows=1 loops=10024)
+                     ->  GroupAggregate (actual time=0.004..0.004 rows=1 loops=10024)
+                           Group Key: sb.icon
+                           ->  Sort (actual time=0.004..0.004 rows=1 loops=10024)
+                                 Sort Key: sb.icon
+                                 Sort Method: quicksort  Memory: 25kB
+                                 ->  Index Scan using secret_boxes_opened_user_idx on secret_boxes sb (actual time=0.003..0.003 rows=1 loops=10024)
+                                       Index Cond: (user_id = u.id)
+ Planning Time: 0.028 ms
+ Execution Time: 399.164 ms
+(56 rows)
+
+CREATE INDEX
+ANALYZE
+###### AFTER users_name_id_idx
+SET
+=== A1 table page 1 (20 rows, custom plan)
+                                                                  QUERY PLAN                                                                  
+----------------------------------------------------------------------------------------------------------------------------------------------
+ Limit (actual time=0.834..1.620 rows=20 loops=1)
+   ->  Nested Loop (actual time=0.828..1.612 rows=20 loops=1)
+         ->  Nested Loop (actual time=0.816..1.510 rows=20 loops=1)
+               ->  Nested Loop (actual time=0.785..1.018 rows=20 loops=1)
+                     ->  Nested Loop (actual time=0.763..0.872 rows=20 loops=1)
+                           ->  Nested Loop Left Join (actual time=0.741..0.767 rows=20 loops=1)
+                                 Join Filter: (un.id = u.unit_id)
+                                 Rows Removed by Join Filter: 34
+                                 ->  Index Scan using users_name_id_idx on users u (actual time=0.717..0.731 rows=20 loops=1)
+                                 ->  Materialize (actual time=0.001..0.001 rows=3 loops=20)
+                                       ->  Seq Scan on units un (actual time=0.013..0.013 rows=5 loops=1)
+                           ->  Aggregate (actual time=0.005..0.005 rows=1 loops=20)
+                                 ->  Index Scan using kudos_sender_created_idx on kudos k (actual time=0.003..0.004 rows=3 loops=20)
+                                       Index Cond: (sender_id = u.id)
+                                       Filter: (status = 'public'::kudo_status)
+                     ->  Aggregate (actual time=0.007..0.007 rows=1 loops=20)
+                           ->  Sort (actual time=0.006..0.006 rows=3 loops=20)
+                                 Sort Key: k_1.sender_id
+                                 Sort Method: quicksort  Memory: 25kB
+                                 ->  Bitmap Heap Scan on kudos k_1 (actual time=0.003..0.004 rows=3 loops=20)
+                                       Recheck Cond: ((receiver_id = u.id) AND (status = 'public'::kudo_status))
+                                       Heap Blocks: exact=23
+                                       ->  Bitmap Index Scan on kudos_public_receiver_idx (actual time=0.002..0.002 rows=3 loops=20)
+                                             Index Cond: (receiver_id = u.id)
+               ->  Aggregate (actual time=0.024..0.024 rows=1 loops=20)
+                     ->  Nested Loop (actual time=0.009..0.023 rows=3 loops=20)
+                           ->  Bitmap Heap Scan on kudos k_2 (actual time=0.002..0.002 rows=3 loops=20)
+                                 Recheck Cond: ((receiver_id = u.id) AND (status = 'public'::kudo_status))
+                                 Heap Blocks: exact=23
+                                 ->  Bitmap Index Scan on kudos_public_receiver_idx (actual time=0.001..0.001 rows=3 loops=20)
+                                       Index Cond: (receiver_id = u.id)
+                           ->  Subquery Scan on v (actual time=0.006..0.006 rows=1 loops=63)
+                                 ->  GroupAggregate (actual time=0.006..0.006 rows=1 loops=63)
+                                       ->  Nested Loop Left Join (actual time=0.005..0.006 rows=2 loops=63)
+                                             ->  Index Only Scan using kudos_pkey on kudos k_3 (actual time=0.002..0.003 rows=1 loops=63)
+                                                   Index Cond: (id = k_2.id)
+                                                   Heap Fetches: 63
+                                             ->  Index Scan using hearts_kudo_user_key on hearts h (actual time=0.002..0.003 rows=2 loops=63)
+                                                   Index Cond: (kudo_id = k_2.id)
+         ->  Aggregate (actual time=0.005..0.005 rows=1 loops=20)
+               ->  GroupAggregate (actual time=0.004..0.004 rows=1 loops=20)
+                     Group Key: sb.icon
+                     ->  Sort (actual time=0.003..0.003 rows=1 loops=20)
+                           Sort Key: sb.icon
+                           Sort Method: quicksort  Memory: 25kB
+                           ->  Index Scan using secret_boxes_opened_user_idx on secret_boxes sb (actual time=0.002..0.002 rows=1 loops=20)
+                                 Index Cond: (user_id = u.id)
+ Planning Time: 3.038 ms
+ Execution Time: 1.755 ms
+(49 rows)
+
+=== A2 table page 500 (offset 9980)
+                                                                   QUERY PLAN                                                                    
+-------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit (actual time=481.458..482.196 rows=20 loops=1)
+   ->  Nested Loop (actual time=0.100..481.506 rows=10000 loops=1)
+         ->  Nested Loop (actual time=0.091..416.620 rows=10000 loops=1)
+               ->  Nested Loop (actual time=0.065..181.955 rows=10000 loops=1)
+                     ->  Nested Loop (actual time=0.048..105.276 rows=10000 loops=1)
+                           ->  Nested Loop Left Join (actual time=0.030..50.669 rows=10000 loops=1)
+                                 Join Filter: (un.id = u.unit_id)
+                                 Rows Removed by Join Filter: 20088
+                                 ->  Index Scan using users_name_id_idx on users u (actual time=0.012..42.041 rows=10000 loops=1)
+                                 ->  Materialize (actual time=0.000..0.000 rows=3 loops=10000)
+                                       ->  Seq Scan on units un (actual time=0.010..0.011 rows=5 loops=1)
+                           ->  Aggregate (actual time=0.005..0.005 rows=1 loops=10000)
+                                 ->  Index Scan using kudos_sender_created_idx on kudos k (actual time=0.004..0.004 rows=3 loops=10000)
+                                       Index Cond: (sender_id = u.id)
+                                       Filter: (status = 'public'::kudo_status)
+                     ->  Aggregate (actual time=0.007..0.007 rows=1 loops=10000)
+                           ->  Sort (actual time=0.006..0.006 rows=3 loops=10000)
+                                 Sort Key: k_1.sender_id
+                                 Sort Method: quicksort  Memory: 25kB
+                                 ->  Bitmap Heap Scan on kudos k_1 (actual time=0.004..0.004 rows=3 loops=10000)
+                                       Recheck Cond: ((receiver_id = u.id) AND (status = 'public'::kudo_status))
+                                       Heap Blocks: exact=10318
+                                       ->  Bitmap Index Scan on kudos_public_receiver_idx (actual time=0.002..0.002 rows=3 loops=10000)
+                                             Index Cond: (receiver_id = u.id)
+               ->  Aggregate (actual time=0.023..0.023 rows=1 loops=10000)
+                     ->  Nested Loop (actual time=0.009..0.022 rows=3 loops=10000)
+                           ->  Bitmap Heap Scan on kudos k_2 (actual time=0.002..0.002 rows=3 loops=10000)
+                                 Recheck Cond: ((receiver_id = u.id) AND (status = 'public'::kudo_status))
+                                 Heap Blocks: exact=10318
+                                 ->  Bitmap Index Scan on kudos_public_receiver_idx (actual time=0.001..0.001 rows=3 loops=10000)
+                                       Index Cond: (receiver_id = u.id)
+                           ->  Subquery Scan on v (actual time=0.006..0.006 rows=1 loops=30003)
+                                 ->  GroupAggregate (actual time=0.006..0.006 rows=1 loops=30003)
+                                       ->  Nested Loop Left Join (actual time=0.005..0.005 rows=1 loops=30003)
+                                             ->  Index Only Scan using kudos_pkey on kudos k_3 (actual time=0.003..0.003 rows=1 loops=30003)
+                                                   Index Cond: (id = k_2.id)
+                                                   Heap Fetches: 30003
+                                             ->  Index Scan using hearts_kudo_user_key on hearts h (actual time=0.002..0.002 rows=1 loops=30003)
+                                                   Index Cond: (kudo_id = k_2.id)
+         ->  Aggregate (actual time=0.006..0.006 rows=1 loops=10000)
+               ->  GroupAggregate (actual time=0.005..0.005 rows=1 loops=10000)
+                     Group Key: sb.icon
+                     ->  Sort (actual time=0.004..0.004 rows=1 loops=10000)
+                           Sort Key: sb.icon
+                           Sort Method: quicksort  Memory: 25kB
+                           ->  Index Scan using secret_boxes_opened_user_idx on secret_boxes sb (actual time=0.003..0.003 rows=1 loops=10000)
+                                 Index Cond: (user_id = u.id)
+ Planning Time: 0.884 ms
+ Execution Time: 482.300 ms
+(49 rows)
+
+=== A3 export page after the 10,000th name (500 rows, keyset)
+                                                                              QUERY PLAN                                                                              
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit (actual time=0.146..27.709 rows=500 loops=1)
+   ->  Nested Loop (actual time=0.144..27.634 rows=500 loops=1)
+         ->  Nested Loop (actual time=0.131..23.918 rows=500 loops=1)
+               ->  Nested Loop (actual time=0.089..10.427 rows=500 loops=1)
+                     ->  Nested Loop (actual time=0.065..6.092 rows=500 loops=1)
+                           ->  Nested Loop Left Join (actual time=0.046..3.155 rows=500 loops=1)
+                                 Join Filter: (un.id = u.unit_id)
+                                 Rows Removed by Join Filter: 969
+                                 ->  Index Scan using users_name_id_idx on users u (actual time=0.026..2.563 rows=500 loops=1)
+                                       Index Cond: (ROW(name, id) > ROW('Load 80763f12d898d3bd078fd9e13b2950df'::text, 'a94a80be-5255-43ea-a111-2b581873a9cb'::uuid))
+                                 ->  Materialize (actual time=0.000..0.000 rows=3 loops=500)
+                                       ->  Seq Scan on units un (actual time=0.013..0.014 rows=5 loops=1)
+                           ->  Aggregate (actual time=0.005..0.005 rows=1 loops=500)
+                                 ->  Index Scan using kudos_sender_created_idx on kudos k (actual time=0.004..0.005 rows=3 loops=500)
+                                       Index Cond: (sender_id = u.id)
+                                       Filter: (status = 'public'::kudo_status)
+                     ->  Aggregate (actual time=0.008..0.008 rows=1 loops=500)
+                           ->  Sort (actual time=0.007..0.007 rows=3 loops=500)
+                                 Sort Key: k_1.sender_id
+                                 Sort Method: quicksort  Memory: 25kB
+                                 ->  Bitmap Heap Scan on kudos k_1 (actual time=0.004..0.005 rows=3 loops=500)
+                                       Recheck Cond: ((receiver_id = u.id) AND (status = 'public'::kudo_status))
+                                       Heap Blocks: exact=512
+                                       ->  Bitmap Index Scan on kudos_public_receiver_idx (actual time=0.003..0.003 rows=3 loops=500)
+                                             Index Cond: (receiver_id = u.id)
+               ->  Aggregate (actual time=0.026..0.026 rows=1 loops=500)
+                     ->  Nested Loop (actual time=0.011..0.025 rows=3 loops=500)
+                           ->  Bitmap Heap Scan on kudos k_2 (actual time=0.002..0.003 rows=3 loops=500)
+                                 Recheck Cond: ((receiver_id = u.id) AND (status = 'public'::kudo_status))
+                                 Heap Blocks: exact=512
+                                 ->  Bitmap Index Scan on kudos_public_receiver_idx (actual time=0.001..0.001 rows=3 loops=500)
+                                       Index Cond: (receiver_id = u.id)
+                           ->  Subquery Scan on v (actual time=0.007..0.007 rows=1 loops=1500)
+                                 ->  GroupAggregate (actual time=0.007..0.007 rows=1 loops=1500)
+                                       ->  Nested Loop Left Join (actual time=0.006..0.006 rows=1 loops=1500)
+                                             ->  Index Only Scan using kudos_pkey on kudos k_3 (actual time=0.003..0.003 rows=1 loops=1500)
+                                                   Index Cond: (id = k_2.id)
+                                                   Heap Fetches: 1500
+                                             ->  Index Scan using hearts_kudo_user_key on hearts h (actual time=0.002..0.002 rows=0 loops=1500)
+                                                   Index Cond: (kudo_id = k_2.id)
+         ->  Aggregate (actual time=0.007..0.007 rows=1 loops=500)
+               ->  GroupAggregate (actual time=0.006..0.006 rows=1 loops=500)
+                     Group Key: sb.icon
+                     ->  Sort (actual time=0.005..0.005 rows=1 loops=500)
+                           Sort Key: sb.icon
+                           Sort Method: quicksort  Memory: 25kB
+                           ->  Index Scan using secret_boxes_opened_user_idx on secret_boxes sb (actual time=0.004..0.004 rows=1 loops=500)
+                                 Index Cond: (user_id = u.id)
+ Planning Time: 1.269 ms
+ Execution Time: 27.882 ms
+(50 rows)
+
+SET
+=== A4 table page 1, generic plan (pgx after 5 runs)
+                                                                                                          QUERY PLAN                                                                                                          
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit (actual time=0.117..1.171 rows=20 loops=1)
+   ->  Nested Loop (actual time=0.115..1.165 rows=20 loops=1)
+         ->  Nested Loop (actual time=0.104..1.034 rows=20 loops=1)
+               ->  Nested Loop (actual time=0.073..0.383 rows=20 loops=1)
+                     ->  Nested Loop (actual time=0.053..0.201 rows=20 loops=1)
+                           ->  Nested Loop Left Join (actual time=0.032..0.069 rows=20 loops=1)
+                                 Join Filter: (un.id = u.unit_id)
+                                 Rows Removed by Join Filter: 34
+                                 ->  Index Scan using users_name_id_idx on users u (actual time=0.015..0.036 rows=20 loops=1)
+                                       Filter: ((($1 IS NULL) OR (unit_id = $1)) AND (($2 IS NULL) OR (role = $2)) AND (($3 IS NULL) OR (name ~~* $3) OR (email ~~* $3)) AND (($6 IS NULL) OR (ROW(name, id) > ROW($6, $7))))
+                                 ->  Materialize (actual time=0.001..0.001 rows=3 loops=20)
+                                       ->  Seq Scan on units un (actual time=0.010..0.011 rows=5 loops=1)
+                           ->  Aggregate (actual time=0.006..0.006 rows=1 loops=20)
+                                 ->  Index Scan using kudos_sender_created_idx on kudos k (actual time=0.004..0.005 rows=3 loops=20)
+                                       Index Cond: (sender_id = u.id)
+                                       Filter: (status = 'public'::kudo_status)
+                     ->  Aggregate (actual time=0.008..0.009 rows=1 loops=20)
+                           Filter: (($4 IS NULL) OR (((count(DISTINCT k_1.sender_id))::integer >= $4) AND ((count(DISTINCT k_1.sender_id))::integer <= $5)))
+                           ->  Sort (actual time=0.007..0.007 rows=3 loops=20)
+                                 Sort Key: k_1.sender_id
+                                 Sort Method: quicksort  Memory: 25kB
+                                 ->  Bitmap Heap Scan on kudos k_1 (actual time=0.004..0.005 rows=3 loops=20)
+                                       Recheck Cond: ((receiver_id = u.id) AND (status = 'public'::kudo_status))
+                                       Heap Blocks: exact=23
+                                       ->  Bitmap Index Scan on kudos_public_receiver_idx (actual time=0.003..0.003 rows=3 loops=20)
+                                             Index Cond: (receiver_id = u.id)
+               ->  Aggregate (actual time=0.032..0.032 rows=1 loops=20)
+                     ->  Nested Loop (actual time=0.011..0.031 rows=3 loops=20)
+                           ->  Bitmap Heap Scan on kudos k_2 (actual time=0.002..0.003 rows=3 loops=20)
+                                 Recheck Cond: ((receiver_id = u.id) AND (status = 'public'::kudo_status))
+                                 Heap Blocks: exact=23
+                                 ->  Bitmap Index Scan on kudos_public_receiver_idx (actual time=0.001..0.001 rows=3 loops=20)
+                                       Index Cond: (receiver_id = u.id)
+                           ->  Subquery Scan on v (actual time=0.008..0.008 rows=1 loops=63)
+                                 ->  GroupAggregate (actual time=0.008..0.008 rows=1 loops=63)
+                                       ->  Nested Loop Left Join (actual time=0.007..0.007 rows=2 loops=63)
+                                             ->  Index Only Scan using kudos_pkey on kudos k_3 (actual time=0.003..0.004 rows=1 loops=63)
+                                                   Index Cond: (id = k_2.id)
+                                                   Heap Fetches: 63
+                                             ->  Index Scan using hearts_kudo_user_key on hearts h (actual time=0.003..0.003 rows=2 loops=63)
+                                                   Index Cond: (kudo_id = k_2.id)
+         ->  Aggregate (actual time=0.006..0.006 rows=1 loops=20)
+               ->  GroupAggregate (actual time=0.005..0.005 rows=1 loops=20)
+                     Group Key: sb.icon
+                     ->  Sort (actual time=0.004..0.004 rows=1 loops=20)
+                           Sort Key: sb.icon
+                           Sort Method: quicksort  Memory: 25kB
+                           ->  Index Scan using secret_boxes_opened_user_idx on secret_boxes sb (actual time=0.003..0.003 rows=1 loops=20)
+                                 Index Cond: (user_id = u.id)
+ Planning Time: 1.041 ms
+ Execution Time: 1.313 ms
+(51 rows)
+
+=== A5 export keyset page, generic plan
+                                                                                                          QUERY PLAN                                                                                                          
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit (actual time=8.962..34.810 rows=500 loops=1)
+   ->  Nested Loop (actual time=8.959..34.728 rows=500 loops=1)
+         ->  Nested Loop (actual time=8.943..31.192 rows=500 loops=1)
+               ->  Nested Loop (actual time=8.895..17.592 rows=500 loops=1)
+                     ->  Nested Loop (actual time=8.865..13.352 rows=500 loops=1)
+                           ->  Nested Loop Left Join (actual time=8.835..10.175 rows=500 loops=1)
+                                 Join Filter: (un.id = u.unit_id)
+                                 Rows Removed by Join Filter: 969
+                                 ->  Index Scan using users_name_id_idx on users u (actual time=8.801..9.772 rows=500 loops=1)
+                                       Filter: ((($1 IS NULL) OR (unit_id = $1)) AND (($2 IS NULL) OR (role = $2)) AND (($3 IS NULL) OR (name ~~* $3) OR (email ~~* $3)) AND (($6 IS NULL) OR (ROW(name, id) > ROW($6, $7))))
+                                       Rows Removed by Filter: 10001
+                                 ->  Materialize (actual time=0.000..0.000 rows=3 loops=500)
+                                       ->  Seq Scan on units un (actual time=0.019..0.020 rows=5 loops=1)
+                           ->  Aggregate (actual time=0.005..0.006 rows=1 loops=500)
+                                 ->  Index Scan using kudos_sender_created_idx on kudos k (actual time=0.004..0.005 rows=3 loops=500)
+                                       Index Cond: (sender_id = u.id)
+                                       Filter: (status = 'public'::kudo_status)
+                     ->  Aggregate (actual time=0.008..0.008 rows=1 loops=500)
+                           Filter: (($4 IS NULL) OR (((count(DISTINCT k_1.sender_id))::integer >= $4) AND ((count(DISTINCT k_1.sender_id))::integer <= $5)))
+                           ->  Sort (actual time=0.007..0.007 rows=3 loops=500)
+                                 Sort Key: k_1.sender_id
+                                 Sort Method: quicksort  Memory: 25kB
+                                 ->  Bitmap Heap Scan on kudos k_1 (actual time=0.005..0.005 rows=3 loops=500)
+                                       Recheck Cond: ((receiver_id = u.id) AND (status = 'public'::kudo_status))
+                                       Heap Blocks: exact=512
+                                       ->  Bitmap Index Scan on kudos_public_receiver_idx (actual time=0.003..0.003 rows=3 loops=500)
+                                             Index Cond: (receiver_id = u.id)
+               ->  Aggregate (actual time=0.027..0.027 rows=1 loops=500)
+                     ->  Nested Loop (actual time=0.010..0.025 rows=3 loops=500)
+                           ->  Bitmap Heap Scan on kudos k_2 (actual time=0.002..0.002 rows=3 loops=500)
+                                 Recheck Cond: ((receiver_id = u.id) AND (status = 'public'::kudo_status))
+                                 Heap Blocks: exact=512
+                                 ->  Bitmap Index Scan on kudos_public_receiver_idx (actual time=0.001..0.001 rows=3 loops=500)
+                                       Index Cond: (receiver_id = u.id)
+                           ->  Subquery Scan on v (actual time=0.007..0.007 rows=1 loops=1500)
+                                 ->  GroupAggregate (actual time=0.007..0.007 rows=1 loops=1500)
+                                       ->  Nested Loop Left Join (actual time=0.006..0.006 rows=1 loops=1500)
+                                             ->  Index Only Scan using kudos_pkey on kudos k_3 (actual time=0.003..0.003 rows=1 loops=1500)
+                                                   Index Cond: (id = k_2.id)
+                                                   Heap Fetches: 1500
+                                             ->  Index Scan using hearts_kudo_user_key on hearts h (actual time=0.002..0.003 rows=0 loops=1500)
+                                                   Index Cond: (kudo_id = k_2.id)
+         ->  Aggregate (actual time=0.006..0.007 rows=1 loops=500)
+               ->  GroupAggregate (actual time=0.006..0.006 rows=1 loops=500)
+                     Group Key: sb.icon
+                     ->  Sort (actual time=0.005..0.005 rows=1 loops=500)
+                           Sort Key: sb.icon
+                           Sort Method: quicksort  Memory: 25kB
+                           ->  Index Scan using secret_boxes_opened_user_idx on secret_boxes sb (actual time=0.004..0.004 rows=1 loops=500)
+                                 Index Cond: (user_id = u.id)
+ Planning Time: 0.029 ms
+ Execution Time: 35.007 ms
+(52 rows)
+
+ROLLBACK

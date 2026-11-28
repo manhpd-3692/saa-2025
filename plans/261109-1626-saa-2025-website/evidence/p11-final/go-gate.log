@@ -1,0 +1,51 @@
+== sqlc diff
+sqlc-diff exit 0
+== gofmt -l
+
+gofmt exit 0
+== go vet ./...
+vet exit 0
+== go vet -tags integration ./...
+vet-int exit 0
+== go test ./...
+ok  	github.com/manhpd-3692/saa-2025/backend/cmd/api	0.029s
+?   	github.com/manhpd-3692/saa-2025/backend/cmd/purge-uploads	[no test files]
+ok  	github.com/manhpd-3692/saa-2025/backend/cmd/seed	0.012s
+?   	github.com/manhpd-3692/saa-2025/backend/db/seeds	[no test files]
+ok  	github.com/manhpd-3692/saa-2025/backend/internal/admin	0.015s
+ok  	github.com/manhpd-3692/saa-2025/backend/internal/auth	0.053s
+ok  	github.com/manhpd-3692/saa-2025/backend/internal/config	0.011s
+?   	github.com/manhpd-3692/saa-2025/backend/internal/db	[no test files]
+ok  	github.com/manhpd-3692/saa-2025/backend/internal/dbx	0.017s
+ok  	github.com/manhpd-3692/saa-2025/backend/internal/events	0.011s
+ok  	github.com/manhpd-3692/saa-2025/backend/internal/gamification	0.011s
+ok  	github.com/manhpd-3692/saa-2025/backend/internal/httpx	0.013s
+ok  	github.com/manhpd-3692/saa-2025/backend/internal/kudo	0.025s
+?   	github.com/manhpd-3692/saa-2025/backend/internal/moderation	[no test files]
+ok  	github.com/manhpd-3692/saa-2025/backend/internal/notification	0.015s
+?   	github.com/manhpd-3692/saa-2025/backend/internal/profile	[no test files]
+?   	github.com/manhpd-3692/saa-2025/backend/internal/testkit	[no test files]
+ok  	github.com/manhpd-3692/saa-2025/backend/internal/upload	0.066s
+?   	github.com/manhpd-3692/saa-2025/backend/internal/user	[no test files]
+test exit 0
+== go test -tags integration ./...
+ok  	github.com/manhpd-3692/saa-2025/backend/cmd/api	3.116s
+?   	github.com/manhpd-3692/saa-2025/backend/cmd/purge-uploads	[no test files]
+ok  	github.com/manhpd-3692/saa-2025/backend/cmd/seed	0.006s
+?   	github.com/manhpd-3692/saa-2025/backend/db/seeds	[no test files]
+ok  	github.com/manhpd-3692/saa-2025/backend/internal/admin	1.333s
+ok  	github.com/manhpd-3692/saa-2025/backend/internal/auth	2.076s
+ok  	github.com/manhpd-3692/saa-2025/backend/internal/config	0.009s
+?   	github.com/manhpd-3692/saa-2025/backend/internal/db	[no test files]
+ok  	github.com/manhpd-3692/saa-2025/backend/internal/dbx	0.628s
+ok  	github.com/manhpd-3692/saa-2025/backend/internal/events	0.013s
+ok  	github.com/manhpd-3692/saa-2025/backend/internal/gamification	4.383s
+ok  	github.com/manhpd-3692/saa-2025/backend/internal/httpx	0.012s
+ok  	github.com/manhpd-3692/saa-2025/backend/internal/kudo	5.719s
+ok  	github.com/manhpd-3692/saa-2025/backend/internal/moderation	3.732s
+ok  	github.com/manhpd-3692/saa-2025/backend/internal/notification	3.195s
+ok  	github.com/manhpd-3692/saa-2025/backend/internal/profile	0.691s
+?   	github.com/manhpd-3692/saa-2025/backend/internal/testkit	[no test files]
+ok  	github.com/manhpd-3692/saa-2025/backend/internal/upload	0.980s
+?   	github.com/manhpd-3692/saa-2025/backend/internal/user	[no test files]
+test-int exit 0

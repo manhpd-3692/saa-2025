@@ -1,6 +1,6 @@
 # System Architecture
 
-State after Phase 10 (notification center on top of Phase 9 Sunner profiles, Phase 8 hearts, hero badges, rules panel and secret box, Phase 7 Kudos Live board, Phase 6 compose, Phase 5 Homepage and Awards,
+State after Phase 11 (admin Overview and user directory on top of Phase 10 notification center, Phase 9 Sunner profiles, Phase 8 hearts, hero badges, rules panel and secret box, Phase 7 Kudos Live board, Phase 6 compose, Phase 5 Homepage and Awards,
 the Phase 4 launch gate and the Phase 3 shell). Items marked **planned (Phase N)** do not exist in code yet. Backend detail lives in [`backend/README.md`](../backend/README.md).
 
 ## Components
@@ -81,6 +81,7 @@ Migrations (`supabase/migrations`, in order):
 | `rls_deny_all_and_grants` | RLS deny-all and grants |
 | `kudo_uploads_unsaved_pending_delete` | an unsaved upload may become `pending_delete` |
 | `kudo_board_read_indexes` | partial indexes `kudos_public_receiver_idx` (public kudos per receiver) and `secret_boxes_opened_user_idx` (latest opened box per user) |
+| `admin_user_directory_order_index` | index `users_name_id_idx` on `users (name, id)`: admin directory order and export keyset (F010) |
 
 ## Frontend structure
 
@@ -90,6 +91,7 @@ Migrations (`supabase/migrations`, in order):
 | `src/app/(shell)/layout.tsx` | Full chrome: `SiteHeader`, `SiteFooter`, `FloatingActionButton`, `MeRefresher`, `ShellActionsProvider` |
 | `src/app/(minimal)/layout.tsx` | `MinimalChrome` (language switch and copyright, no Go call) for Login |
 | `src/app/admin/layout.tsx` | Role gate plus `AdminChrome`; nav items in `src/features/admin/admin-nav-items.ts` |
+| `src/app/admin/page.tsx`, `src/app/admin/users/page.tsx`, `src/features/admin/` | Overview and User directory pages and their code ([details](#admin-overview-and-user-directory-f010)) |
 | `src/app/not-found.tsx` | Localized 404 in the minimal chrome (`src/components/errors/`) |
 | `src/app/(shell)/kudos/`, `src/features/kudos-board/` | Live board, View Kudo overlay and page, KudoCard UI ([Kudos Live board](#kudos-live-board-f006)) |
 | `src/components/shell/` | Header, avatar and language menus, nav links, FAB, footer, bell slot |
@@ -388,11 +390,57 @@ Tests: `e2e/notification-center.spec.ts`; Vitest `build-notification-message.tes
 `notification-time.test.ts`, `unread-refresh-policy.test.ts`; Go `notification_remask_test.go`,
 `notification_read_integration_test.go`, `api_notification_integration_test.go`.
 
+## Admin Overview and user directory (F010)
+
+`/admin` (Overview by unit) and `/admin/users` (directory) read four ADMIN routes
+(`backend/cmd/api/wire_admin_reports.go`, package `backend/internal/admin`): PROFILE + `RequireAdmin`, so 401
+without a token and 403 for a `user` role before any query runs.
+
+| Route | Answer |
+|---|---|
+| `GET /api/v1/admin/overview?from&to` | Overview for the range |
+| `GET /api/v1/admin/overview/export?from&to` | The same table as CSV `saa-overview-{from}_{to}.csv` |
+| `GET /api/v1/admin/users?unit&level&role&q&page&pageSize` | One directory page ordered by name, match count, Unit choices (the search suggest asks a small `pageSize`) |
+| `GET /api/v1/admin/users/export?unit&level&role&q` | Every match, not one page, as `saa-users-{YYYY-MM-DD}.csv` |
+
+**Date range and time zone.** A report day is a day in `Asia/Ho_Chi_Minh` (`report_date_range.go`; the browser
+uses the same zone in `src/features/admin/report-dates.ts`). Both ends are included; the activity window is
+`[start of from, start of the day after to)`. A missing or malformed day, or `from` after `to`, gives the
+default range (last 30 days ending today), never an error.
+
+**CSV streaming policy** (`csv_stream_writer.go`, Codex N11):
+
+- The first page is read before the status, headers or BOM are written, so a failure there is a normal 500
+  JSON answer with no CSV byte.
+- Once streaming started the status cannot change: a later read failure aborts the connection
+  (`http.ErrAbortHandler`, no terminating chunk) instead of ending the file as if it were complete.
+- UTF-8 BOM, CRLF rows, 500 rows per page, whole export under the 20 s deadline (`dbx.ExportTimeout`). A text
+  cell starting with `=`, `+`, `-`, `@`, tab or CR gets a leading apostrophe (formula guard); generated numbers
+  are not touched.
+- The browser (`export-download.ts`) saves the file only after the whole body arrived; a non-2xx answer, network
+  failure, 25 s timeout or cut-off body saves nothing and offers to try again. The file name comes from
+  `Content-Disposition`, which Go exposes through CORS.
+
+**Admin call failures** (`admin-call-failure.ts`, `load-admin-report.ts`): the admin layout checks the role once
+per mount, so every page call follows Go. 401 goes to `/login?next=<the page>`, 403 turns the page into the
+Forbidden page, anything else shows the error state with Retry. This covers server reads, browser reads, the
+search suggest and the exports.
+
+**Copy.** Admin text comes from the `admin` dictionary (vi and en, `src/i18n/dictionaries/*/admin.json`); the
+admin nav reads Vietnamese by default.
+
+**Directory order.** Migration 12 adds `users_name_id_idx`. On a scaled local database (20,000 Sunners, 60,000
+kudos) the first table page went from 859 ms to 1.8 ms and one 500-row export page from 377 ms to 28 ms.
+
+Tests: `e2e/admin-overview-and-users.spec.ts`; Vitest `report-dates.test.ts`, `export-download.test.ts`; Go
+`csv_stream_writer_test.go`, `report_request_parsing_test.go`, the integration tests in `internal/admin` and
+`cmd/api/api_admin_reports_integration_test.go`.
+
 ## Planned (not yet in code)
 
 | Item | Phase |
 |---|---|
-| Feature routes and screens | 11 to 13 |
+| Feature routes and screens | 12 to 13 |
 | Final integration, E2E, docs | 14 |
 
 Source of truth for phases: `plans/261109-1626-saa-2025-website/plan.md`.

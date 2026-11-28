@@ -1,0 +1,197 @@
+[
+  {
+    "id": "A1.headers",
+    "status": "PASS",
+    "detail": "[\"No\",\"Unit\",\"Total member\",\"Total sent kudos\",\"Total received kudos\",\"Total users with at least one kudo\",\"Total received secret box\"]"
+  },
+  {
+    "id": "A1.rowsAllFirst",
+    "status": "PASS",
+    "detail": "rows=6 first=[\"\",\"All\",\"25\",\"60\",\"60\",\"23\",\"31\"]"
+  },
+  {
+    "id": "A1.defaultRange30d",
+    "status": "PASS",
+    "detail": "button=\"2026-10-30 2026-11-28\" expected 2026-10-30..2026-11-28"
+  },
+  {
+    "id": "A1.exportStatus200",
+    "status": "PASS",
+    "detail": "status=200"
+  },
+  {
+    "id": "A1.contentDispositionReadable",
+    "status": "PASS",
+    "detail": "header=\"attachment; filename=saa-overview-2026-10-30_2026-11-28.csv\""
+  },
+  {
+    "id": "A1.filename",
+    "status": "PASS",
+    "detail": "suggested=\"saa-overview-2026-10-30_2026-11-28.csv\""
+  },
+  {
+    "id": "A1.utf8Bom",
+    "status": "PASS",
+    "detail": "first3=efbbbf"
+  },
+  {
+    "id": "A1.csvHeaders",
+    "status": "PASS",
+    "detail": "headers=[\"No\",\"Unit\",\"Total member\",\"Total sent kudos\",\"Total received kudos\",\"Total users with at least one kudo\",\"Total received secret box\"]"
+  },
+  {
+    "id": "A1.csvEqualsTable",
+    "status": "PASS",
+    "detail": "csvRows=6 tableRows=6 mismatches=[]"
+  },
+  {
+    "id": "A1.csvSample",
+    "status": "INFO",
+    "detail": "[\"No,Unit,Total member,Total sent kudos,Total received kudos,Total users with at least one kudo,Total received secret box\",\",All,25,60,60,23,31\",\"1,CECV1,5,15,8,5,11\"]"
+  },
+  {
+    "id": "A1.invalidFromFallsBack",
+    "status": "PASS",
+    "detail": "button=\"2026-10-30 2026-11-28\""
+  },
+  {
+    "id": "A1.reversedRangeFallsBack",
+    "status": "PASS",
+    "detail": "button=\"2026-10-30 2026-11-28\""
+  },
+  {
+    "id": "A4.headers",
+    "status": "PASS",
+    "detail": "[\"ID\",\"User\",\"Email\",\"∑ sent Kudos\",\"∑ Received Kudos\",\"Total Heart\",\"Level\",\"Number of Badges\",\"Time to get 6 Badges\",\"Last Logged in\",\"Role\",\"Actions\"]"
+  },
+  {
+    "id": "A4.page1Rows20",
+    "status": "PASS",
+    "detail": "rows=20"
+  },
+  {
+    "id": "A4.page1Sorted",
+    "status": "FAIL",
+    "detail": "first=Bùi Thanh Nam last=Phan Gia Bảo"
+  },
+  {
+    "id": "A4.pagerTotal25",
+    "status": "PASS",
+    "detail": "pager=\"1–20 of 25 users\""
+  },
+  {
+    "id": "A4.page2Rows5",
+    "status": "PASS",
+    "detail": "rows=5 first=SAA Admin E2E"
+  },
+  {
+    "id": "A4.pagesNoOverlap",
+    "status": "PASS",
+    "detail": ""
+  },
+  {
+    "id": "A4.exportContentDisposition",
+    "status": "PASS",
+    "detail": "header=\"attachment; filename=saa-users-2026-11-28.csv\""
+  },
+  {
+    "id": "A4.exportFilename",
+    "status": "PASS",
+    "detail": "suggested=\"saa-users-2026-11-28.csv\""
+  },
+  {
+    "id": "A4.exportBom",
+    "status": "PASS",
+    "detail": "first3=efbbbf"
+  },
+  {
+    "id": "A4.exportRowCount25",
+    "status": "PASS",
+    "detail": "dataRows=25 headers=[\"ID\",\"User\",\"Email\",\"Sent Kudos\",\"Received Kudos\",\"Total Heart\",\"Level\",\"Number of Badges\",\"Time to get 6 Badges\",\"Last Logged in\",\"Role\"]"
+  },
+  {
+    "id": "A4.formulaGuardNoRawFormulaCells",
+    "status": "PASS",
+    "detail": "leadingFormulaChars=0"
+  },
+  {
+    "id": "A4.csvSampleUsers",
+    "status": "INFO",
+    "detail": "[\"ID,User,Email,Sent Kudos,Received Kudos,Total Heart,Level,Number of Badges,Time to get 6 Badges,Last Logged in,Role\",\"d0000000,Bùi Thanh Nam,sunner08.demo@sun-asterisk.com,2,1,4,New Hero,0,,2026-11-27 06:13,User\"]"
+  },
+  {
+    "id": "A5.suggestMinTwoChars",
+    "status": "PASS",
+    "detail": "oneChar=0 twoChars=8"
+  },
+  {
+    "id": "A4.rowMenuViewProfile",
+    "status": "PASS",
+    "detail": "items=1"
+  },
+  {
+    "id": "A4.roleNoControl",
+    "status": "PASS",
+    "detail": "roleControls=0"
+  },
+  {
+    "id": "API.overview.admin200",
+    "status": "PASS",
+    "detail": "status=200"
+  },
+  {
+    "id": "API.users.roleAdminFilter",
+    "status": "PASS",
+    "detail": "status=200 n=1"
+  },
+  {
+    "id": "FR601.userPage/admin",
+    "status": "FAIL",
+    "detail": "url=/admin text=\"EN Access Denied The resource you’re looking for doesn’t exist or has been removed. Back to Homepage Copyright © 2025 Sun*\" dataLeak=false"
+  },
+  {
+    "id": "FR601.userPage/admin/users",
+    "status": "FAIL",
+    "detail": "url=/admin/users text=\"EN Access Denied The resource you’re looking for doesn’t exist or has been removed. Back to Homepage Copyright © 2025 Sun*\" dataLeak=false"
+  },
+  {
+    "id": "FR601.api403/api/v1/admin/overview",
+    "status": "PASS",
+    "detail": "status=403"
+  },
+  {
+    "id": "FR601.api403/api/v1/admin/overview/export",
+    "status": "PASS",
+    "detail": "status=403"
+  },
+  {
+    "id": "FR601.api403/api/v1/admin/users",
+    "status": "PASS",
+    "detail": "status=403"
+  },
+  {
+    "id": "FR601.api403/api/v1/admin/users/export",
+    "status": "PASS",
+    "detail": "status=403"
+  },
+  {
+    "id": "signedOut.adminToLogin",
+    "status": "PASS",
+    "detail": "url=/login?next=%2Fadmin"
+  },
+  {
+    "id": "FR002.viLocale",
+    "status": "INFO",
+    "detail": "main=\"Overview 2026-10-30 2026-11-28 Export No Unit Total member Total sent kudos Total received kudos Total users with at least one kudo Total received secret box All 25 60 60 23 31 1 CECV1 5 15 8 5 11 2 CECV2 6 15 15 6 7 3 CECV3 6 15 30 5 9 4 CECV4 4 9 5 4 4 5 CECV5 3 6 2 3 0\""
+  },
+  {
+    "id": "_badAdminApiResponses",
+    "status": "INFO",
+    "detail": []
+  },
+  {
+    "id": "_consoleErrors",
+    "status": "INFO",
+    "detail": []
+  }
+]

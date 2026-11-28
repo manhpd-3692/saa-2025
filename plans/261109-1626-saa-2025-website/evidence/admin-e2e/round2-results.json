@@ -1,0 +1,302 @@
+[
+  {
+    "loc": "vi",
+    "id": "R56.navLinks",
+    "status": "INFO",
+    "detail": "[\"Tổng quan\",\"Duyệt nội dung\",\"Người dùng\",\"Cài đặt\"]"
+  },
+  {
+    "loc": "vi",
+    "id": "R56.currentLink",
+    "status": "INFO",
+    "detail": "[\"Tổng quan\"]"
+  },
+  {
+    "loc": "vi",
+    "id": "R56.h1",
+    "status": "INFO",
+    "detail": "[\"Tổng quan\"]"
+  },
+  {
+    "loc": "vi",
+    "id": "R56.tableHeaders",
+    "status": "INFO",
+    "detail": "[\"STT\",\"Đơn vị\",\"Tổng thành viên\",\"Tổng Kudos đã gửi\",\"Tổng Kudos đã nhận\",\"Số người có ít nhất 1 Kudos\",\"Tổng Secret Box đã nhận\"]"
+  },
+  {
+    "loc": "vi",
+    "id": "R56.rangeButton",
+    "status": "INFO",
+    "detail": "[\"2026-10-30 2026-11-28\"]"
+  },
+  {
+    "loc": "vi",
+    "id": "R56.buttons",
+    "status": "INFO",
+    "detail": "[\"2026-10-30 2026-11-28\",\"Xuất file\"]"
+  },
+  {
+    "loc": "vi",
+    "id": "R56.rows",
+    "status": "PASS",
+    "detail": "rows=6 first=[\"\",\"Tất cả\",\"25\",\"60\",\"60\",\"23\",\"31\"] CECV1=[\"1\",\"CECV1\",\"5\",\"15\",\"8\",\"5\",\"11\"]"
+  },
+  {
+    "loc": "vi",
+    "id": "R56.exportDownloads",
+    "status": "PASS",
+    "detail": "file=saa-overview-2026-10-30_2026-11-28.csv"
+  },
+  {
+    "loc": "vi",
+    "id": "R56.exportNotStuckBusy",
+    "status": "PASS",
+    "detail": "busyCount=0 label=\"Xuất file\""
+  },
+  {
+    "loc": "vi",
+    "id": "R57.tableHeaders",
+    "status": "INFO",
+    "detail": "[\"ID\",\"Người dùng\",\"Email\",\"∑ Kudos đã gửi\",\"∑ Kudos đã nhận\",\"Tổng tim\",\"Level\",\"Số huy hiệu\",\"Thời gian đạt 6 huy hiệu\",\"Đăng nhập lần cuối\",\"Role\",\"Thao tác\"]"
+  },
+  {
+    "loc": "vi",
+    "id": "R57.filterButtons",
+    "status": "INFO",
+    "detail": "[\"VN\",\"\",\"Chọn phòng ban\",\"Chọn Level\",\"Chọn Role\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\"]"
+  },
+  {
+    "loc": "vi",
+    "id": "R57.searchBox",
+    "status": "INFO",
+    "detail": "[\"\"] placeholder=Tìm kiếm"
+  },
+  {
+    "loc": "vi",
+    "id": "R57.pager",
+    "status": "INFO",
+    "detail": "[]"
+  },
+  {
+    "loc": "vi",
+    "id": "R57.page1Rows",
+    "status": "PASS",
+    "detail": "rows=20 firstRow=[\"d0000000\",\"Bùi Thanh Nam\",\"sunner08.demo@sun-asterisk.com\",\"2\",\"1\",\"4\",\"New Hero\",\"0\",\"-\",\"27/11/2026 07:07\",\"User\",\"\"]"
+  },
+  {
+    "loc": "vi",
+    "id": "R57.idColumn",
+    "status": "INFO",
+    "detail": "[\"d0000000\",\"d0000000\",\"d0000000\"]"
+  },
+  {
+    "loc": "vi",
+    "id": "RUnit.options",
+    "status": "INFO",
+    "detail": "[\"Tất cả\",\"CECV1\",\"CECV2\",\"CECV3\",\"CECV4\",\"CECV5\"]"
+  },
+  {
+    "loc": "vi",
+    "id": "RLevel.options",
+    "status": "INFO",
+    "detail": "[\"Tất cả\",\"New Hero\",\"Rising Hero\",\"Super Hero\",\"Legend Hero\"]"
+  },
+  {
+    "loc": "vi",
+    "id": "RRole.options",
+    "status": "INFO",
+    "detail": "[\"Tất cả\",\"Admin\",\"User\"]"
+  },
+  {
+    "loc": "vi",
+    "id": "R59.unitFilterCECV1",
+    "status": "PASS",
+    "detail": "rows=5 (DB 5)"
+  },
+  {
+    "loc": "vi",
+    "id": "R61.roleAdminWithUnit",
+    "status": "PASS",
+    "detail": "rows=0 (DB 0)"
+  },
+  {
+    "loc": "vi",
+    "id": "R61.emptyStateCopy",
+    "status": "INFO",
+    "detail": "[\"Người dùng Xuất file Phòng ban CECV1 Level Chọn Level Role Admin ID Người dùng Email ∑ Kudos đã gửi ∑ Kudos đã nhận Tổng tim Level Số huy hiệu Thời gian đạt 6 huy hiệu Đăng nhập lần cuối Role Thao tác Không có người dùng nào khớp bộ lọc. Xóa bộ lọc\"]"
+  },
+  {
+    "loc": "vi",
+    "id": "R58.suggestTwoChars",
+    "status": "PASS",
+    "detail": "options=8 first=Đ Đặng Mai Linh sunner07.demo@sun-asterisk.com"
+  },
+  {
+    "loc": "vi",
+    "id": "apiErrors",
+    "status": "PASS",
+    "detail": "[]"
+  },
+  {
+    "loc": "vi",
+    "id": "consoleErrors",
+    "status": "PASS",
+    "detail": "[]"
+  },
+  {
+    "loc": "en",
+    "id": "R56.navLinks",
+    "status": "INFO",
+    "detail": "[\"Overview\",\"Review content\",\"User\",\"Settings\"]"
+  },
+  {
+    "loc": "en",
+    "id": "R56.currentLink",
+    "status": "INFO",
+    "detail": "[\"Overview\"]"
+  },
+  {
+    "loc": "en",
+    "id": "R56.h1",
+    "status": "INFO",
+    "detail": "[\"Overview\"]"
+  },
+  {
+    "loc": "en",
+    "id": "R56.tableHeaders",
+    "status": "INFO",
+    "detail": "[\"No\",\"Unit\",\"Total member\",\"Total sent kudos\",\"Total received kudos\",\"Total users with at least one kudo\",\"Total received secret box\"]"
+  },
+  {
+    "loc": "en",
+    "id": "R56.rangeButton",
+    "status": "INFO",
+    "detail": "[\"2026-10-30 2026-11-28\"]"
+  },
+  {
+    "loc": "en",
+    "id": "R56.buttons",
+    "status": "INFO",
+    "detail": "[\"2026-10-30 2026-11-28\",\"Export\"]"
+  },
+  {
+    "loc": "en",
+    "id": "R56.rows",
+    "status": "PASS",
+    "detail": "rows=6 first=[\"\",\"All\",\"25\",\"60\",\"60\",\"23\",\"31\"] CECV1=[\"1\",\"CECV1\",\"5\",\"15\",\"8\",\"5\",\"11\"]"
+  },
+  {
+    "loc": "en",
+    "id": "R56.exportDownloads",
+    "status": "PASS",
+    "detail": "file=saa-overview-2026-10-30_2026-11-28.csv"
+  },
+  {
+    "loc": "en",
+    "id": "R56.exportNotStuckBusy",
+    "status": "PASS",
+    "detail": "busyCount=0 label=\"Export\""
+  },
+  {
+    "loc": "en",
+    "id": "R57.tableHeaders",
+    "status": "INFO",
+    "detail": "[\"ID\",\"User\",\"Email\",\"∑ sent Kudos\",\"∑ Received Kudos\",\"Total Heart\",\"Level\",\"Number of Badges\",\"Time to get 6 Badges\",\"Last Logged in\",\"Role\",\"Actions\"]"
+  },
+  {
+    "loc": "en",
+    "id": "R57.filterButtons",
+    "status": "INFO",
+    "detail": "[\"EN\",\"\",\"Select unit\",\"Select Level\",\"Select Role\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\"]"
+  },
+  {
+    "loc": "en",
+    "id": "R57.searchBox",
+    "status": "INFO",
+    "detail": "[\"\"] placeholder=Search"
+  },
+  {
+    "loc": "en",
+    "id": "R57.pager",
+    "status": "INFO",
+    "detail": "[\"1–20 of 25 users ‹ 1 2 ›\"]"
+  },
+  {
+    "loc": "en",
+    "id": "R57.page1Rows",
+    "status": "PASS",
+    "detail": "rows=20 firstRow=[\"d0000000\",\"Bùi Thanh Nam\",\"sunner08.demo@sun-asterisk.com\",\"2\",\"1\",\"4\",\"New Hero\",\"0\",\"-\",\"27/11/2026 07:07\",\"User\",\"\"]"
+  },
+  {
+    "loc": "en",
+    "id": "R57.idColumn",
+    "status": "INFO",
+    "detail": "[\"d0000000\",\"d0000000\",\"d0000000\"]"
+  },
+  {
+    "loc": "en",
+    "id": "RUnit.options",
+    "status": "INFO",
+    "detail": "[\"All\",\"CECV1\",\"CECV2\",\"CECV3\",\"CECV4\",\"CECV5\"]"
+  },
+  {
+    "loc": "en",
+    "id": "RLevel.options",
+    "status": "INFO",
+    "detail": "[\"All\",\"New Hero\",\"Rising Hero\",\"Super Hero\",\"Legend Hero\"]"
+  },
+  {
+    "loc": "en",
+    "id": "RRole.options",
+    "status": "INFO",
+    "detail": "[\"All\",\"Admin\",\"User\"]"
+  },
+  {
+    "loc": "en",
+    "id": "R59.unitFilterCECV1",
+    "status": "PASS",
+    "detail": "rows=5 (DB 5)"
+  },
+  {
+    "loc": "en",
+    "id": "R61.roleAdminWithUnit",
+    "status": "PASS",
+    "detail": "rows=0 (DB 0)"
+  },
+  {
+    "loc": "en",
+    "id": "R61.emptyStateCopy",
+    "status": "INFO",
+    "detail": "[\"User Export Unit CECV1 Level Select Level Role Admin ID User Email ∑ sent Kudos ∑ Received Kudos Total Heart Level Number of Badges Time to get 6 Badges Last Logged in Role Actions No user matches your filters. Clear filters\"]"
+  },
+  {
+    "loc": "en",
+    "id": "R58.suggestTwoChars",
+    "status": "PASS",
+    "detail": "options=8 first=Đ Đặng Mai Linh sunner07.demo@sun-asterisk.com"
+  },
+  {
+    "loc": "en",
+    "id": "apiErrors",
+    "status": "PASS",
+    "detail": "[]"
+  },
+  {
+    "loc": "en",
+    "id": "consoleErrors",
+    "status": "PASS",
+    "detail": "[]"
+  },
+  {
+    "loc": "vi",
+    "id": "R56.forbiddenForUser",
+    "status": "INFO",
+    "detail": "[\"Không có quyền truy cập\"]"
+  },
+  {
+    "loc": "en",
+    "id": "R56.forbiddenForUser",
+    "status": "INFO",
+    "detail": "[\"Access Denied\"]"
+  }
+]

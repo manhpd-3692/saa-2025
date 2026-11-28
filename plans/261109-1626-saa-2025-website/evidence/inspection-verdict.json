@@ -1,13 +1,17 @@
 { "score": 9.5, "criticalCount": 0, "decision": "SEALED",
   "acceptanceCovered": [
-    "Tat ca thong bao panel: PASS after fix round 1, seed consistency (reports/verify-notifications-panel.md)",
-    "View thong bao chi tiet: PASS round 0 (reports/verify-notification-detail.md)"
+    "A1 Admin Overview: PASS after fix round 1, Vietnamese copy (reports/verify-admin-overview.md)",
+    "A4 Admin User: PASS after fix round 1 (reports/verify-admin-user.md)",
+    "Dropdown search user admin: PASS after fix round 1 (reports/verify-admin-dropdown-search-user.md)",
+    "Dropdown list phong ban: PASS after fix round 1 (reports/verify-admin-dropdown-department.md)",
+    "Dropdown level: PASS after fix round 1 (reports/verify-admin-dropdown-level.md)",
+    "Dropdown Role: PASS after fix round 1 (reports/verify-admin-dropdown-role.md)"
   ],
-  "regressionChecked": ["gofmt", "go vet", "go test", "go test -tags integration", "tsc", "eslint", "vitest 397", "playwright e2e full suite 126", "next build", "logs no new ERROR"],
+  "regressionChecked": ["gofmt", "go vet", "go test", "go test -tags integration", "tsc", "eslint", "vitest 421", "playwright e2e full suite 139", "next build", "P3 admin gate spec with Vietnamese nav"],
   "contractStatus": "OK", "refuted": [], "unproven": [], "reachableRegressions": [],
   "findings": [
-    { "severity": "Warning", "category": "Privacy", "location": "src/features/notifications/notification-bell.tsx:36", "summary": "W1 unread count could carry across users (fixed: keyed by user id, in-flight read aborted)", "disposition": "Accept" },
-    { "severity": "Warning", "category": "Spec", "location": "backend/internal/notification/notification_read_service.go:1", "summary": "W2 read-all marks unseen notices; kept per FR-402/A7, spec edge-case note owed", "disposition": "Accept" },
-    { "severity": "Warning", "category": "Performance", "location": "src/features/notifications/use-unread-count.ts:32", "summary": "W3 focus refresh unthrottled (fixed: 5 s gap + visibilitychange)", "disposition": "Accept" },
-    { "severity": "Suggestion", "category": "Privacy", "location": "backend/internal/notification/notification_remask.go:1", "summary": "sender denylist of three keys; allowlist or contract test safer", "disposition": "Defer" }
+    { "severity": "Warning", "category": "Reliability", "location": "src/features/admin/export-button.tsx:41", "summary": "W1 export stuck busy when URL build throws (fixed: runExport try/finally)", "disposition": "Accept" },
+    { "severity": "Warning", "category": "Auth UX", "location": "src/features/admin/user-search-box.tsx:32", "summary": "W2 suggest ignored 401 (fixed: admin-call-failure, internal-only next)", "disposition": "Accept" },
+    { "severity": "Warning", "category": "Performance", "location": "backend/db/queries/admin_reports.sql:96", "summary": "W3 no index for user list order (fixed: users_name_id_idx, 859 to 1.8 ms first page at 20k users)", "disposition": "Accept" },
+    { "severity": "Suggestion", "category": "Product", "location": "src/features/admin/users-table.tsx:1", "summary": "D010 ID column shows first 8 chars, identical for demo users; spec owner decision", "disposition": "Defer" }
   ] }

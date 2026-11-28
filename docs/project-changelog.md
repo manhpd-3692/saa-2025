@@ -4,6 +4,27 @@ What each delivered phase changed, newest first. Phase scope and status live in
 [`plans/261109-1626-saa-2025-website/plan.md`](../plans/261109-1626-saa-2025-website/plan.md);
 current structure in [`system-architecture.md`](system-architecture.md).
 
+## Phase 11: admin Overview and user directory, F010 (commit `7e263ad`, 2026-11-28)
+
+- Added: `/admin` Overview by unit (All first) with a date range picker (quick ranges, default last 30 days) and
+  CSV export; `/admin/users` directory, 20 per page by name, Unit / Level / Role filters kept in the address,
+  search with suggestions, pager, row menu (View profile) and CSV export of every match.
+- Added: Go routes `GET /api/v1/admin/overview`, `/admin/overview/export`, `/admin/users`, `/admin/users/export`
+  (`wire_admin_reports.go`, `internal/admin`, `db/queries/admin_reports.sql`), all ADMIN class.
+- Added: streaming CSV: first page read before any byte is written, a late failure aborts the connection, 20 s
+  export deadline, formula guard on text cells, UTF-8 BOM. The browser saves a file only when the whole body
+  arrived.
+- Added: report days in `Asia/Ho_Chi_Minh`; a missing or invalid range falls back to the default range.
+- Added: admin call failures follow Go: 401 to Login with the way back, 403 to the Forbidden page, else error
+  with Retry (`admin-call-failure.ts`, `load-admin-report.ts`).
+- Added: migration `20261128080000_admin_user_directory_order_index` (`users_name_id_idx`): first table page
+  859 ms to 1.8 ms, one 500-row export page 377 ms to 28 ms on 20,000 Sunners.
+- Changed: admin copy and nav are Vietnamese by default (`dictionaries/vi/admin.json`, `vi/shell.json`), with an
+  English dictionary.
+- Added: Playwright spec `e2e/admin-overview-and-users.spec.ts` (fixtures in `e2e/support/admin-report-fixtures.ts`);
+  `login-and-admin-gate.spec.ts` now asserts the Vietnamese admin nav; Vitest and Go unit and integration tests.
+- Docs: F010 section in `system-architecture.md`; admin routes in `backend/README.md`.
+
 ## Phase 10: notification center, F009 (commit `6ea9069`, 2026-11-28)
 
 - Added: header bell with an unread dot, dropdown panel and full history with paging, detail window for the
