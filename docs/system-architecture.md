@@ -1,6 +1,6 @@
 # System Architecture
 
-State after Phase 9 (Sunner profiles on top of Phase 8 hearts, hero badges, rules panel and secret box, Phase 7 Kudos Live board, Phase 6 compose, Phase 5 Homepage and Awards,
+State after Phase 10 (notification center on top of Phase 9 Sunner profiles, Phase 8 hearts, hero badges, rules panel and secret box, Phase 7 Kudos Live board, Phase 6 compose, Phase 5 Homepage and Awards,
 the Phase 4 launch gate and the Phase 3 shell). Items marked **planned (Phase N)** do not exist in code yet. Backend detail lives in [`backend/README.md`](../backend/README.md).
 
 ## Components
@@ -343,11 +343,56 @@ teammate's profile selects Kudos; the own profile `/profile` selects nothing.
 Tests: `e2e/sunner-profiles.spec.ts`; Vitest `profile-kudos-list-state.test.ts`, `nav-active-item.test.ts`; Go
 integration tests `profile_integration_test.go`, `api_profile_integration_test.go`.
 
+## Notification center (F009)
+
+Code in `src/features/notifications/`. `components/shell/notification-bell-slot.tsx` (Server Component, mounted
+by the header and the admin chrome) loads the `common` and `notifications` dictionaries and renders
+`NotificationBell`. The bell is hidden without a signed-in Sunner and is keyed by `SessionUser.id` (new field,
+from `/me` `id`, `session-summary.ts`): when `MeRefresher` swaps the Sunner, count, open panel and loaded list
+start over, so a late answer for the previous user is never shown. The panel, detail window and list code load
+on first open (`next/dynamic`, no SSR).
+
+| Route (PROFILE, `wire_notification.go`) | Feeds |
+|---|---|
+| `GET /api/v1/me/notifications?cursor=&limit=` | Panel and full history, keyset by `(created_at, id)`, newest first |
+| `GET /api/v1/me/notifications/unread-count` | Bell dot |
+| `POST /api/v1/me/notifications/{id}/read` | Opening a notice |
+| `POST /api/v1/me/notifications/read-all` | "Đánh dấu đọc tất cả" |
+
+No route creates, edits or deletes a notice: producers call `notification.Service` in process. Fields and
+errors: [`backend/README.md`](../backend/README.md).
+
+**Views.** `notification-panel.tsx` has two variants over one list (`use-notification-list.ts`): the dropdown
+and the full history ("Xem tất cả", pages on scroll). `notification-center.tsx` owns the list, the detail
+window (`notification-detail-dialog.tsx`) and the mark-read calls. Opening a notice never waits for the read
+call: the detail (or the Secret Box flow for `secret_box_received`) opens at once; on success the dot clears
+and the bell count drops, on failure the dot and count stay and the failure is announced. Text is not stored:
+`build-notification-message.ts` builds it from `kind` and `params` in the reader's language (seven kinds;
+`generic` shows its `message` as written).
+
+**Refresh policy** (`use-unread-count.ts`, `unread-refresh-policy.ts`). The count is read on mount, every 60 s
+(`UNREAD_REFRESH_INTERVAL_MS`) while the page is visible, and when the panel opens. On `focus` and
+`visibilitychange` it is read again at most once per 5 s (`RETURN_REFRESH_MIN_GAP_MS`); the 60 s timer is not
+throttled. There is no push. A failed read keeps the last count.
+
+**Re-mask on read** (`notification_remask.go`). The list drops the sender fields from `params` of every notice
+whose linked kudo is anonymous now, for a non-admin caller, whatever was stored at insert time. This is the
+last guard after the insert-time strip and the edit-time redaction. `kudoAvailable` is true when the kudo
+exists and is public, the caller's own, or the caller is an admin; a removed kudo leaves `kudoId` null.
+
+**Secret Box host in the admin layout.** `app/admin/layout.tsx` now wraps the admin chrome in
+`ShellActionsProvider` and mounts `GamificationShellHost`, so a Secret Box notice in an admin's bell opens
+the box window there as it does in the shell.
+
+Tests: `e2e/notification-center.spec.ts`; Vitest `build-notification-message.test.ts`,
+`notification-time.test.ts`, `unread-refresh-policy.test.ts`; Go `notification_remask_test.go`,
+`notification_read_integration_test.go`, `api_notification_integration_test.go`.
+
 ## Planned (not yet in code)
 
 | Item | Phase |
 |---|---|
-| Feature routes and screens | 10 to 13 |
+| Feature routes and screens | 11 to 13 |
 | Final integration, E2E, docs | 14 |
 
 Source of truth for phases: `plans/261109-1626-saa-2025-website/plan.md`.

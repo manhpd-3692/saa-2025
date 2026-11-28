@@ -1,8 +1,8 @@
 {
-  "task": "Phase 9: own and other Sunner profiles (F007)",
+  "task": "Phase 10: notification center (F009) - read APIs, bell, panel, full history, detail window, seven kinds in vi/en",
   "mode": "code",
-  "acceptanceCriteria": ["U8 Profile ban than", "U9 Profile nguoi khac", "Dropdown-filter da nhan/gui"],
-  "touchpoints": ["backend/internal/profile/", "backend/db/queries/profile.sql", "backend/cmd/api/wire_profile.go", "backend/internal/kudo/kudo_cards_from_rows.go", "src/app/(shell)/profile/", "src/features/profile/", "src/components/shell/nav-active-item.ts", "src/i18n/", "e2e/sunner-profiles.spec.ts"],
-  "blastRadius": ["avatar menu profile link", "kudo card avatar links", "compose receiver prefill", "secret box modal refresh", "header nav active rule"],
-  "contracts": ["GET /api/v1/users/{id}/profile", "GET /api/v1/users/{id}/kudos?filter&cursor", "R02 anonymous masking with owner/admin exceptions", "box figures owner only", "uniform 404 user_not_found"]
+  "acceptanceCriteria": ["Tat ca thong bao panel", "View thong bao chi tiet"],
+  "touchpoints": ["backend/internal/notification/", "backend/db/queries/notifications.sql", "backend/cmd/api/wire_notification.go", "backend/db/seeds/demo_notifications.sql", "backend/db/seeds/demo_activity.sql", "backend/cmd/seed/main.go", "src/features/notifications/", "src/components/shell/notification-bell-slot.tsx", "src/lib/auth/session-summary.ts", "src/app/admin/layout.tsx", "src/i18n/", "e2e/notification-center.spec.ts"],
+  "blastRadius": ["shell header and admin chrome bell slot", "SessionUser shape (id added)", "admin layout secret box host", "seed icon completion and hashtag cleanup"],
+  "contracts": ["GET /api/v1/me/notifications", "GET /api/v1/me/notifications/unread-count", "POST /api/v1/me/notifications/{id}/read", "POST /api/v1/me/notifications/read-all", "R02 re-mask on read with admin exception", "uniform 404 notification_not_found"]
 }

@@ -37,7 +37,7 @@ box idempotency and moderation versioning on real code → feature phases in the
 | 7 | [Kudos live board and detail](./phase-07-kudos-live-board-and-detail.md) | Complete (2f44032) |
 | 8 | [Hearts, hero badges, secret box](./phase-08-hearts-hero-badges-secret-box.md) | Complete (a9f3c68; carry-overs open) |
 | 9 | [Sunner profiles](./phase-09-sunner-profiles.md) | Complete (8073e25; carry-overs open) |
-| 10 | [Notification center](./phase-10-notification-center.md) | Pending |
+| 10 | [Notification center](./phase-10-notification-center.md) | Complete (6ea9069; carry-overs open) |
 | 11 | [Admin overview and users](./phase-11-admin-overview-and-users.md) | Pending |
 | 12 | [Admin kudo moderation](./phase-12-admin-kudo-moderation.md) | Pending |
 | 13 | [Admin campaign settings](./phase-13-admin-campaign-settings.md) | Pending |

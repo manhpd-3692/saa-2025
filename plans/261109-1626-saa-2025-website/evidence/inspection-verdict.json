@@ -1,13 +1,13 @@
 { "score": 9.5, "criticalCount": 0, "decision": "SEALED",
   "acceptanceCovered": [
-    "U8 Profile ban than: PASS round 0 (reports/verify-profile-own.md)",
-    "U9 Profile nguoi khac: PASS after fix round 1, nav highlight (reports/verify-profile-other.md)",
-    "Dropdown-filter da nhan/gui: PASS round 0 (reports/verify-profile-dropdown-received-sent.md)"
+    "Tat ca thong bao panel: PASS after fix round 1, seed consistency (reports/verify-notifications-panel.md)",
+    "View thong bao chi tiet: PASS round 0 (reports/verify-notification-detail.md)"
   ],
-  "regressionChecked": ["gofmt", "go vet", "go test", "go test -tags integration", "tsc", "eslint", "vitest 361", "playwright e2e full suite 113", "next build", "logs no new ERROR"],
+  "regressionChecked": ["gofmt", "go vet", "go test", "go test -tags integration", "tsc", "eslint", "vitest 397", "playwright e2e full suite 126", "next build", "logs no new ERROR"],
   "contractStatus": "OK", "refuted": [], "unproven": [], "reachableRegressions": [],
   "findings": [
-    { "severity": "Warning", "category": "Logic", "location": "src/features/profile/use-profile-kudos.ts:77", "summary": "W1 filter change dropped during in-flight load (fixed: createLoadGate)", "disposition": "Accept" },
-    { "severity": "Warning", "category": "Logic", "location": "src/features/profile/profile-kudos-list-state.ts:1", "summary": "W2 refresh merge never removed cards / gaps (fixed: refreshedList); L1 late page after refresh (fixed: generation + withNextPage)", "disposition": "Accept" },
-    { "severity": "Suggestion", "category": "Error boundaries", "location": "backend/internal/profile/profile_service.go:104", "summary": "S3 box-summary failure nulls public counts for non-owners; needs spec owner decision", "disposition": "Defer" }
+    { "severity": "Warning", "category": "Privacy", "location": "src/features/notifications/notification-bell.tsx:36", "summary": "W1 unread count could carry across users (fixed: keyed by user id, in-flight read aborted)", "disposition": "Accept" },
+    { "severity": "Warning", "category": "Spec", "location": "backend/internal/notification/notification_read_service.go:1", "summary": "W2 read-all marks unseen notices; kept per FR-402/A7, spec edge-case note owed", "disposition": "Accept" },
+    { "severity": "Warning", "category": "Performance", "location": "src/features/notifications/use-unread-count.ts:32", "summary": "W3 focus refresh unthrottled (fixed: 5 s gap + visibilitychange)", "disposition": "Accept" },
+    { "severity": "Suggestion", "category": "Privacy", "location": "backend/internal/notification/notification_remask.go:1", "summary": "sender denylist of three keys; allowlist or contract test safer", "disposition": "Defer" }
   ] }

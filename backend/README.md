@@ -222,6 +222,29 @@ summary cannot be read the answer is still 200 with `counts: null` and `countsUn
 `kudo.ReadService.CardsFromRows`, so masking is the board's. `nextCursor` is opaque (base64url of
 `<filter>:<kudo cursor>`): pass it back unchanged with the same `filter`.
 
+## Notification center endpoints (F009, `wire_notification.go`)
+
+All four are PROFILE routes and touch only the caller's own notices. None creates, edits or deletes a
+notification: producers call `notification.Service` in process.
+
+| Route | Answer | Notable errors |
+|---|---|---|
+| `GET /api/v1/me/notifications?cursor=&limit=` | `{items: [{id, kind, params, kudoId, kudoAvailable, readAt, createdAt}], nextCursor}`; newest first, `limit` default 20, max 50 (larger values are clamped) | 400 `invalid_cursor` |
+| `GET /api/v1/me/notifications/unread-count` | `{unreadCount}` | none |
+| `POST /api/v1/me/notifications/{id}/read` | 204; keeps the first `readAt`, repeating is a no-op | 404 `notification_not_found` (unknown, another Sunner's or malformed id) |
+| `POST /api/v1/me/notifications/read-all` | `{markedRead}`: how many unread became read | none |
+
+`params` depends on `kind`; no text is stored. For a non-admin caller the sender fields are removed from
+`params` whenever the linked kudo is anonymous now, whatever was stored. `kudoAvailable` is true when the kudo
+exists and is public, the caller's own, or the caller is an admin; `kudoId` is null once the kudo is gone.
+`nextCursor` is opaque, null on the last page.
+
+**Seed.** `cmd/seed` applies the scenario file, `demo_activity.sql`, then `demo_notifications.sql` in one
+transaction (the last reads the temp tables of the second). It gives every kind (`kudo_received`,
+`heart_received`, `secret_box_received`, `hero_level_up`, `kudo_spam_warning`, `icons_completed`, `generic`),
+the spam kudo `d2000000-0000-4000-8000-000000000001` of `sunner01` with its warning, and `sunner01`'s completed
+icon set; `demo_activity.sql` also deletes hashtags no kudo uses.
+
 ## Upload lifecycle and cleanup
 
 `kudo_uploads.state`: `pending` (uploaded, not in a kudo) -> `attached` (saved with a kudo). Removing

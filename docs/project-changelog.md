@@ -4,6 +4,27 @@ What each delivered phase changed, newest first. Phase scope and status live in
 [`plans/261109-1626-saa-2025-website/plan.md`](../plans/261109-1626-saa-2025-website/plan.md);
 current structure in [`system-architecture.md`](system-architecture.md).
 
+## Phase 10: notification center, F009 (commit `6ea9069`, 2026-11-28)
+
+- Added: header bell with an unread dot, dropdown panel and full history with paging, detail window for the
+  seven kinds in vi/en, mark one read and read all. The count refreshes every 60 s while visible and on
+  focus / tab shown at most once per 5 s; a failed read keeps the last count.
+- Added: Go routes `GET /api/v1/me/notifications`, `GET /api/v1/me/notifications/unread-count`,
+  `POST /api/v1/me/notifications/{id}/read`, `POST /api/v1/me/notifications/read-all`
+  (`wire_notification.go`, `internal/notification`); none creates or deletes a notice. An unknown, foreign or
+  malformed id is the same 404 `notification_not_found`.
+- Added: read-time re-mask: a non-admin never gets sender fields for a notice whose kudo is anonymous now.
+- Changed: `SessionUser` carries `id` (`/me` must return it); bell state is keyed by it per Sunner.
+- Changed: the admin layout hosts the Secret Box window (`ShellActionsProvider`, `GamificationShellHost`), so
+  a Secret Box notice works in the admin bell.
+- Changed: `notification-bell-slot.tsx` is now a Server Component rendering the F009 bell.
+- Changed: seed applies `demo_notifications.sql` after `demo_activity.sql` in the same transaction: all seven
+  kinds, a spam kudo of `sunner01` (`d2000000-0000-4000-8000-000000000001`), his icon set completed
+  (`icons_completed_at`), and unused hashtags removed on every reseed.
+- Added: Playwright spec `e2e/notification-center.spec.ts` (fixtures in `e2e/support/notification-fixtures.ts`);
+  Vitest for message building, time format and refresh policy; Go unit and integration tests.
+- Docs: F009 section in `system-architecture.md`; notification routes in `backend/README.md`.
+
 ## Phase 9: own and other Sunner profiles, F007 (commit `8073e25`, 2026-11-28)
 
 - Added: `/profile` (own, from the avatar menu) and `/profile/[userId]` (teammate, from a card avatar): header

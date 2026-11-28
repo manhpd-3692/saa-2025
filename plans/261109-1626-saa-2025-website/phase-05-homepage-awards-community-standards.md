@@ -113,6 +113,6 @@ Read-only reuse: `src/features/countdown/{countdown-display.tsx, use-countdown.t
 | 5 | Figma copy issues: three awards share one homepage summary; trailing comma; personal Slack handle in community standards | Design owner | Figma corrected or decision logged in `clarifications.md`; handle keep/remove decided |
 | 6 | Footer current-page marking | Phase 3 owner | Footer marks current page; e2e assertion passes |
 | 7 | `[countdown]` log prefix in shared events helper | Phase 4 owner | Prefix renamed or confirmed intentional |
-| 8 | FR-103 spam-warning link | Phase 10 owner | Link wired; P10 e2e covers it |
+| 8 | FR-103 spam-warning link | Phase 10 owner | **Closed (6ea9069):** inline link to `/community-standards` verified in `verify-notification-detail.md` (round 2, HTTP 200); `e2e/notification-center.spec.ts` asserts the href and the click-through |
 | 9 | Reduced-motion scrolling verified in code only | Tester | Playwright reduced-motion assertion runs in e2e |
 | 10 | Manual daily check vs Figma not recorded | Orchestrator with designer | Sign-off recorded in a verify report or here |

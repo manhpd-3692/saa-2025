@@ -99,8 +99,8 @@ P2 (đường rủi ro đầu-cuối: provision, JWT, `/me`...) không có màn 
 | 51 | U8 Profile bản thân | (ngoài checklist) | P9 | 362:5037 | `docs/figma-refs/user/profile-own.png` | F007 FR-001,101,201,202,203,204,205,206,401,402,403,404 · BR-003,004,005 · SC-001,002,008,009 | Done (PASS) | 0 | 8073e25 |
 | 52 | U9 Profile người khác | (ngoài checklist) | P9 | 362:5097 | `docs/figma-refs/user/profile-other.png` | F007 FR-102,103,104,301,302,601..605 · BR-001,002,003,004 · SC-003,005,006,007,011 | Done (PASS) | 1 | 8073e25 |
 | 53 | Dropdown-filter đã nhận/gửi | (ngoài checklist) | P9 | 763:4728 | `docs/figma-refs/user/profile-dropdown-received-sent.png` | F007 FR-205,401,603 · BR-002 · SC-002,005 | Done (PASS) | 0 | 8073e25 |
-| 54 | Tất cả thông báo (panel) | (ngoài checklist) | P10 | 589:9132 | `docs/figma-refs/user/notifications-panel.png` | F009 FR-101,201,202,203,204,205,402,403,404 · BR-004,005 · SC-003,006,007 | Pending | 0 | - |
-| 55 | View thông báo (chi tiết) | (ngoài checklist) | P10 | 589:9152 | `docs/figma-refs/user/notification-detail.png` | F009 FR-102,103,206,401,405 · BR-002,007 · SC-002,009 | Pending | 0 | - |
+| 54 | Tất cả thông báo (panel) | (ngoài checklist) | P10 | 589:9132 | `docs/figma-refs/user/notifications-panel.png` | F009 FR-101,201,202,203,204,205,402,403,404 · BR-004,005 · SC-003,006,007 | Done (PASS) | 1 | 6ea9069 |
+| 55 | View thông báo (chi tiết) | (ngoài checklist) | P10 | 589:9152 | `docs/figma-refs/user/notification-detail.png` | F009 FR-102,103,206,401,405 · BR-002,007 · SC-002,009 | Done (PASS) | 0 | 6ea9069 |
 | 56 | A1 Admin - Overview | (ngoài checklist) | P11 | 620:7712 | `docs/figma-refs/admin/admin-overview.png` | F010 FR-001,101,102,103,104,401,402,601 · BR-001,002,003,006,007 · SC-001,002,006 | Pending | 0 | - |
 | 57 | A4 Admin - User | (ngoài checklist) | P11 | 773:26403 | `docs/figma-refs/admin/admin-user.png` | F010 FR-201,202,203,204,205,206,207,403,601 · BR-005,008 · SC-003,007 | Pending | 0 | - |
 | 58 | Dropdown search user admin | (ngoài checklist) | P11 | 1002:15639 | `docs/figma-refs/admin/admin-dropdown-search-user.png` | F010 FR-203 · BR-005 · SC-003 | Pending | 0 | - |
