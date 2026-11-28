@@ -27,6 +27,7 @@ export const DICTIONARY_NAMESPACES = [
   "kudo-compose",
   "kudos-board",
   "gamification",
+  "profile",
 ] as const;
 export type DictionaryNamespace = (typeof DICTIONARY_NAMESPACES)[number];
 

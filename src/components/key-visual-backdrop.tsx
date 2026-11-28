@@ -9,6 +9,7 @@ const KEY_VISUALS = {
     width: 1440,
     height: 400,
   },
+  profile: { src: "/images/profile/profile-key-visual.webp", width: 1440, height: 336 },
 } as const;
 
 /** Wider windows than the art soften its side edges (static class names for Tailwind). */
@@ -19,7 +20,7 @@ const EDGE_FADE_CLASS = {
 
 /**
  * Decorative "Root Further" artwork behind the top of a page (Homepage, Awards,
- * Community Standards). The crops come from the Figma reference PNGs with the
+ * Community Standards, Profiles). The crops come from the Figma reference PNGs with the
  * copy painted out (replace them with real Figma exports when available), so
  * they are painted at natural size: the page text lands on the spots it covered
  * in the design. `align` names the edge the text is laid out from; `fadeFrom`

@@ -9,13 +9,19 @@ export interface NavItem {
   labelKey: string;
   /** `exact`: only the href itself; `section`: the href and every path below it. */
   match: "exact" | "section";
+  /** Other path prefixes that belong to this item's section. */
+  alsoUnder?: readonly string[];
 }
 
-/** Header items (FR-101); the logo and footer reuse the same destinations. */
+/**
+ * Header items (FR-101); the logo and footer reuse the same destinations. A
+ * teammate's profile `/profile/<id>` belongs to Sun* Kudos, whose cards lead
+ * there (Figma 362:5097); the own profile `/profile` selects nothing (362:5037).
+ */
 export const MAIN_NAV_ITEMS: readonly NavItem[] = [
   { href: "/", labelKey: "shell.nav.about", match: "exact" },
   { href: "/awards", labelKey: "shell.nav.awards", match: "section" },
-  { href: "/kudos", labelKey: "shell.nav.kudos", match: "section" },
+  { href: "/kudos", labelKey: "shell.nav.kudos", match: "section", alsoUnder: ["/profile/"] },
 ];
 
 /** Footer items (FR-102): the header destinations plus Community Standards. */
@@ -26,7 +32,8 @@ export const FOOTER_NAV_ITEMS: readonly NavItem[] = [
 
 function matches(item: NavItem, pathname: string): boolean {
   if (pathname === item.href) return true;
-  return item.match === "section" && pathname.startsWith(`${item.href}/`);
+  if (item.match === "section" && pathname.startsWith(`${item.href}/`)) return true;
+  return item.alsoUnder?.some((prefix) => pathname.startsWith(prefix)) ?? false;
 }
 
 /** The single selected href for `pathname`, or null: the longest matching item wins. */
