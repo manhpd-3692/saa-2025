@@ -79,6 +79,7 @@ Migrations (`supabase/migrations`, in order):
 | `notifications` | notifications |
 | `kudos_moderation_columns` | kudo moderation columns |
 | `rls_deny_all_and_grants` | RLS deny-all and grants |
+| `kudo_uploads_unsaved_pending_delete` | an unsaved upload may become `pending_delete` |
 
 ## Frontend structure
 
@@ -208,11 +209,21 @@ the awards menu uses hash anchors and a scroll-spy. See
 Tests: `e2e/countdown-prelaunch.spec.ts` with `e2e/support/launch-gate-fixtures.ts` switches the event
 row between seed scenarios and restores `live`; the 60 s cache makes step order matter.
 
+## Kudo compose (F005)
+
+The FAB `compose` opener (`shell-actions-context.tsx`) opens a modal host (`src/features/kudo-compose/`,
+Tiptap editor) for writing and editing kudos. Go routes: `GET /api/v1/users/search`, `GET /api/v1/hashtags`,
+`GET /api/v1/kudos/{id}/edit`, `PATCH /api/v1/kudos/{id}`, `DELETE /api/v1/uploads/{uploadId}`.
+Removed or abandoned images use mark-then-delete (`pending_delete`) and the manual `cmd/purge-uploads`;
+details and error codes in [`backend/README.md`](../backend/README.md). The visible-text length rule is
+shared by Go and Vitest through `backend/internal/kudo/testdata/visible_text_vectors.json`. Tests:
+`e2e/write-kudo.spec.ts`. Dictionary namespace `kudo-compose` (vi and en).
+
 ## Planned (not yet in code)
 
 | Item | Phase |
 |---|---|
-| Feature routes and screens | 6 to 13 |
+| Feature routes and screens | 7 to 13 |
 | Final integration, E2E, docs | 14 |
 
 Source of truth for phases: `plans/261109-1626-saa-2025-website/plan.md`.

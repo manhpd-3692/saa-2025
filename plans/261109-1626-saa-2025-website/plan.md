@@ -33,7 +33,7 @@ box idempotency and moderation versioning on real code → feature phases in the
 | 3 | [Auth, app shell, i18n, 403/404](./phase-03-auth-shell-i18n-error-pages.md) | Complete (manual Google sign-in check open) |
 | 4 | [Countdown and launch gate](./phase-04-countdown-launch-gate.md) | Complete (ed625fa) |
 | 5 | [Homepage, awards, community standards](./phase-05-homepage-awards-community-standards.md) | Complete (0e5bd13) |
-| 6 | [Write, edit and send kudos](./phase-06-write-edit-send-kudos.md) | Pending |
+| 6 | [Write, edit and send kudos](./phase-06-write-edit-send-kudos.md) | Complete (7a31bbd) |
 | 7 | [Kudos live board and detail](./phase-07-kudos-live-board-and-detail.md) | Pending |
 | 8 | [Hearts, hero badges, secret box](./phase-08-hearts-hero-badges-secret-box.md) | Pending |
 | 9 | [Sunner profiles](./phase-09-sunner-profiles.md) | Pending |

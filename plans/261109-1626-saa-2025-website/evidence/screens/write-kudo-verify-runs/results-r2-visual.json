@@ -1,0 +1,20 @@
+[
+ {
+  "screen": "write-kudo",
+  "code": "M1 five thumbs keep Image button on the thumbnail row",
+  "ok": true,
+  "detail": "5 thumbs band y 778-858; Image button y 794-842 x 953 w 95 right edge 1049 (content edge 1056); ready 5"
+ },
+ {
+  "screen": "write-kudo-addlink-box",
+  "code": "L1 label Nội dung on one line",
+  "ok": true,
+  "detail": "label height 33px = 1 line(s)"
+ },
+ {
+  "screen": "write-kudo-edit-mode",
+  "code": "M2 placeholder hidden over prefilled text",
+  "ok": true,
+  "detail": "placeholder elements in DOM: 0, visible: false; editor text: \"sửa bài viết\""
+ }
+]

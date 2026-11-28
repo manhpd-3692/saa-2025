@@ -1,0 +1,62 @@
+[
+ {
+  "screen": "write-kudo-anonymous",
+  "code": "FR-207 / FR-404 / BR-005 / SC-006 anonymous send and notification",
+  "ok": true,
+  "detail": "201 060fc1d9-c327-4519-9e99-8a4b7c906c9b; success toast 1; kudo is_anonymous=true, sender stored; notifications: kudo_received {}; image key kudo-images/15569683-93f0-4245-8388-dc9bb65cff81.png"
+ },
+ {
+  "screen": "write-kudo-anonymous",
+  "code": "FR-604 anonymous kudo via other-Sunner reads",
+  "ok": true,
+  "detail": "board/detail/profile DTO and notification list API not built (P7/P9/P10) and no second Sunner session; not verifiable in this run; DB-level keys/params checked above"
+ },
+ {
+  "screen": "write-kudo-edit-mode",
+  "code": "setup: named base kudo with 2 hashtags and 2 images",
+  "ok": true,
+  "detail": "created de295a94-5788-442e-937d-5648f68d75b3"
+ },
+ {
+  "screen": "write-kudo-edit-mode",
+  "code": "FR-102 window opens pre-filled from own kudo",
+  "ok": true,
+  "detail": "heading 'Chỉnh sửa bài viết của bạn'; title/text/2 chips/2 thumbs prefilled; anonymous off; language switch disabled=true"
+ },
+ {
+  "screen": "write-kudo-edit-mode",
+  "code": "BR-006 recipient locked",
+  "ok": true,
+  "detail": "no combobox; locked recipient shows 'Trần Thị Bình'"
+ },
+ {
+  "screen": "write-kudo-edit-mode",
+  "code": "FR-403 save edited title, anonymity, removed image",
+  "ok": true,
+  "detail": "PATCH 200; window closed; toast 'Đã lưu thay đổi.'; DB title updated, is_anonymous=true, 1 image left; removed upload deleted after commit"
+ },
+ {
+  "screen": "write-kudo-edit-mode",
+  "code": "FR-406 / BR-008 / SC-008 redaction of existing notice",
+  "ok": true,
+  "detail": "kudo_received params now: {}"
+ },
+ {
+  "screen": "write-kudo-edit-mode",
+  "code": "FR-406 named again does not restore names",
+  "ok": true,
+  "detail": "PATCH 200 (anonymity off, is_anonymous=f); notice still without sender: {}"
+ },
+ {
+  "screen": "write-kudo-edit-mode",
+  "code": "FR-602 / SC-003 non-author cannot edit (admin session)",
+  "ok": true,
+  "detail": "dialog count 1; message \"Chỉnh sửa\"; body snippet: Chỉnh sửa bài viết của bạn |  | Bạn chỉ có thể sửa Kudos của chính mình. |  | Hủy"
+ },
+ {
+  "screen": "write-kudo-edit-mode",
+  "code": "FR-602 spam-marked kudo cannot be edited",
+  "ok": true,
+  "detail": "not verifiable: spam flag is set by F011 admin moderation (P12, not built)"
+ }
+]

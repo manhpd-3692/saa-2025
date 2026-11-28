@@ -58,15 +58,15 @@ P2 (đường rủi ro đầu-cuối: provision, JWT, `/me`...) không có màn 
 | 10 | U3 Homepage SAA | Homepage SAA | P5 | 2167:9026 | `docs/figma-refs/user/homepage-saa.png` | F004 FR-101,201,202,203,204,205,206,207,403,601 · SC-001,005,007,010 | Done (PASS) | 1 | 0e5bd13 |
 | 11 | U4 Hệ thống giải | Hệ thống giải | P5 | 313:8436 | `docs/figma-refs/user/awards-system.png` | F004 FR-301,302,303,304,305,401,402 · BR-001,002,003 · SC-001,002,003,004 | Done (PASS) | 1 | 0e5bd13 |
 | 12 | U10 Tiêu chuẩn cộng đồng | Homepage SAA (footer) | P5 | 1161:8944 | `docs/figma-refs/user/community-standards.png` | F004 FR-103,351,352,601 · SC-006 · F005 FR-210 | Done (PASS) | 0 | 0e5bd13 |
-| 13 | U6 Viết Kudo | Viết Kudos | P6 | 520:11602 | `docs/figma-refs/user/write-kudo.png` | F005 FR-101,201,202,203,204,205,206,207,209,210,401,402,405 · BR-001..004 · SC-001,004 | Pending | 0 | - |
-| 14 | Gửi lời chúc Kudos (biến thể 1) | Viết Kudos | P6 | 828:13433 hoặc 1612:5056 | `docs/figma-refs/user/write-kudo-form-variant-1.png` | F005 FR-201,202,203,205,207 · BR-002,004 · SC-004 | Pending | 0 | - |
-| 15 | Gửi lời chúc Kudos (biến thể 2) | Viết Kudos | P6 | 828:13433 hoặc 1612:5056 | `docs/figma-refs/user/write-kudo-form-variant-2.png` | F005 FR-203,204,206,209 · BR-003 · SC-004,005 | Pending | 0 | - |
-| 16 | Viết KUDO - lỗi chưa điền đủ | Viết Kudos | P6 | 662:13035 | `docs/figma-refs/user/write-kudo-validation-error.png` | F005 FR-208,402 · BR-001,002,003,004 · SC-002 | Pending | 0 | - |
-| 17 | Dropdown list người nhận | Viết Kudos | P6 | 828:10943 | `docs/figma-refs/user/write-kudo-dropdown-receiver.png` | F005 FR-201,204 · BR-001 · SC-002 | Pending | 0 | - |
-| 18 | Dropdown list hashtag | Viết Kudos | P6 | 1002:13013 | `docs/figma-refs/user/write-kudo-dropdown-hashtag.png` | F005 FR-002,205 · BR-002 | Pending | 0 | - |
-| 19 | Addlink Box | Viết Kudos | P6 | 1002:12917 | `docs/figma-refs/user/write-kudo-addlink-box.png` | F005 FR-203,209 · SC-004 | Pending | 0 | - |
-| 20 | Ẩn danh | Viết Kudos | P6 | 2099:9148 | `docs/figma-refs/user/write-kudo-anonymous.png` | F005 FR-207,404,604 · BR-005 · SC-006,007 | Pending | 0 | - |
-| 21 | Màn sửa bài viết - edit mode | Viết Kudos | P6 | 1949:13746 | `docs/figma-refs/user/write-kudo-edit-mode.png` | F005 FR-102,403,404,406,602 · BR-006,008 · SC-003,008 | Pending | 0 | - |
+| 13 | U6 Viết Kudo | Viết Kudos | P6 | 520:11602 | `docs/figma-refs/user/write-kudo.png` | F005 FR-101,201,202,203,204,205,206,207,209,210,401,402,405 · BR-001..004 · SC-001,004 | Done (PASS) | 1 | 7a31bbd |
+| 14 | Gửi lời chúc Kudos (biến thể 1) | Viết Kudos | P6 | 828:13433 hoặc 1612:5056 | `docs/figma-refs/user/write-kudo-form-variant-1.png` | F005 FR-201,202,203,205,207 · BR-002,004 · SC-004 | Done (PASS) | 1 | 7a31bbd |
+| 15 | Gửi lời chúc Kudos (biến thể 2) | Viết Kudos | P6 | 828:13433 hoặc 1612:5056 | `docs/figma-refs/user/write-kudo-form-variant-2.png` | F005 FR-203,204,206,209 · BR-003 · SC-004,005 | Done (PASS) | 1 | 7a31bbd |
+| 16 | Viết KUDO - lỗi chưa điền đủ | Viết Kudos | P6 | 662:13035 | `docs/figma-refs/user/write-kudo-validation-error.png` | F005 FR-208,402 · BR-001,002,003,004 · SC-002 | Done (PASS) | 0 | 7a31bbd |
+| 17 | Dropdown list người nhận | Viết Kudos | P6 | 828:10943 | `docs/figma-refs/user/write-kudo-dropdown-receiver.png` | F005 FR-201,204 · BR-001 · SC-002 | Done (PASS) | 0 | 7a31bbd |
+| 18 | Dropdown list hashtag | Viết Kudos | P6 | 1002:13013 | `docs/figma-refs/user/write-kudo-dropdown-hashtag.png` | F005 FR-002,205 · BR-002 | Done (PASS) | 0 | 7a31bbd |
+| 19 | Addlink Box | Viết Kudos | P6 | 1002:12917 | `docs/figma-refs/user/write-kudo-addlink-box.png` | F005 FR-203,209 · SC-004 | Done (PASS) | 1 | 7a31bbd |
+| 20 | Ẩn danh | Viết Kudos | P6 | 2099:9148 | `docs/figma-refs/user/write-kudo-anonymous.png` | F005 FR-207,404,604 · BR-005 · SC-006,007 | Done (PASS) | 0 | 7a31bbd |
+| 21 | Màn sửa bài viết - edit mode | Viết Kudos | P6 | 1949:13746 | `docs/figma-refs/user/write-kudo-edit-mode.png` | F005 FR-102,403,404,406,602 · BR-006,008 · SC-003,008 | Done (PASS) | 1 | 7a31bbd |
 | 22 | U5 Sun* Kudos - Live board | Sun* Kudos | P7 | 2940:13431 | `docs/figma-refs/user/kudos-live-board.png` | F006 FR-001,101,201..211,403,601 · BR-001,003,004,005 · SC-001,003,004,009 | Pending | 0 | - |
 | 23 | U7 View Kudo | Sun* Kudos | P7 | 520:18779 | `docs/figma-refs/user/view-kudo.png` | F006 FR-102,104,401,404,405 · BR-006,007 · SC-006 | Pending | 0 | - |
 | 24 | Dropdown Hashtag filter | Sun* Kudos | P7 | 721:5580 | `docs/figma-refs/user/kudos-dropdown-hashtag-filter.png` | F006 FR-203 · BR-003 · SC-004 | Pending | 0 | - |

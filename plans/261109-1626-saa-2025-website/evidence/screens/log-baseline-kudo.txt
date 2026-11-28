@@ -1,0 +1,3 @@
+    32 logs/api.log
+  3474 logs/web.log
+  3506 total

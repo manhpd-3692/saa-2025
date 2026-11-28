@@ -1,12 +1,11 @@
 {
-  "task": "Phase 5: Homepage SAA with ceremony countdown and event info, Awards system page with sticky menu and scroll-spy, Community Standards page (F004)",
+  "task": "Phase 6: write, edit and send kudos (F005) - compose/edit modal, recipient search, hashtags, edit PATCH with anonymity redaction, upload delete and purge",
   "mode": "code",
   "acceptanceCriteria": [
-    "U3 Homepage SAA",
-    "U4 He thong giai",
-    "U10 Tieu chuan cong dong"
+    "U6 Viet Kudo", "Gui loi chuc Kudos variant 1", "Gui loi chuc Kudos variant 2", "Viet KUDO loi chua dien du",
+    "Dropdown list nguoi nhan", "Dropdown list hashtag", "Addlink Box", "An danh", "Man sua bai viet edit mode"
   ],
-  "touchpoints": ["src/app/(shell)/page.tsx", "src/app/(shell)/awards/", "src/app/(shell)/community-standards/", "src/features/home/", "src/features/awards/", "src/features/community-standards/", "src/components/key-visual-backdrop.tsx", "src/i18n/", "public/images/{home,awards,community-standards}/", "e2e/"],
-  "blastRadius": ["/ route (P3 placeholder replaced)", "shell nav active state", "P4 live e2e assertion now scoped to the launch countdown"],
-  "contracts": ["Go GET /api/v1/events/current (ceremonyAt, serverNow)", "CeremonyCountdown never redirects, stops at 00 (R08)", "use cache keyed by locale", "/kudos link target (F006, later phase)"]
+  "touchpoints": ["backend/internal/kudo/", "backend/internal/upload/", "backend/internal/user/", "backend/cmd/api/wire_kudo_compose.go", "backend/cmd/purge-uploads/", "backend/db/queries/{kudo_write,uploads,user_search}.sql", "supabase/migrations/20261128060000_kudo_uploads_unsaved_pending_delete.sql", "src/features/kudo-compose/", "src/app/(shell)/layout.tsx", "src/components/shell/{shell-actions-context,floating-action-button}.tsx", "src/i18n/", "e2e/write-kudo.spec.ts", "e2e/browser-transport-smoke.spec.ts"],
+  "blastRadius": ["notifications.params (anonymity redaction)", "kudo_uploads state machine and check constraints", "shell FAB focus behaviour", "locale switcher lock while compose open"],
+  "contracts": ["GET /api/v1/users/search", "GET /api/v1/hashtags", "GET /api/v1/kudos/{id}/edit", "PATCH /api/v1/kudos/{id}", "DELETE /api/v1/uploads/{uploadId} 204/409/404", "visible-text ALG-002 parity Go and TS (shared vectors)", "R02/N01 redaction never restored", "N02 pending_delete never reusable"]
 }

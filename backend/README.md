@@ -7,6 +7,7 @@ root) is frontend only and never touches the database (G15–G19). Supabase prov
 ```
 cmd/api/            main.go (config, pool, server timeouts, graceful shutdown), router.go, wire_<capability>.go
 cmd/seed/           SEED_SCENARIO runner (local only)
+cmd/purge-uploads/  manual purge of abandoned kudo images (no scheduler)
 db/queries/         sqlc queries, one file per capability (auth.sql, events.sql, ...)
 db/seeds/           prelaunch.sql | live.sql | after-ceremony.sql + demo_activity.sql (embedded)
 internal/auth/      JWKS verifier, auth middleware (IDENTITY/PROFILE chains), RequireAdmin, AuthContext
@@ -43,7 +44,7 @@ All commands from the repo root unless noted.
    ```
 2. Google OAuth (only sign-in method): copy `supabase/.env.example` to `supabase/.env` and fill the
    client id/secret. Authorized redirect URI: `http://127.0.0.1:54321/auth/v1/callback`.
-3. `supabase start` — applies the 9 migrations, seeds `units` from `supabase/seed.sql`, creates the
+3. `supabase start` — applies the 10 migrations, seeds `units` from `supabase/seed.sql`, creates the
    private `kudo-images` bucket (5 MB, JPEG/PNG/WebP).
 4. Copy `backend/.env.example` to `backend/.env` (gitignored) and fill it. Local values:
    `SUPABASE_URL=http://127.0.0.1:54321`, `SUPABASE_SERVICE_KEY` = `SECRET_KEY` from
@@ -139,10 +140,50 @@ fallback if `BYPASSRLS` is refused: `create policy ... to saa_api using (true) w
 
 - `SUPABASE_URL` and `SUPABASE_JWKS_URL` must be `https` unless the host is loopback (`127.0.0.1`,
   `::1`, `localhost`): they decide whose tokens are trusted.
-- `SUPABASE_SERVICE_KEY` is optional at boot (nothing reads it before the upload phase, which must
-  require it); when set it must not contain whitespace. `config.Config` redacts it and the
-  `DATABASE_URL` password when logged (`slog.LogValuer`, `String`).
+- `SUPABASE_SERVICE_KEY` is optional at boot (the API starts without it); when set it must not contain
+  whitespace. `config.Config` redacts it and the `DATABASE_URL` password when logged
+  (`slog.LogValuer`, `String`). It is used for two things: Storage object I/O (uploads, upload delete,
+  edit cleanup, `purge-uploads`) and the Supabase Auth admin read of `auth.identities` that
+  `POST /api/v1/me/provision` uses to check `email_verified` (C08). Without it the API still boots,
+  but provisioning fails closed with 500 (`profile provisioning disabled` is logged), image operations
+  answer 503 `storage_unavailable`, and `purge-uploads` refuses to run.
 - Eligibility per request uses only server-controlled claims (`email` domain,
   `app_metadata.provider == google`, `providers` only Google). `user_metadata.email_verified` is
-  client-writable and ignored; `POST /api/v1/me/provision` must check `email_verified` from
-  `auth.identities` (gap log C08). Tokens without a `kid` header are rejected.
+  client-writable and ignored; `POST /api/v1/me/provision` checks `email_verified` from
+  `auth.identities` through the service key (gap log C08). Tokens without a `kid` header are rejected.
+
+## Kudo compose endpoints (F005, `wire_kudo_compose.go`)
+
+All are PROFILE routes.
+
+| Route | Purpose | Notable answers |
+|---|---|---|
+| `GET /api/v1/users/search?q=&limit=` | Recipient and mention search (name or email, case-insensitive) | `q` cut at 100 chars; `limit` default 10, max 20 |
+| `GET /api/v1/hashtags?q=` | Shared hashtag list | at most 50 rows |
+| `GET /api/v1/kudos/{id}/edit` | Edit prefill | 403 `not_kudo_author`; 409 `kudo_spam_locked`; 404 missing or hidden |
+| `PATCH /api/v1/kudos/{id}` | Edit a kudo (content, hashtags, images, anonymity) | 200 `{kudo_id}`; 422 `validation_failed` or invalid attachment; 403, 409, 404 as above; sends no notification; going anonymous redacts the existing notifications |
+| `DELETE /api/v1/uploads/{uploadId}` | Remove one of the caller's unsaved uploads | 204; 404 `upload_not_found` (missing or foreign); 409 `upload_attached` (attached or already `pending_delete`) |
+
+## Upload lifecycle and cleanup
+
+`kudo_uploads.state`: `pending` (uploaded, not in a kudo) -> `attached` (saved with a kudo). Removing
+an upload (delete endpoint, an image dropped in an edit, or the purge) uses mark-then-delete:
+
+1. Under the row lock, set `pending_delete` (short transaction, no Storage I/O under the lock).
+2. After commit, delete the Storage object, then the row.
+3. If the object delete fails the row stays `pending_delete`; the next purge retries it, so no object
+   is left without a row.
+
+A `pending_delete` row of a never-attached upload keeps `kudo_id` and `attached_at` null; an
+attachment removed in an edit keeps both. Migration `20261128060000_kudo_uploads_unsaved_pending_delete`
+relaxed the two state check constraints to allow this.
+
+`cmd/purge-uploads` is manual only (no scheduler). It removes pending uploads older than 24 h
+(`OrphanUploadAge`) and every leftover `pending_delete` upload; attached uploads are never touched.
+It reads the same environment as the API (load it as in "Run and verify") and needs
+`SUPABASE_SERVICE_KEY`:
+
+```sh
+go run ./cmd/purge-uploads -dry-run   # counts purgeable uploads, deletes nothing
+go run ./cmd/purge-uploads            # exits 1 if any upload could not be purged
+```

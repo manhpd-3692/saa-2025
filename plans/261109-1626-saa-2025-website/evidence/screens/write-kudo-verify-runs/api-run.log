@@ -1,0 +1,27 @@
+{"screen":"write-kudo","code":"SC-009 own pending upload DELETE -> 204 (test debris cleanup)","ok":true,"detail":"deleted 22 pending uploads of sunner01; pending left 0"}
+{"screen":"write-kudo","code":"SC-009 attached upload DELETE -> 409, other user's -> 404","ok":true,"detail":"own attached -> 409, other user -> 404, row still 'attached'"}
+{"screen":"write-kudo","code":"FR-601 unauthenticated POST refused, nothing saved","ok":true,"detail":"401, 0 rows"}
+{"screen":"write-kudo","code":"SC-002 BR-001 self as recipient","ok":true,"detail":"422 {\"error\":{\"code\":\"validation_failed\",\"message\":\"Some fields are missing or invalid.\",\"fields\":[{\"field\":\"receiverId\",\"code\":\"self_kudo\"}]}}\n; 0 rows"}
+{"screen":"write-kudo","code":"SC-002 FR-202 empty title","ok":true,"detail":"422 {\"error\":{\"code\":\"validation_failed\",\"message\":\"Some fields are missing or invalid.\",\"fields\":[{\"field\":\"title\",\"code\":\"required\"}]}}\n; 0 rows"}
+{"screen":"write-kudo","code":"SC-002 FR-202 title 101 chars","ok":true,"detail":"422 {\"error\":{\"code\":\"validation_failed\",\"message\":\"Some fields are missing or invalid.\",\"fields\":[{\"field\":\"title\",\"code\":\"too_long\"}]}}\n; 0 rows"}
+{"screen":"write-kudo","code":"SC-002 BR-002 zero hashtags","ok":true,"detail":"422 {\"error\":{\"code\":\"validation_failed\",\"message\":\"Some fields are missing or invalid.\",\"fields\":[{\"field\":\"hashtags\",\"code\":\"required\"}]}}\n; 0 rows"}
+{"screen":"write-kudo","code":"SC-002 BR-002 six hashtags","ok":true,"detail":"422 {\"error\":{\"code\":\"validation_failed\",\"message\":\"Some fields are missing or invalid.\",\"fields\":[{\"field\":\"hashtags\",\"code\":\"too_many\"}]}}\n; 0 rows"}
+{"screen":"write-kudo","code":"SC-002 BR-003 six images","ok":true,"detail":"422 {\"error\":{\"code\":\"invalid_attachment\",\"message\":\"An image is missing, not yours, already used, or not a JPEG, PNG or WebP of at most 5 MB.\"}}\n; 0 rows"}
+{"screen":"write-kudo","code":"SC-002 BR-004 1,001 characters","ok":true,"detail":"422 {\"error\":{\"code\":\"validation_failed\",\"message\":\"Some fields are missing or invalid.\",\"fields\":[{\"field\":\"contentHtml\",\"code\":\"too_long\"}]}}\n; 0 rows"}
+{"screen":"write-kudo","code":"SC-002 BR-004 whitespace only","ok":true,"detail":"422 {\"error\":{\"code\":\"validation_failed\",\"message\":\"Some fields are missing or invalid.\",\"fields\":[{\"field\":\"contentHtml\",\"code\":\"required\"}]}}\n; 0 rows"}
+{"screen":"write-kudo","code":"SC-002 BR-004 only script (empty after sanitize)","ok":true,"detail":"422 {\"error\":{\"code\":\"validation_failed\",\"message\":\"Some fields are missing or invalid.\",\"fields\":[{\"field\":\"contentHtml\",\"code\":\"required\"}]}}\n; 0 rows"}
+{"screen":"write-kudo","code":"SC-002 BR-003 unknown upload id","ok":true,"detail":"422 {\"error\":{\"code\":\"invalid_attachment\",\"message\":\"An image is missing, not yours, already used, or not a JPEG, PNG or WebP of at most 5 MB.\"}}\n; 0 rows"}
+{"screen":"write-kudo","code":"SC-002 valid body with pre-check (control)","ok":true,"detail":"201 kudoId 919f790b-c693-4f2f-affb-059ece9855c3 (control: API accepts a valid body)"}
+{"screen":"write-kudo-edit-mode","code":"SC-003 / FR-602 non-author PATCH refused, nothing changed","ok":true,"detail":"non-author PATCH -> 403 {\"error\":{\"code\":\"not_kudo_author\",\"message\":\"You can only edit your own kudos.\"}}\n; title unchanged"}
+{"screen":"write-kudo-edit-mode","code":"FR-601 unauthenticated PATCH refused","ok":true,"detail":"401, title unchanged"}
+{"screen":"write-kudo-edit-mode","code":"BR-006 recipient locked on PATCH (receiverId in body ignored)","ok":true,"detail":"PATCH 200 with receiverId=self in body; receiver unchanged (d0000000-0000-4000-8000-000000000002)"}
+FATAL Error: ENOENT: no such file or directory, open 'C:\Users\phan.duc.manh\AppData\Local\Temp\claude\23fbeeb88486407b\2dd50bdd-94af-4779-a405-12b95bd71853\scratchpad\kudo\undefined\kudo\results-api.json'
+    at Object.writeFileSync (node:fs:3028:20)
+    at Object.save (C:\Users\phan.duc.manh\AppData\Local\Temp\claude\23fbeeb88486407b\2dd50bdd-94af-4779-a405-12b95bd71853\scratchpad\kudo\lib.cjs:44:25)
+    at C:\Users\phan.duc.manh\AppData\Local\Temp\claude\23fbeeb88486407b\2dd50bdd-94af-4779-a405-12b95bd71853\scratchpad\kudo\api-kudo-checks.cjs:112:7
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\phan.duc.manh\\AppData\\Local\\Temp\\claude\\23fbeeb88486407b\\2dd50bdd-94af-4779-a405-12b95bd71853\\scratchpad\\kudo\\undefined\\kudo\\results-api.json'
+}

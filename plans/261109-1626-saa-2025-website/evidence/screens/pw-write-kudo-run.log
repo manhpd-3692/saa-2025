@@ -1,0 +1,18 @@
+
+Running 12 tests using 1 worker
+
+  ok  1 [chromium] › e2e\write-kudo.spec.ts:71:1 › the FAB opens the window and the language switch is disabled until it closes (FR-101, F001 SC-007) (1.6s)
+  ok  2 [chromium] › e2e\write-kudo.spec.ts:84:1 › recipient dropdown lists Sunners with their unit and never the sender (FR-201, BR-001) (2.6s)
+  ok  3 [chromium] › e2e\write-kudo.spec.ts:96:1 › hashtag dropdown picks shared tags, adds new ones and stops at five (FR-205, BR-002, DEC-002) (2.0s)
+  ok  4 [chromium] › e2e\write-kudo.spec.ts:116:1 › the add-link box inserts an http(s) link and refuses anything else (FR-209) (1.7s)
+  ok  5 [chromium] › e2e\write-kudo.spec.ts:133:1 › typing @ suggests Sunners and inserts a mention counted as its @Name (FR-204, FR-203) (2.6s)
+  ok  6 [chromium] › e2e\write-kudo.spec.ts:144:1 › Gửi with missing fields shows the error state and sends nothing; fixing them sends (FR-208, US007) (2.4s)
+  ok  7 [chromium] › e2e\write-kudo.spec.ts:160:1 › 1,001 visible characters are blocked; 1,000 are allowed (FR-203, BR-004) (2.5s)
+  ok  8 [chromium] › e2e\write-kudo.spec.ts:177:1 › a named kudo with images is saved and its recipient notified with the sender (FR-401, FR-206, SC-001) (4.8s)
+  ok  9 [chromium] › e2e\write-kudo.spec.ts:188:1 › an anonymous kudo keeps the sender out of the recipient's notification (FR-207, FR-404, BR-005) (3.9s)
+  ok 10 [chromium] › e2e\write-kudo.spec.ts:198:1 › a sixth image is refused; removed and cancelled unsaved uploads are deleted (FR-206, FR-405, BR-003) (2.1s)
+  ok 11 [chromium] › e2e\write-kudo.spec.ts:224:1 › a failed send keeps everything typed, and a retry succeeds (FR-402) (2.3s)
+  ok 12 [chromium] › e2e\write-kudo.spec.ts:241:1 › the author edits their own kudo with the recipient locked (FR-102, FR-403, BR-006, D004) (6.5s)
+
+  12 passed (36.1s)
+EXIT=0

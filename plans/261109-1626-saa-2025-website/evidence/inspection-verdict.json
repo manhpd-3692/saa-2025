@@ -1,17 +1,22 @@
-{ "score": 9, "criticalCount": 0, "decision": "SEALED",
+{ "score": 9.5, "criticalCount": 0, "decision": "SEALED",
   "acceptanceCovered": [
-    "U3 Homepage SAA: PASS after fix round 1 (reports/verify-homepage-saa.md); /kudos link is an accepted cross-phase dependency on F006",
-    "U4 He thong giai: PASS after fix round 1 (reports/verify-awards-system.md); menu label per FR-302",
-    "U10 Tieu chuan cong dong: PASS round 0 (reports/verify-community-standards.md)"
+    "U6 Viet Kudo: PASS after fix round 1 (reports/verify-write-kudo.md); board part of FR-401 is a dependency on F006",
+    "Gui loi chuc Kudos variant 1: PASS after fix round 1 (reports/verify-write-kudo-variant-1.md)",
+    "Gui loi chuc Kudos variant 2: PASS after fix round 1 (reports/verify-write-kudo-variant-2.md)",
+    "Viet KUDO loi chua dien du: PASS round 0 (reports/verify-write-kudo-validation-error.md)",
+    "Dropdown list nguoi nhan: PASS round 0 (reports/verify-write-kudo-dropdown-receiver.md)",
+    "Dropdown list hashtag: PASS round 0 (reports/verify-write-kudo-dropdown-hashtag.md)",
+    "Addlink Box: PASS after fix round 1 (reports/verify-write-kudo-addlink-box.md)",
+    "An danh: PASS round 0 (reports/verify-write-kudo-anonymous.md)",
+    "Man sua bai viet edit mode: PASS after fix round 1 (reports/verify-write-kudo-edit-mode.md); spam refusal depends on F011"
   ],
-  "regressionChecked": ["tsc", "eslint", "vitest 185", "playwright e2e full suite", "next build", "logs/web.log and logs/api.log no unexpected ERROR"],
+  "regressionChecked": ["gofmt", "go vet", "go test", "go test -tags integration", "tsc", "eslint", "vitest 303", "playwright e2e full suite 73", "next build", "logs/web.log and logs/api.log no unexpected ERROR"],
   "contractStatus": "OK", "refuted": [], "unproven": [], "reachableRegressions": [],
   "findings": [
-    { "severity": "Warning", "category": "Correctness", "location": "src/features/home/home-event-panel.tsx:32", "summary": "ceremony countdown kept first serverNow after soft refresh (fixed: keyed by serverNow)", "disposition": "Accept" },
-    { "severity": "Warning", "category": "Accessibility", "location": "src/features/awards/awards-menu.tsx:60", "summary": "smooth scroll ignored prefers-reduced-motion; focus ring invisible on dark background (both fixed, focus e2e test added)", "disposition": "Accept" },
-    { "severity": "Warning", "category": "Test coverage", "location": "e2e/awards-and-community-standards.spec.ts:1", "summary": "no proof that use cache locale key does not leak (fixed: vi reload after en, proven to fail without locale key)", "disposition": "Accept" },
-    { "severity": "Suggestion", "category": "Correctness", "location": "src/features/awards/award-catalog.ts:99", "summary": "Signature menu label follows FR-302 (hyphen, one line) over the PNG (two lines, no hyphen)", "disposition": "Accept" },
-    { "severity": "Suggestion", "category": "Dependency", "location": "src/features/home/home-hero.tsx:32", "summary": "/kudos returns 404 until the Kudos board (F006) phase lands; re-verify then", "disposition": "Defer" },
-    { "severity": "Suggestion", "category": "Content", "location": "src/i18n/dictionaries/en/awards.json:1", "summary": "most English copy not supplied; Vietnamese fallback per AD04", "disposition": "Defer" },
-    { "severity": "Suggestion", "category": "Design", "location": "public/images/home/home-key-visual.webp:1", "summary": "backgrounds are painted-out crops of figma-refs PNGs; replace with real exports", "disposition": "Defer" }
+    { "severity": "Warning", "category": "Reliability", "location": "backend/internal/upload/pending_delete_cleanup.go:1", "summary": "W1 post-commit cleanup blocked PATCH (fixed: async cleaner); W2 storage I/O under row lock and N1 orphan risk (fixed: mark pending_delete, then object, then row; migration 20261128060000)", "disposition": "Accept" },
+    { "severity": "Warning", "category": "Correctness", "location": "src/features/kudo-compose/kudo-compose-form-state.ts:1", "summary": "W3 double submit (fixed: ref guard, e2e proven)", "disposition": "Accept" },
+    { "severity": "Warning", "category": "Accessibility", "location": "src/features/kudo-compose/dialog-focus-trap.ts:1", "summary": "W5 focus trap and restore (fixed, e2e); W4 Escape same as Huy per FR-405", "disposition": "Accept" },
+    { "severity": "Warning", "category": "Test coverage", "location": "backend/internal/kudo/kudo_edit_race_integration_test.go:1", "summary": "W6 race tests edit/spam and delete/attach (added)", "disposition": "Accept" },
+    { "severity": "Suggestion", "category": "Product", "location": "backend/internal/upload/upload_handler.go:31", "summary": "PendingUploadQuota 20/24h not in spec; needs product decision", "disposition": "Defer" },
+    { "severity": "Suggestion", "category": "Schema", "location": "supabase/migrations/20261128060000_kudo_uploads_unsaved_pending_delete.sql:1", "summary": "S8 both-or-neither check for pending_delete columns plus rollback note", "disposition": "Defer" }
   ] }

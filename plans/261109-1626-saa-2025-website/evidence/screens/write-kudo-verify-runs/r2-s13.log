@@ -1,0 +1,22 @@
+{"screen":"write-kudo","code":"FR-101","ok":true,"detail":"FAB > Viết KUDOS opened dialog with heading"}
+{"screen":"write-kudo","code":"FR-101 (rules panel path)","ok":true,"detail":"Thể lệ opened panel with Viết KUDOS; evidence/screens/write-kudo/r2-fab-thele-panel.png"}
+{"screen":"write-kudo","code":"FR-201 / BR-001 recipient list","ok":true,"detail":"option \"T Trần Thị Bình CECV1\"; self query -> \"Không tìm thấy Sunner phù hợp.\""}
+{"screen":"write-kudo","code":"FR-202 title required","ok":true,"detail":"required message shown on empty Gửi"}
+{"screen":"write-kudo","code":"FR-202 title max 100","ok":true,"detail":"maxlength attr=null, value length after typing 101 chars=101"}
+{"screen":"write-kudo","code":"FR-203 toolbar + counter","ok":true,"detail":"6 toolbar buttons + community link present; bold applied (strong count 1); counter after 'Xin chào ' = 8/1.000"}
+{"screen":"write-kudo","code":"FR-204 mention via @","ok":true,"detail":"suggestion \"T Trần Thị Bình CECV1\" inserted as @Trần Thị Bình"}
+{"screen":"write-kudo","code":"FR-205 / BR-002 hashtags max 5","ok":true,"detail":"5 chips (case-variant counted once), add disabled at 5, re-enabled after removing one"}
+{"screen":"write-kudo","code":"FR-206 / BR-003 images","ok":true,"detail":"6th refused: Bạn chỉ có thể đính kèm tối đa 5 ảnh JPEG, PNG hoặc WebP, mỗi ảnh không quá 5 MB.; 5 thumbs; remove -> 4"}
+{"screen":"write-kudo","code":"FR-206 wrong file type refused","ok":true,"detail":"thumbs=5 errorThumbs=0 alerts=[\"Bạn cần điền đủ Người nhận, Lời nhắn gửi và Hashtag để gửi Kudos!\"]"}
+{"screen":"write-kudo","code":"FR-207 anonymous checkbox","ok":true,"detail":"checkbox toggles on/off"}
+{"screen":"write-kudo","code":"FR-209 link box present","ok":true,"detail":"Thêm đường dẫn box with Nội dung and URL (detail on addlink screen)"}
+{"screen":"write-kudo","code":"FR-210 community standards link","ok":true,"detail":"href=/community-standards target=_blank; new tab http://localhost:3000/community-standards title \"Sun* Annual Awards 2025\""}
+{"screen":"write-kudo","code":"FR-405 Hủy closes, no confirm, uploads deleted","ok":true,"detail":"closed without confirmation; upload DELETE 204 x5"}
+{"screen":"write-kudo","code":"FR-401 / SC-001 valid send","ok":true,"detail":"POST 201 kudoId a207ab7b-8613-4b4e-95a5-397a4424c1d2; window closed; success toast; DB: 1 kudo row, 1 hashtag link(s), 1 image(s)"}
+{"screen":"write-kudo","code":"FR-401 board visibility","ok":false,"detail":"GET /kudos -> 404: Kudos board (F006, P7) not built; sent kudo cannot be seen on the board yet"}
+{"screen":"write-kudo","code":"SC-004 1,001 blocked","ok":true,"detail":"counter at 1,001 = 1.001/1.000; max message shown"}
+{"screen":"write-kudo","code":"BR-002 hashtag required","ok":true,"detail":"no hashtag: POST count 0; banner names Hashtag"}
+{"screen":"write-kudo-validation-error","code":"FR-208 / BR-001..004 validation state","ok":true,"detail":"banner \"Bạn cần điền đủ Người nhận, Lời nhắn gửi và Hashtag để gửi Kudos!\"; 3 fields aria-invalid"}
+{"screen":"write-kudo-validation-error","code":"FR-208 nothing sent","ok":true,"detail":"0 POST /api/v1/kudos requests"}
+{"screen":"write-kudo-validation-error","code":"FR-402 send failure keeps input","ok":true,"detail":"banner \"Gửi Kudos không thành công. Vui lòng thử lại.\"; title, text, hashtag kept"}
+LOG {"console":["error: Failed to load resource: the server responded with a status of 404 (Not Found)","error: Failed to load resource: net::ERR_FAILED"],"pageerror":[],"bad":["404 GET /kudos"],"dialogs":0}

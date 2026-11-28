@@ -117,7 +117,7 @@ Commit `01b620e` (pushed). Screen tracker rows 1–8 Done (PASS). Round 1 closed
 | # | Item | Owner | Done when |
 |---|------|-------|-----------|
 | 1 | Real Google sign-in and logout, manual (F002 SC-001, SC-007, FR-102, FR-604) | User (needs company Google account) | Sign-in and logout run on the local stack; result recorded in a verify report |
-| 2 | F001 SC-007 language lock | P6 implementer | SC-007 Playwright test passes in P6 |
+| 2 | F001 SC-007 language lock | P6 implementer | **Closed in P6 (7a31bbd).** Language switch disabled while the compose modal is open; covered by P6 e2e (73/73) |
 | 3 | F001 SC-004 countdown part | P4 implementer | Countdown part of SC-004 passes in P4 |
 | 4 | Copy: VN/EN 403, 404 and Login error strings; 403 text currently equals 404 text | User (product copy) | Approved copy in `errors` and `auth` dictionaries; 403 message differs from 404 |
 | 5 | Windows→WSL relay stalls `/me` about 30 s (environment) | User | `.wslconfig` mirrored networking applied and `wsl -e true` probe stays under 1 s, or stall accepted |

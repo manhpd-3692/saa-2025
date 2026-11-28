@@ -1,0 +1,20 @@
+{"screen":"write-kudo","code":"FR-206 non-image file refused at pick","ok":true,"detail":"thumbs 0; alert [\"Bạn chỉ có thể đính kèm tối đa 5 ảnh JPEG, PNG hoặc WebP, mỗi ảnh không quá 5 MB.\"]"}
+{"screen":"write-kudo","code":"FR-202 title 101 chars refused at send","ok":true,"detail":"POST count 0; messages [\"Danh hiệu tối đa 100 ký tự.\",\"Bạn chỉ có thể đính kèm tối đa 5 ảnh JPEG, PNG hoặc WebP, mỗi ảnh không quá 5 MB.\"]; banner \"\""}
+{"screen":"write-kudo","code":"FR-206 fake image refused by server at send","ok":true,"detail":"POST 422 {\"error\":{\"code\":\"invalid_attachment\",\"message\":\"An image is missing, not yours, already used, or not a JPEG, PNG or WebP of at most 5 MB.\"}}\n; alerts [\"Một trong các ảnh không hợp lệ. Hãy xoá ảnh đó và thử lại.\",\"\"]; DB kudo rows 0"}
+{"screen":"write-kudo","code":"FR-206 fake image: thumb still shown, window kept","ok":true,"detail":"window kept open with typed input after refusal"}
+{"screen":"write-kudo-variant-1","code":"FR-201 / FR-203 / FR-205 / FR-207 / BR-002 / SC-004 filled state","ok":true,"detail":"4 chips (add still enabled), 5 thumbs, anonymous checked, counter 22/1.000; title left empty -> send blocked (see row 16)"}
+{"screen":"write-kudo-variant-1","code":"FR-202 title still required in variant state","ok":true,"detail":"title error shown; window kept"}
+{"screen":"write-kudo-variant-1","code":"BR-004 1,000-char text accepted by counter","ok":true,"detail":"1,000 chars: counter 1.000/1.000, no max message"}
+{"screen":"write-kudo-variant-2","code":"FR-203 / FR-204 / FR-206 / FR-209 / BR-003 / SC-004 formatted state","ok":false,"detail":"bold=1 link=1 mention=1 thumbs=5 chips=3"}
+{"screen":"write-kudo-variant-2","code":"FR-206 sixth image refused in variant state","ok":true,"detail":"6th refused; still 5 thumbs"}
+{"screen":"write-kudo-dropdown-receiver","code":"FR-201 / BR-001 dropdown rows: name + unit, self absent","ok":true,"detail":"rows [\"T Trần Thị Bình CECV1\"]; self query and no-match show 'Không tìm thấy Sunner phù hợp.'"}
+{"screen":"write-kudo-dropdown-receiver","code":"FR-204 @ suggestions (mention)","ok":true,"detail":"1 mention suggestion(s) for @Trần"}
+{"screen":"write-kudo-dropdown-receiver","code":"FR-201 keyboard pick","ok":true,"detail":"ArrowDown + Enter picked recipient: Trần"}
+{"screen":"write-kudo-dropdown-hashtag","code":"FR-002 / FR-205 shared tags listed and reusable","ok":true,"detail":"23 shared tags listed (#again, #changed, #customerfirst, #dedication...); earlier-created #e2e-s13-tag offered when searching"}
+{"screen":"write-kudo-dropdown-hashtag","code":"BR-002 case-insensitive, leading # ignored, max 5","ok":true,"detail":"'#E2E Dup' + 'e2e dup' -> 1 chip"}
+{"screen":"write-kudo-addlink-box","code":"FR-209 / FR-203 link box validation and insertion","ok":true,"detail":"javascript: refused with URL message; example.com/saa inserted as href https://example.com/saa; counter 13/1.000"}
+{"screen":"write-kudo-addlink-box","code":"FR-209 Hủy closes box without inserting","ok":true,"detail":"cancel: box closed, no link inserted"}
+{"screen":"write-kudo-anonymous","code":"FR-207 / BR-005 anonymous checkbox state","ok":true,"detail":"checkbox checked (no extra hint text in UI; spec state anonymous-on hint wording is TBD)"}
+{"screen":"write-kudo-anonymous","code":"FR-207 / FR-404 / BR-005 / SC-006 send anonymous","ok":false,"detail":"page.waitForResponse: Timeout 30000ms exceeded while waiting for event \"response\""}
+{"screen":"write-kudo-anonymous","code":"FR-604 image key and API read (other Sunners)","ok":true,"detail":"image object key checked above; board/detail DTO not built (P7), not verifiable here"}
+LOG {"console":["error: Failed to load resource: the server responded with a status of 422 (Unprocessable Entity)","error: Failed to load resource: the server responded with a status of 429 (Too Many Requests)"],"pageerror":[],"bad":["422 POST /api/v1/kudos","429 POST /api/v1/uploads/kudo-images"],"dialogs":0}

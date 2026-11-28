@@ -4,6 +4,21 @@ What each delivered phase changed, newest first. Phase scope and status live in
 [`plans/261109-1626-saa-2025-website/plan.md`](../plans/261109-1626-saa-2025-website/plan.md);
 current structure in [`system-architecture.md`](system-architecture.md).
 
+## Phase 6: write, edit and send kudos, F005 (commit `7a31bbd`, 2026-11-28)
+
+- Added: compose/edit modal (Tiptap) opened from the FAB: recipient combobox, mention suggestions, hashtag
+  picker, link box, image grid, anonymous toggle, edit prefill. Dictionary namespace `kudo-compose`.
+- Added: Go routes `GET /api/v1/users/search`, `GET /api/v1/hashtags`, `GET /api/v1/kudos/{id}/edit`,
+  `PATCH /api/v1/kudos/{id}` (edit; going anonymous redacts notifications, none sent on edit) and
+  `DELETE /api/v1/uploads/{uploadId}`.
+- Added: upload state `pending_delete` with mark-then-delete cleanup; migration
+  `20261128060000_kudo_uploads_unsaved_pending_delete`.
+- Added: `cmd/purge-uploads` (manual only, `-dry-run`) for pending uploads older than 24 h and leftover
+  `pending_delete` rows.
+- Added: visible-text length vectors shared by Go and Vitest; Playwright spec `e2e/write-kudo.spec.ts`.
+- Docs: `backend/README.md` lists the compose endpoints and states what `SUPABASE_SERVICE_KEY` is used for
+  (Storage and the C08 `email_verified` check).
+
 ## Phase 5: Homepage, Awards, Community Standards, F004 (commit `0e5bd13`, 2026-11-28)
 
 - Added: Homepage `/`. Hero, about text, six award cards and the Kudos block render at once; the event

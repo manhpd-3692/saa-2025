@@ -1,11 +1,15 @@
 {
   "commands": [
-    {"command": "npm run typecheck", "exitCode": 0, "status": "pass", "summary": "tsc clean after fix round 1", "ts": "2026-11-28T04:00:00Z"},
-    {"command": "npm run lint", "exitCode": 0, "status": "pass", "summary": "eslint 0 findings", "ts": "2026-11-28T04:00:00Z"},
-    {"command": "npm test", "exitCode": 0, "status": "pass", "summary": "vitest 185/185 (19 files)", "ts": "2026-11-28T04:00:00Z"},
-    {"command": "npm run build", "exitCode": 0, "status": "pass", "summary": "next build on final code (logs/p5-fix1-build.log)", "ts": "2026-11-28T04:00:00Z"},
-    {"command": "npx playwright test (full suite, 1 worker)", "exitCode": 0, "status": "pass", "summary": "58/58 on final code (logs/p5-final-e2e.log)", "ts": "2026-11-28T04:00:00Z"},
-    {"command": "Playwright MCP visual + AC check of 3 P5 screens at 1440x1024 and 1280", "exitCode": 0, "status": "pass", "summary": "3/3 PASS after fix round 1 (reports/verify-{homepage-saa,awards-system,community-standards}.md)", "ts": "2026-11-28T04:00:00Z"},
-    {"command": "go test (backend)", "exitCode": 0, "status": "skipped", "summary": "backend untouched in phase 5", "ts": "2026-11-28T04:00:00Z"}
+    {"command": "gofmt -l .", "exitCode": 0, "status": "pass", "summary": "no files", "ts": "2026-11-28T12:55:00Z"},
+    {"command": "go vet ./... && go vet -tags integration ./...", "exitCode": 0, "status": "pass", "summary": "clean", "ts": "2026-11-28T12:55:00Z"},
+    {"command": "go test -count=1 ./...", "exitCode": 0, "status": "pass", "summary": "all packages", "ts": "2026-11-28T12:55:00Z"},
+    {"command": "go test -tags integration -count=1 ./...", "exitCode": 0, "status": "pass", "summary": "SC-003, SC-008, SC-009 (N02), F009 SC-012, edit/spam and delete/attach races", "ts": "2026-11-28T12:55:00Z"},
+    {"command": "npm run typecheck", "exitCode": 0, "status": "pass", "summary": "tsc clean", "ts": "2026-11-28T12:55:00Z"},
+    {"command": "npm run lint", "exitCode": 0, "status": "pass", "summary": "eslint 0", "ts": "2026-11-28T12:55:00Z"},
+    {"command": "npm test", "exitCode": 0, "status": "pass", "summary": "vitest 303/303 (22 files)", "ts": "2026-11-28T12:55:00Z"},
+    {"command": "npm run build", "exitCode": 0, "status": "pass", "summary": "next build on final code", "ts": "2026-11-28T12:55:00Z"},
+    {"command": "npx playwright test (full suite, 1 worker)", "exitCode": 0, "status": "pass", "summary": "73/73 on final code", "ts": "2026-11-28T12:55:00Z"},
+    {"command": "Playwright visual + AC check of 9 P6 screens at 1440x1024", "exitCode": 0, "status": "pass", "summary": "9/9 PASS (5 after fix round 1), reports/verify-write-kudo*.md", "ts": "2026-11-28T12:55:00Z"},
+    {"command": "go test -race", "exitCode": 0, "status": "skipped", "summary": "no gcc in WSL", "ts": "2026-11-28T12:55:00Z"}
   ]
 }
