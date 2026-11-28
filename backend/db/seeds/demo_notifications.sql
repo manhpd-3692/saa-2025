@@ -73,11 +73,45 @@ select 'd2000000-0000-4000-8000-000000000001', s.id, r.id, 'Góp ý thẳng th�
 from demo_people s, demo_people r
 where s.n = 1 and r.n = 4;
 
+-- 5b. More moderation history for Admin - Review content (F011), between Sunners no e2e spec
+-- counts on: an anonymous punctuation-only kudo and an advert, both Spam (the Spam filter and the
+-- real sender of an anonymous kudo), and a kudo once marked Spam by mistake and restored to
+-- Public (version 2, its old warning read). Seeded decisions have no admin (moderated_by null):
+-- admins exist only after a real sign-in (G02).
+insert into public.kudos (id, sender_id, receiver_id, title, content, is_anonymous, status,
+                          moderation_version, moderated_at, created_at, updated_at)
+select v.id::uuid, s.id, r.id, v.title, v.content, v.anonymous, v.status::kudo_status,
+       v.version, now() - v.moderated_ago, now() - v.age, now() - v.age
+from (values
+  ('d2000002-0000-4000-8000-000000000002', 20, 21, 'Cảm ơn', '<p>. . . . . . .</p>', true, 'spam', 1,
+   interval '3 days', interval '3 days 4 hours'),
+  ('d2000003-0000-4000-8000-000000000003', 22, 24, 'Ưu đãi chỉ hôm nay',
+   '<p>Inbox mình để nhận khoá học làm giàu siêu tốc, số lượng có hạn!!!</p>', false, 'spam', 1,
+   interval '20 hours', interval '1 day 1 hour'),
+  ('d2000004-0000-4000-8000-000000000004', 19, 24, 'Cảm ơn bạn đã hỗ trợ',
+   '<p>Cảm ơn bạn đã giúp mình chuẩn bị slide cho buổi thuyết trình với khách hàng.</p>', false, 'public', 2,
+   interval '4 days', interval '5 days 3 hours')
+) as v(id, sender_n, receiver_n, title, content, anonymous, status, version, moderated_ago, age)
+join demo_people s on s.n = v.sender_n
+join demo_people r on r.n = v.receiver_n;
+
 insert into public.notifications (recipient_id, kind, params, kudo_id, dedupe_key, read_at, created_at)
 select k.sender_id, 'kudo_spam_warning', '{}'::jsonb, k.id, 'kudo_spam:' || k.id,
        k.moderated_at + interval '2 hours', k.moderated_at
 from public.kudos k
 where k.id = 'd2000000-0000-4000-8000-000000000001';
+
+-- The warnings of 5b: sent when each was marked Spam (the restored one a day before its
+-- restore, which notifies nobody, D002); unread only when less than two days old.
+insert into public.notifications (recipient_id, kind, params, kudo_id, dedupe_key, read_at, created_at)
+select k.sender_id, 'kudo_spam_warning', '{}'::jsonb, k.id, 'kudo_spam:' || k.id,
+       case when w.at > now() - interval '2 days' then null else w.at + interval '2 hours' end, w.at
+from public.kudos k
+cross join lateral (
+  select case when k.status = 'public' then k.moderated_at - interval '1 day' else k.moderated_at end as at
+) w
+where k.id in ('d2000002-0000-4000-8000-000000000002', 'd2000003-0000-4000-8000-000000000003',
+               'd2000004-0000-4000-8000-000000000004');
 
 -- 6. icons_completed: every demo Sunner whose set is complete (users.icons_completed_at, set by
 -- demo_activity.sql step 6 for An only), at that moment, once ever (dedupe icons_completed:{userId}).

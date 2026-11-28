@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, type KeyboardEvent, type MouseEvent, type ReactNode } from "react";
 import { KUDOS_BOARD_PATH } from "@/features/awards/sun-kudos-promo-block";
 import { trapTabKey } from "@/features/kudo-compose/dialog-focus-trap";
+import { SpamKudoFrame } from "@/features/moderation/spam-alert-overlay";
 import { useLocale } from "@/i18n/locale-provider";
 import { fillText } from "./kudo-board-format";
 import { KudoCard } from "./kudo-card";
@@ -65,7 +66,14 @@ export function KudoDetailOverlay({ result, mode }: { result: SectionResult<Kudo
         {t("kudos-board.detail.close")}
       </button>
     );
-  const content = card ? <KudoCard card={card} variant="detail" actions={closeControl} /> : <DetailError closeControl={closeControl} />;
+  // F011 DEC-003: a Spam kudo (author and admins only) carries the Spam badge; its author also gets the alert.
+  const content = card ? (
+    <SpamKudoFrame status={card.status} isOwn={card.isOwn}>
+      <KudoCard card={card} variant="detail" actions={closeControl} />
+    </SpamKudoFrame>
+  ) : (
+    <DetailError closeControl={closeControl} />
+  );
 
   if (mode === "page") {
     return (

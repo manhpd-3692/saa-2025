@@ -12,6 +12,265 @@ import (
 	"github.com/google/uuid"
 )
 
+const adminCountKudos = `-- name: AdminCountKudos :one
+
+SELECT count(*)::int AS total
+FROM kudos k
+WHERE ($1::uuid IS NULL OR k.sender_id = $1::uuid)
+  AND ($2::uuid IS NULL OR k.receiver_id = $2::uuid)
+  AND ($3::kudo_status IS NULL OR k.status = $3::kudo_status)
+  AND ($4::timestamptz IS NULL
+       OR (k.created_at >= $4::timestamptz AND k.created_at < $5::timestamptz))
+  AND ($6::text IS NULL
+       OR k.title ILIKE $6::text
+       OR regexp_replace(replace(replace(replace(replace(replace(
+            regexp_replace(regexp_replace(k.content, '<(br|/?(p|li|ol|blockquote))([\s/][^>]*)?>', ' ', 'gi'), '<[^>]*>', '', 'g'),
+            '&lt;', '<'), '&gt;', '>'), '&#34;', '"'), '&#39;', ''''), '&amp;', '&'), '\s+', ' ', 'g')
+          ILIKE $6::text)
+`
+
+type AdminCountKudosParams struct {
+	SenderID    *uuid.UUID
+	ReceiverID  *uuid.UUID
+	Status      *KudoStatus
+	WindowStart *time.Time
+	WindowEnd   *time.Time
+	Pattern     *string
+}
+
+// Admin review list (F011 ALG-002, BR-001, BR-005). Every filter is optional and they combine with
+// AND; the window is the half-open [start of `from`, start of the day after `to`) in the report
+// time zone, built in Go. @pattern is a LIKE pattern built in Go with `\`, `%` and `_` escaped; it
+// matches the title or the body's visible text: the stored HTML with block tags (p, li, ol,
+// blockquote, br) turned into spaces, other tags dropped, bluemonday's entities decoded (&amp;
+// last) and whitespace runs collapsed, so a tag or attribute name never matches. The same
+// expression is in both queries so the pager counts exactly the listed set.
+func (q *Queries) AdminCountKudos(ctx context.Context, arg AdminCountKudosParams) (int32, error) {
+	row := q.db.QueryRow(ctx, adminCountKudos,
+		arg.SenderID,
+		arg.ReceiverID,
+		arg.Status,
+		arg.WindowStart,
+		arg.WindowEnd,
+		arg.Pattern,
+	)
+	var total int32
+	err := row.Scan(&total)
+	return total, err
+}
+
+const adminKudoPeopleByIDs = `-- name: AdminKudoPeopleByIDs :many
+SELECT u.id, u.name, u.avatar_url, un.code AS unit_code
+FROM users u
+LEFT JOIN units un ON un.id = u.unit_id
+WHERE u.id = ANY($1::uuid[])
+`
+
+type AdminKudoPeopleByIDsRow struct {
+	ID        uuid.UUID
+	Name      string
+	AvatarUrl *string
+	UnitCode  *string
+}
+
+// The people an applied Sender / Receiver filter names, so the page can label the chosen option.
+func (q *Queries) AdminKudoPeopleByIDs(ctx context.Context, ids []uuid.UUID) ([]AdminKudoPeopleByIDsRow, error) {
+	rows, err := q.db.Query(ctx, adminKudoPeopleByIDs, ids)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []AdminKudoPeopleByIDsRow
+	for rows.Next() {
+		var i AdminKudoPeopleByIDsRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.Name,
+			&i.AvatarUrl,
+			&i.UnitCode,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const adminListKudoPeople = `-- name: AdminListKudoPeople :many
+SELECT u.id, u.name, u.avatar_url, un.code AS unit_code
+FROM users u
+LEFT JOIN units un ON un.id = u.unit_id
+WHERE (CASE WHEN $1::boolean
+            THEN EXISTS (SELECT 1 FROM kudos k WHERE k.sender_id = u.id)
+            ELSE EXISTS (SELECT 1 FROM kudos k WHERE k.receiver_id = u.id) END)
+  AND ($2::text IS NULL
+       OR u.name ILIKE $2::text OR u.email ILIKE $2::text)
+ORDER BY u.name, u.id
+LIMIT $3::int
+`
+
+type AdminListKudoPeopleParams struct {
+	AsSender bool
+	Pattern  *string
+	RowLimit int32
+}
+
+type AdminListKudoPeopleRow struct {
+	ID        uuid.UUID
+	Name      string
+	AvatarUrl *string
+	UnitCode  *string
+}
+
+// F011 A2 (BR-009): people who sent (@as_sender) or received at least one kudo of any status,
+// narrowed by a case-insensitive "contains" on name or email, by name. No email is selected.
+func (q *Queries) AdminListKudoPeople(ctx context.Context, arg AdminListKudoPeopleParams) ([]AdminListKudoPeopleRow, error) {
+	rows, err := q.db.Query(ctx, adminListKudoPeople, arg.AsSender, arg.Pattern, arg.RowLimit)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []AdminListKudoPeopleRow
+	for rows.Next() {
+		var i AdminListKudoPeopleRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.Name,
+			&i.AvatarUrl,
+			&i.UnitCode,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const adminListKudos = `-- name: AdminListKudos :many
+SELECT k.id, k.title, k.content, k.is_anonymous, k.status, k.moderation_version, k.moderated_by,
+       k.moderated_at, k.created_at,
+       k.sender_id, s.name AS sender_name, s.avatar_url AS sender_avatar_url, su.code AS sender_unit_code,
+       k.receiver_id, r.name AS receiver_name, r.avatar_url AS receiver_avatar_url, ru.code AS receiver_unit_code,
+       hs.heart_total,
+       ARRAY(
+         SELECT h.name FROM kudo_hashtags kh JOIN hashtags h ON h.id = kh.hashtag_id
+         WHERE kh.kudo_id = k.id ORDER BY h.name
+       )::text[] AS hashtags
+FROM kudos k
+JOIN users s ON s.id = k.sender_id
+LEFT JOIN units su ON su.id = s.unit_id
+JOIN users r ON r.id = k.receiver_id
+LEFT JOIN units ru ON ru.id = r.unit_id
+JOIN LATERAL (
+  SELECT v.heart_total FROM kudo_heart_state v WHERE v.kudo_id = k.id OFFSET 0
+) hs ON true
+WHERE ($1::uuid IS NULL OR k.sender_id = $1::uuid)
+  AND ($2::uuid IS NULL OR k.receiver_id = $2::uuid)
+  AND ($3::kudo_status IS NULL OR k.status = $3::kudo_status)
+  AND ($4::timestamptz IS NULL
+       OR (k.created_at >= $4::timestamptz AND k.created_at < $5::timestamptz))
+  AND ($6::text IS NULL
+       OR k.title ILIKE $6::text
+       OR regexp_replace(replace(replace(replace(replace(replace(
+            regexp_replace(regexp_replace(k.content, '<(br|/?(p|li|ol|blockquote))([\s/][^>]*)?>', ' ', 'gi'), '<[^>]*>', '', 'g'),
+            '&lt;', '<'), '&gt;', '>'), '&#34;', '"'), '&#39;', ''''), '&amp;', '&'), '\s+', ' ', 'g')
+          ILIKE $6::text)
+ORDER BY k.created_at DESC, k.id DESC
+LIMIT $8::int OFFSET $7::int
+`
+
+type AdminListKudosParams struct {
+	SenderID    *uuid.UUID
+	ReceiverID  *uuid.UUID
+	Status      *KudoStatus
+	WindowStart *time.Time
+	WindowEnd   *time.Time
+	Pattern     *string
+	RowOffset   int32
+	RowLimit    int32
+}
+
+type AdminListKudosRow struct {
+	ID                uuid.UUID
+	Title             string
+	Content           string
+	IsAnonymous       bool
+	Status            KudoStatus
+	ModerationVersion int32
+	ModeratedBy       *uuid.UUID
+	ModeratedAt       *time.Time
+	CreatedAt         time.Time
+	SenderID          uuid.UUID
+	SenderName        string
+	SenderAvatarUrl   *string
+	SenderUnitCode    *string
+	ReceiverID        uuid.UUID
+	ReceiverName      string
+	ReceiverAvatarUrl *string
+	ReceiverUnitCode  *string
+	HeartTotal        int64
+	Hashtags          []string
+}
+
+// One page newest first (created_at desc, id desc), every status. The sender is the REAL sender,
+// also of anonymous kudos: only the ADMIN-class review endpoint reads this, and the Go read layer
+// applies the shared anonymity rule (BR-004, G04). Hashtags by name; the weighted heart total
+// behind the OFFSET 0 fence as in ListPublicKudoCards.
+func (q *Queries) AdminListKudos(ctx context.Context, arg AdminListKudosParams) ([]AdminListKudosRow, error) {
+	rows, err := q.db.Query(ctx, adminListKudos,
+		arg.SenderID,
+		arg.ReceiverID,
+		arg.Status,
+		arg.WindowStart,
+		arg.WindowEnd,
+		arg.Pattern,
+		arg.RowOffset,
+		arg.RowLimit,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []AdminListKudosRow
+	for rows.Next() {
+		var i AdminListKudosRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.Title,
+			&i.Content,
+			&i.IsAnonymous,
+			&i.Status,
+			&i.ModerationVersion,
+			&i.ModeratedBy,
+			&i.ModeratedAt,
+			&i.CreatedAt,
+			&i.SenderID,
+			&i.SenderName,
+			&i.SenderAvatarUrl,
+			&i.SenderUnitCode,
+			&i.ReceiverID,
+			&i.ReceiverName,
+			&i.ReceiverAvatarUrl,
+			&i.ReceiverUnitCode,
+			&i.HeartTotal,
+			&i.Hashtags,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const lockKudoForModeration = `-- name: LockKudoForModeration :one
 
 SELECT id, sender_id, receiver_id, status, moderation_version, moderated_by, moderated_at

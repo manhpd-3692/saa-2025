@@ -11,12 +11,12 @@ export const instant = false;
  * F006 segment layout: the board (or a directly opened kudo) in `children`,
  * and the `@modal` slot where a kudo opened from the board shows over it
  * (intercepted `(.)[id]` route; `default.tsx` renders nothing otherwise).
- * One dictionary (`common`, `shell`, `kudos-board`, `gamification`) serves both
- * slots; the active heart campaign (F008 A3) is read once for both.
+ * One dictionary (`common`, `shell`, `kudos-board`, `gamification`, and
+ * `moderation` for the F011 spam badge and alert) serves both slots; the active heart campaign (F008 A3) is read once for both.
  */
 export default async function KudosLayout({ children, modal }: { children: ReactNode; modal: ReactNode }) {
   const locale = await getRequestLocale();
-  const dictionary = await loadDictionaries(locale, ["common", "shell", "kudos-board", "gamification"]);
+  const dictionary = await loadDictionaries(locale, ["common", "shell", "kudos-board", "gamification", "moderation"]);
   return (
     <LocaleProvider locale={locale} dictionary={dictionary}>
       <ActiveCampaignProvider>

@@ -3,12 +3,10 @@ package moderation
 import (
 	"encoding/json"
 	"errors"
-	"log/slog"
 	"net/http"
 
 	"github.com/google/uuid"
 
-	"github.com/manhpd-3692/saa-2025/backend/internal/auth"
 	"github.com/manhpd-3692/saa-2025/backend/internal/db"
 	"github.com/manhpd-3692/saa-2025/backend/internal/httpx"
 )
@@ -51,10 +49,8 @@ type staleEnvelope struct {
 
 // ServeHTTP runs behind the ADMIN chain (RequireAdmin on users.role, BR-007).
 func (h DecisionHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	admin, ok := auth.FromContext(r.Context())
-	if !ok || !admin.IsAdmin() {
-		slog.ErrorContext(r.Context(), "moderation handler used outside the ADMIN chain")
-		httpx.WriteError(w, http.StatusForbidden, httpx.CodeForbidden, "Admin role required.")
+	admin, ok := adminCaller(w, r)
+	if !ok {
 		return
 	}
 	kudoID, err := uuid.Parse(r.PathValue("id"))

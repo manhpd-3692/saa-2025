@@ -13,23 +13,33 @@ export interface DayRange {
   to: string;
 }
 
+/** An optional range filter (F011 FR-204): "" for both days means that no range is applied. */
+export interface OptionalRangeProps {
+  /** Clears the applied range; the field then shows "Start date → End date". */
+  onClear?: () => void;
+}
+
 /**
  * Range field with quick ranges and a two-month calendar (A2, FR-401, D012;
  * shared with P13). A quick range applies at once; on the calendar the admin
  * picks a start, then an end not before it, then Apply (SM-001). Escape, a
  * click outside or Cancel closes it and the applied range stays.
  */
-export function DateRangePicker({ from, to, today, onApply }: DayRange & { today: string; onApply: (range: DayRange) => void }) {
+export function DateRangePicker({ from, to, today, onApply, onClear }: DayRange & OptionalRangeProps & {
+  today: string;
+  onApply: (range: DayRange) => void;
+}) {
   const { t } = useLocale();
   const { open, setOpen, ref } = useDismissablePopover<HTMLDivElement>();
-  const [selection, setSelection] = useState<DaySelection>({ start: from, end: to });
-  const [view, setView] = useState(() => addMonths(monthOf(to), -1));
+  const applied = Boolean(from && to);
+  const [selection, setSelection] = useState<DaySelection>({ start: from || null, end: to || null });
+  const [view, setView] = useState(() => addMonths(monthOf(to || today), -1));
   const preset = selection.start && selection.end ? quickRangeOf(selection.start, selection.end, today) : "custom";
 
   function toggle() {
     if (!open) {
-      setSelection({ start: from, end: to });
-      setView(addMonths(monthOf(to), -1));
+      setSelection({ start: from || null, end: to || null });
+      setView(addMonths(monthOf(to || today), -1));
     }
     setOpen(!open);
   }
@@ -52,14 +62,14 @@ export function DateRangePicker({ from, to, today, onApply }: DayRange & { today
         data-popover-trigger
         aria-haspopup="dialog"
         aria-expanded={open}
-        aria-label={`${t("admin.range.label")}: ${from} → ${to}`}
+        aria-label={`${t("admin.range.label")}: ${applied ? `${from} → ${to}` : t("admin.range.none")}`}
         onClick={toggle}
         data-testid="date-range-field"
         className="flex h-[52px] w-64 items-center gap-2 whitespace-nowrap rounded-panel border border-admin-header bg-white px-3 text-base text-on-primary"
       >
-        <span>{from}</span>
+        <span className={applied ? "" : "text-compose-muted"}>{applied ? from : t("admin.range.start")}</span>
         <ArrowRightIcon size={14} className="mx-1 shrink-0 text-compose-muted" />
-        <span>{to}</span>
+        <span className={applied ? "" : "text-compose-muted"}>{applied ? to : t("admin.range.end")}</span>
         <CalendarIcon size={16} className="ml-auto shrink-0 text-compose-muted" />
       </button>
       {open && (
@@ -88,6 +98,18 @@ export function DateRangePicker({ from, to, today, onApply }: DayRange & { today
               <span className="mr-auto text-compose-muted" aria-live="polite">
                 {selection.start === null ? t("admin.range.pickStart") : selection.end === null ? t("admin.range.pickEnd") : `${selection.start} → ${selection.end}`}
               </span>
+              {onClear && applied && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setOpen(false);
+                    onClear();
+                  }}
+                  className="rounded-control px-3 py-1.5 hover:bg-primary-muted"
+                >
+                  {t("admin.range.clear")}
+                </button>
+              )}
               <button type="button" onClick={() => setOpen(false)} className="rounded-control px-3 py-1.5 hover:bg-primary-muted">
                 {t("admin.range.cancel")}
               </button>

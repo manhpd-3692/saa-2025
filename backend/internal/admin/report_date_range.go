@@ -54,6 +54,18 @@ func ParseDateRange(fromRaw, toRaw string, now time.Time) DateRange {
 	return DateRange{From: from, To: to}
 }
 
+// ParseOptionalDateRange reads an optional `from`/`to` filter (F011 BR-005):
+// ok is false — no date filter — when either day is missing or malformed or
+// the start is after the end; never an error.
+func ParseOptionalDateRange(fromRaw, toRaw string) (DateRange, bool) {
+	from, okFrom := parseReportDay(fromRaw)
+	to, okTo := parseReportDay(toRaw)
+	if !okFrom || !okTo || from.After(to) {
+		return DateRange{}, false
+	}
+	return DateRange{From: from, To: to}, true
+}
+
 // parseReportDay accepts exactly YYYY-MM-DD naming a real day ("2026-02-30" and
 // "2026-2-1" are rejected).
 func parseReportDay(raw string) (time.Time, bool) {

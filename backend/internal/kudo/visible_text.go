@@ -31,6 +31,13 @@ func visibleText(sanitized string) (string, int) {
 	return text, utf8.RuneCountInString(text)
 }
 
+// VisibleText is the ALG-002 visible text of stored content, for readers that
+// show plain text (the F011 review table's Content excerpt).
+func VisibleText(sanitized string) string {
+	text, _ := visibleText(sanitized)
+	return text
+}
+
 func writeVisible(n *html.Node, b *strings.Builder) {
 	switch n.Type {
 	case html.TextNode:

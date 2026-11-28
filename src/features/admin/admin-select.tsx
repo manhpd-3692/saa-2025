@@ -13,8 +13,10 @@ export interface AdminSelectOption {
  * 1002:15711, Role 1002:15714): white field with the placeholder until a value
  * is chosen, gold outline while open, dark panel of centred choices. The first
  * choice ("All") clears the filter. Menu keyboard model from the shell popover.
+ * `boxed` draws each choice as an outlined rounded box in a compact panel at the
+ * field's right edge (F011 Status, Figma 1002:15559).
  */
-export function AdminSelect({ label, placeholder, anyLabel, options, value, onChange, className = "", testId }: {
+export function AdminSelect({ label, placeholder, anyLabel, options, value, onChange, className = "", testId, boxed = false }: {
   label: string;
   placeholder: string;
   anyLabel: string;
@@ -24,6 +26,7 @@ export function AdminSelect({ label, placeholder, anyLabel, options, value, onCh
   /** Width of the field (Figma: Unit 258 px, Level 135 px, Role 122 px). */
   className?: string;
   testId: string;
+  boxed?: boolean;
 }) {
   const { open, setOpen, ref } = useDismissablePopover<HTMLDivElement>({ menu: true });
   const selected = options.find((option) => option.value === value) ?? null;
@@ -35,9 +38,13 @@ export function AdminSelect({ label, placeholder, anyLabel, options, value, onCh
   }
 
   const item = (checked: boolean) =>
-    `flex h-[30px] w-full items-center justify-center whitespace-nowrap rounded-control px-3 text-sm text-white/75 hover:bg-primary-muted hover:text-white focus-visible:bg-primary-muted ${
-      checked ? "bg-primary-muted text-white" : ""
-    }`;
+    boxed
+      ? `flex h-9 w-full min-w-[72px] items-center justify-center whitespace-nowrap rounded-control border px-3 text-sm hover:bg-primary-muted focus-visible:bg-primary-muted ${
+          checked ? "border-primary text-primary" : "border-white/80 text-white"
+        }`
+      : `flex h-[30px] w-full items-center justify-center whitespace-nowrap rounded-control px-3 text-sm text-white/75 hover:bg-primary-muted hover:text-white focus-visible:bg-primary-muted ${
+          checked ? "bg-primary-muted text-white" : ""
+        }`;
 
   return (
     <div ref={ref} className={`relative flex flex-col gap-1 ${className}`} data-testid={testId}>
@@ -60,7 +67,11 @@ export function AdminSelect({ label, placeholder, anyLabel, options, value, onCh
         <ul
           role="menu"
           aria-label={label}
-          className="absolute left-0 top-full z-40 mt-2.5 max-h-80 min-w-full overflow-y-auto rounded-panel border border-primary-border bg-menu p-1.5"
+          className={
+            boxed
+              ? "absolute right-0 top-full z-40 mt-2.5 flex max-h-80 flex-col gap-2.5 overflow-y-auto rounded-panel bg-menu px-5 py-2.5"
+              : "absolute left-0 top-full z-40 mt-2.5 max-h-80 min-w-full overflow-y-auto rounded-panel border border-primary-border bg-menu p-1.5"
+          }
         >
           <li role="none">
             <button type="button" role="menuitemradio" aria-checked={value === null} onClick={() => choose(null)} className={item(value === null)}>
