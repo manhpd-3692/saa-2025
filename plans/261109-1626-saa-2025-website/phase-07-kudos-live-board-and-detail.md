@@ -14,6 +14,7 @@
   (overlay from board, full page on direct link), Copy Link, avatar hover card.
 
 ## Key Insights
+- (From P5) Homepage and Awards link to `/kudos` (constant `KUDOS_BOARD_PATH`) and return 404 until this phase lands; re-verify both links when the board route exists.
 - One `KudoCard` DTO + `{items, nextCursor}` from `KudoReadService` (also consumed by P9). `heart.total` from `kudo_heart_state` (X02).
 - Highlight = Kudos Quốc Dân: weighted desc, newer wins ties, public only, zero-heart fills (G12, SC-009).
 - Independent loading/empty/error/retry per block; refresh on focus/poll, no live push (Codex checklist).

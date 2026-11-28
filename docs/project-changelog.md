@@ -4,6 +4,25 @@ What each delivered phase changed, newest first. Phase scope and status live in
 [`plans/261109-1626-saa-2025-website/plan.md`](../plans/261109-1626-saa-2025-website/plan.md);
 current structure in [`system-architecture.md`](system-architecture.md).
 
+## Phase 5: Homepage, Awards, Community Standards, F004 (commit `0e5bd13`, 2026-11-28)
+
+- Added: Homepage `/`. Hero, about text, six award cards and the Kudos block render at once; the event
+  panel (ceremony countdown and event info) streams from a per-request Go read inside `Suspense`. With no
+  event row, an error or no answer in 5 s it shows a fallback with a Retry button (`router.refresh()`).
+- Added: `CeremonyCountdown`. Counts to `ceremonyAt` on server time with the shared `useCountdown`; never
+  redirects, stops at `00`, resyncs `serverNow` on refocus.
+- Added: `/awards` (six cards, sticky menu with hash anchors and scroll-spy, Kudos block) and
+  `/community-standards` (ten rules and the security standards). Both signed-in only, static typed content
+  (`award-catalog.ts`, `community-rules-content.ts`) cached per locale with `use cache`.
+- Added: English falls back to Vietnamese where the design gave no English copy (`LocalizedText`,
+  `pickLocalized`, `loadTranslator`). New dictionary namespaces `home`, `awards`, `standards`.
+- Added: awards menu keeps the fragment in the address (Back returns), moves focus to the card, and scrolls
+  instantly under `prefers-reduced-motion`.
+- Added: `KeyVisualBackdrop` for the three pages.
+- Added: Playwright specs `e2e/homepage-and-awards.spec.ts` and `e2e/awards-and-community-standards.spec.ts`;
+  Vitest for event date format, ceremony countdown, award catalog and `pickActiveAward`.
+- Docs: Phase 5 architecture in `system-architecture-homepage-awards.md`.
+
 ## Phase 4: countdown launch gate, F003 (commit `ed625fa`, 2026-11-28)
 
 - Added: launch gate in `src/proxy.ts`, run in parallel with the session refresh and before the sign-in

@@ -1,10 +1,12 @@
 {
-  "task": "Phase 4: countdown launch gate (F003) - proxy gate before launch, /countdown prelaunch page per Figma, shared countdown display and hook for P5",
+  "task": "Phase 5: Homepage SAA with ceremony countdown and event info, Awards system page with sticky menu and scroll-spy, Community Standards page (F004)",
   "mode": "code",
   "acceptanceCriteria": [
-    "U2 Countdown Prelaunch"
+    "U3 Homepage SAA",
+    "U4 He thong giai",
+    "U10 Tieu chuan cong dong"
   ],
-  "touchpoints": ["src/proxy.ts", "src/lib/events/", "src/app/countdown/", "src/features/countdown/", "src/i18n/locale-config.ts", "src/i18n/dictionaries/{vi,en}/countdown.json", "public/images/countdown/", "backend/internal/events/", "e2e/countdown-prelaunch.spec.ts", "e2e/support/launch-gate-fixtures.ts", "e2e/login-and-admin-gate.spec.ts"],
-  "blastRadius": ["every page route passes the launch gate in src/proxy.ts", "P5 homepage reuses countdown-display and use-countdown"],
-  "contracts": ["Go GET /api/v1/events/current (serverNow, startAt, status)", "gate fail-open on Go error or 1.5 s timeout (DEC-003)", "307 redirects", "60 s success-only gate cache (AD13)"]
+  "touchpoints": ["src/app/(shell)/page.tsx", "src/app/(shell)/awards/", "src/app/(shell)/community-standards/", "src/features/home/", "src/features/awards/", "src/features/community-standards/", "src/components/key-visual-backdrop.tsx", "src/i18n/", "public/images/{home,awards,community-standards}/", "e2e/"],
+  "blastRadius": ["/ route (P3 placeholder replaced)", "shell nav active state", "P4 live e2e assertion now scoped to the launch countdown"],
+  "contracts": ["Go GET /api/v1/events/current (ceremonyAt, serverNow)", "CeremonyCountdown never redirects, stops at 00 (R08)", "use cache keyed by locale", "/kudos link target (F006, later phase)"]
 }

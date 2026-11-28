@@ -1,7 +1,7 @@
 # System Architecture
 
-State after Phase 4 (countdown and launch gate on top of the Phase 3 shell). Items marked **planned (Phase N)** do
-not exist in code yet. Backend detail lives in [`backend/README.md`](../backend/README.md).
+State after Phase 5 (Homepage, Awards and Community Standards on top of the Phase 4 launch gate and Phase 3
+shell). Items marked **planned (Phase N)** do not exist in code yet. Backend detail lives in [`backend/README.md`](../backend/README.md).
 
 ## Components
 
@@ -92,6 +92,9 @@ Migrations (`supabase/migrations`, in order):
 | `src/components/shell/` | Header, avatar and language menus, nav links, FAB, footer, bell slot |
 | `src/app/countdown/page.tsx` | Prelaunch countdown: bare route (no header or footer), reads Go fresh per request |
 | `src/features/countdown/` | Shared countdown: clock store, `useCountdown`, `CountdownDisplay`; launch wrapper `LaunchCountdown` |
+| `src/app/(shell)/page.tsx`, `awards/`, `community-standards/` | Homepage, Awards, Community Standards ([details](system-architecture-homepage-awards.md)) |
+| `src/features/home/`, `awards/`, `community-standards/` | Feature code for those pages: ceremony countdown, award catalog and menu, community rules |
+| `src/components/key-visual-backdrop.tsx` | Decorative key-visual artwork behind the top of those three pages |
 | `src/lib/events/` | Events client and launch gate (below) |
 | `src/features/auth/` | Login button and messages, sign-out, profile recovery, route decisions |
 | `src/lib/auth/` | Session summary (`session-summary.ts`, server read in `get-session-summary.ts`) |
@@ -138,7 +141,7 @@ Supported: `vi`, `en` (`src/i18n/locale-config.ts`). Order, in `resolveLocale`:
 3. `vi` (master language and last fallback).
 
 `getRequestLocale()` reads cookies and headers; dictionaries load per namespace from
-`src/i18n/dictionaries/{locale}/{namespace}.json` (namespaces `common`, `shell`, `auth`, `errors`, `countdown`; the root layout sends `common` and `shell` to the client).
+`src/i18n/dictionaries/{locale}/{namespace}.json` (namespaces `common`, `shell`, `auth`, `errors`, `countdown`, `home`, `awards`, `standards`; the root layout sends `common` and `shell` to the client). A key missing in `en` shows the `vi` text; typed content (award catalog, community rules) uses `pickLocalized` with the same fallback (see [Homepage, Awards and Community Standards](system-architecture-homepage-awards.md)).
 
 ## Rendering decision: `instant = false`
 
@@ -190,9 +193,17 @@ zero) it calls `router.replace("/")` once, without a full reload. When the windo
 becomes visible it calls the events route from the browser (5 s): `active` hands over at once; `upcoming`
 replaces the start time and server time; a failure keeps counting on the existing offset.
 
-**Reuse (Phase 5).** `CountdownDisplay` (pure: days, hours, minutes boxes plus a polite live region) and
+**Reuse.** `CountdownDisplay` (pure: days, hours, minutes boxes plus a polite live region) and
 `useCountdown(targetIso, serverNowIso)` (returns `remainingMs` and the parts; never navigates) know nothing
-about redirects or event status, so the ceremony countdown reuses them. Only `LaunchCountdown` navigates.
+about redirects or event status. The Homepage `CeremonyCountdown` reuses them (it stops at 00, never
+redirects). Only `LaunchCountdown` navigates.
+
+## Homepage, Awards, Community Standards (F004)
+
+The Homepage streams its Go event read (countdown and event info) inside `<Suspense>` with a fallback and
+retry; `/awards` and `/community-standards` are static typed content cached per locale with `use cache`;
+the awards menu uses hash anchors and a scroll-spy. See
+[`system-architecture-homepage-awards.md`](system-architecture-homepage-awards.md).
 
 Tests: `e2e/countdown-prelaunch.spec.ts` with `e2e/support/launch-gate-fixtures.ts` switches the event
 row between seed scenarios and restores `live`; the 60 s cache makes step order matter.
@@ -201,7 +212,7 @@ row between seed scenarios and restores `live`; the 60 s cache makes step order 
 
 | Item | Phase |
 |---|---|
-| Feature routes and screens | 5 to 13 |
+| Feature routes and screens | 6 to 13 |
 | Final integration, E2E, docs | 14 |
 
 Source of truth for phases: `plans/261109-1626-saa-2025-website/plan.md`.

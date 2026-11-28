@@ -55,9 +55,9 @@ P2 (đường rủi ro đầu-cuối: provision, JWT, `/me`...) không có màn 
 | 7 | Floating Action Button (đóng) | Homepage SAA | P3 | 313:9137 hoặc 313:9139 | `docs/figma-refs/user/fab-closed.png` | F001 FR-104 · F008 FR-101 · F005 FR-101 | Done (PASS) | 1 | 01b620e |
 | 8 | Floating Action Button (mở) | Homepage SAA | P3 | 313:9137 hoặc 313:9139 | `docs/figma-refs/user/fab-open.png` | F001 FR-104 · F008 FR-101,103 · F005 FR-101 | Done (PASS) | 2 | 01b620e |
 | 9 | U2 Countdown - Prelaunch | Countdown Prelaunch | P4 | 2268:35127 | `docs/figma-refs/user/countdown-prelaunch.png` | F003 FR-101,102,103,201,202,203,204,401,402,403 · BR-001,002,003 · SC-003,004,005,008,011 | Done (PASS) | 1 | ed625fa |
-| 10 | U3 Homepage SAA | Homepage SAA | P5 | 2167:9026 | `docs/figma-refs/user/homepage-saa.png` | F004 FR-101,201,202,203,204,205,206,207,403,601 · SC-001,005,007,010 | Pending | 0 | - |
-| 11 | U4 Hệ thống giải | Hệ thống giải | P5 | 313:8436 | `docs/figma-refs/user/awards-system.png` | F004 FR-301,302,303,304,305,401,402 · BR-001,002,003 · SC-001,002,003,004 | Pending | 0 | - |
-| 12 | U10 Tiêu chuẩn cộng đồng | Homepage SAA (footer) | P5 | 1161:8944 | `docs/figma-refs/user/community-standards.png` | F004 FR-103,351,352,601 · SC-006 · F005 FR-210 | Pending | 0 | - |
+| 10 | U3 Homepage SAA | Homepage SAA | P5 | 2167:9026 | `docs/figma-refs/user/homepage-saa.png` | F004 FR-101,201,202,203,204,205,206,207,403,601 · SC-001,005,007,010 | Done (PASS) | 1 | 0e5bd13 |
+| 11 | U4 Hệ thống giải | Hệ thống giải | P5 | 313:8436 | `docs/figma-refs/user/awards-system.png` | F004 FR-301,302,303,304,305,401,402 · BR-001,002,003 · SC-001,002,003,004 | Done (PASS) | 1 | 0e5bd13 |
+| 12 | U10 Tiêu chuẩn cộng đồng | Homepage SAA (footer) | P5 | 1161:8944 | `docs/figma-refs/user/community-standards.png` | F004 FR-103,351,352,601 · SC-006 · F005 FR-210 | Done (PASS) | 0 | 0e5bd13 |
 | 13 | U6 Viết Kudo | Viết Kudos | P6 | 520:11602 | `docs/figma-refs/user/write-kudo.png` | F005 FR-101,201,202,203,204,205,206,207,209,210,401,402,405 · BR-001..004 · SC-001,004 | Pending | 0 | - |
 | 14 | Gửi lời chúc Kudos (biến thể 1) | Viết Kudos | P6 | 828:13433 hoặc 1612:5056 | `docs/figma-refs/user/write-kudo-form-variant-1.png` | F005 FR-201,202,203,205,207 · BR-002,004 · SC-004 | Pending | 0 | - |
 | 15 | Gửi lời chúc Kudos (biến thể 2) | Viết Kudos | P6 | 828:13433 hoặc 1612:5056 | `docs/figma-refs/user/write-kudo-form-variant-2.png` | F005 FR-203,204,206,209 · BR-003 · SC-004,005 | Pending | 0 | - |
