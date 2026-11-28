@@ -35,6 +35,14 @@
   --color-compose-active: rgb(153 140 95 / 0.25); /* pressed toolbar button */
   --color-overlay: rgb(0 16 26 / 0.8); /* backdrop behind a modal */
 
+  /* Notification center (F009, Figma 589:9132 / 589:9152): relative time and type icons */
+  --color-notice-time: #999999;
+  --color-notice-mail: #3f95ff;
+  --color-notice-heart: #ee5850;
+  --color-notice-star: #00fbff;
+  --color-notice-warning: #ffd900;
+  --color-notice-badge: #2ad32d;
+
   --radius-control: 4px;
   --radius-panel: 8px;
   --radius-dialog: 24px;

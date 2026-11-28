@@ -52,6 +52,11 @@ delete from public.kudo_uploads where owner_id in (select id from demo_people);
 delete from public.campaigns where created_by in (select id from demo_people);
 delete from public.kudos
 where sender_id in (select id from demo_people) or receiver_id in (select id from demo_people);
+-- Hashtags no kudo uses any more (left by deleted kudos and by test runs, e.g. random per-run
+-- tags of the Go integration suite) go too: the shared, alphabetical and capped tag list (F005
+-- A3) starts again from the seed's tags instead of growing with every run.
+delete from public.hashtags h
+where not exists (select 1 from public.kudo_hashtags kh where kh.hashtag_id = h.id);
 delete from auth.users where id in (select id from demo_people); -- cascades public.users
 
 -- 2. Identities: verified Google accounts on the company domain (they cannot sign in locally).
@@ -238,10 +243,20 @@ set opened_at = b.earned_at + make_interval(mins => 10 + p.n * 13),
 from demo_people p
 where b.user_id = p.id and b.seq = 1;
 
--- Nguyễn Văn An (the e2e user) has also opened his 2nd and 3rd box: three different icons
--- collected, the rest of his boxes wait unopened for the Secret Box window.
+-- Nguyễn Văn An (the e2e user) has also opened his 2nd to 6th box, each a new icon: with his
+-- first box (TOUCH_OF_LIGHT, opened last) he holds all six, so his set was completed then and
+-- users.icons_completed_at is set once (F008 BR-010, Codex R11). Boxes 7 and 8 wait unopened
+-- for the Secret Box window.
 update public.secret_boxes b
 set opened_at = b.earned_at + interval '20 minutes',
-    icon = case b.seq when 2 then 'REVIVAL'::public.secret_box_icon else 'ROOT_FURTHER'::public.secret_box_icon end
+    icon = (case b.seq
+              when 2 then 'REVIVAL' when 3 then 'ROOT_FURTHER' when 4 then 'STAY_GOLD'
+              when 5 then 'FLOW_TO_HORIZON' else 'BEYOND_THE_BOUNDARY' end)::public.secret_box_icon
 from demo_people p
-where b.user_id = p.id and p.n = 1 and b.seq in (2, 3);
+where b.user_id = p.id and p.n = 1 and b.seq between 2 and 6;
+
+update public.users u
+set icons_completed_at = (select max(b.opened_at) from public.secret_boxes b where b.user_id = u.id)
+from demo_people p
+where u.id = p.id and p.n = 1
+  and (select count(distinct b.icon) from public.secret_boxes b where b.user_id = u.id) = 6;

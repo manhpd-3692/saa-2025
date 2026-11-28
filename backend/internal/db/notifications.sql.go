@@ -7,9 +7,25 @@ package db
 
 import (
 	"context"
+	"time"
 
 	"github.com/google/uuid"
 )
+
+const countUnreadNotifications = `-- name: CountUnreadNotifications :one
+SELECT count(*) AS unread_count
+FROM notifications
+WHERE recipient_id = $1
+  AND read_at IS NULL
+`
+
+// F009 A2 (FR-205): unread rows of the caller (partial index notifications_recipient_unread_idx).
+func (q *Queries) CountUnreadNotifications(ctx context.Context, recipientID uuid.UUID) (int64, error) {
+	row := q.db.QueryRow(ctx, countUnreadNotifications, recipientID)
+	var unread_count int64
+	err := row.Scan(&unread_count)
+	return unread_count, err
+}
 
 const insertOnceNotification = `-- name: InsertOnceNotification :one
 INSERT INTO notifications (recipient_id, kind, params, kudo_id, dedupe_key)
@@ -41,6 +57,79 @@ func (q *Queries) InsertOnceNotification(ctx context.Context, arg InsertOnceNoti
 	return id, err
 }
 
+const listNotificationsForRecipient = `-- name: ListNotificationsForRecipient :many
+SELECT n.id, n.kind, n.params, n.kudo_id, n.read_at, n.created_at,
+       k.is_anonymous AS kudo_is_anonymous,
+       (k.id IS NOT NULL
+         AND (k.status = 'public' OR k.sender_id = $1::uuid OR $2::boolean))::boolean
+         AS kudo_viewable
+FROM notifications n
+LEFT JOIN kudos k ON k.id = n.kudo_id
+WHERE n.recipient_id = $1::uuid
+  AND ($3::timestamptz IS NULL
+       OR (n.created_at, n.id) < ($3::timestamptz, $4::uuid))
+ORDER BY n.created_at DESC, n.id DESC
+LIMIT $5::int
+`
+
+type ListNotificationsForRecipientParams struct {
+	RecipientID     uuid.UUID
+	ViewerIsAdmin   bool
+	CursorCreatedAt *time.Time
+	CursorID        *uuid.UUID
+	RowLimit        int32
+}
+
+type ListNotificationsForRecipientRow struct {
+	ID              uuid.UUID
+	Kind            string
+	Params          []byte
+	KudoID          *uuid.UUID
+	ReadAt          *time.Time
+	CreatedAt       time.Time
+	KudoIsAnonymous *bool
+	KudoViewable    bool
+}
+
+// F009 A4 (FR-203, FR-403, BR-001): the caller's notices newest first, keyset on (created_at, id).
+// kudo_is_anonymous is the linked kudo's CURRENT flag for the read-time re-mask (BR-007, Codex R02);
+// kudo_viewable says whether the action button can still open that kudo (A5): it exists and is
+// public, the caller's own, or the caller is an admin (F006 BR-006). A removed kudo leaves kudo_id null.
+func (q *Queries) ListNotificationsForRecipient(ctx context.Context, arg ListNotificationsForRecipientParams) ([]ListNotificationsForRecipientRow, error) {
+	rows, err := q.db.Query(ctx, listNotificationsForRecipient,
+		arg.RecipientID,
+		arg.ViewerIsAdmin,
+		arg.CursorCreatedAt,
+		arg.CursorID,
+		arg.RowLimit,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []ListNotificationsForRecipientRow
+	for rows.Next() {
+		var i ListNotificationsForRecipientRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.Kind,
+			&i.Params,
+			&i.KudoID,
+			&i.ReadAt,
+			&i.CreatedAt,
+			&i.KudoIsAnonymous,
+			&i.KudoViewable,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const lockKudoAnonymity = `-- name: LockKudoAnonymity :one
 
 SELECT is_anonymous
@@ -49,13 +138,52 @@ WHERE id = $1
 FOR SHARE
 `
 
-// Notifications (F009 A1). Only NotificationService.Create writes rows; no HTTP route does.
+// Notifications (F009). Only NotificationService.Create inserts or merges rows; no HTTP route
+// does (FR-602). Sunners read their own rows and change only read_at (A2, A4, A6, A7).
 // N01: serializes a kudo-linked insert with an anonymity edit holding the kudo row for update.
 func (q *Queries) LockKudoAnonymity(ctx context.Context, id uuid.UUID) (bool, error) {
 	row := q.db.QueryRow(ctx, lockKudoAnonymity, id)
 	var is_anonymous bool
 	err := row.Scan(&is_anonymous)
 	return is_anonymous, err
+}
+
+const markAllNotificationsRead = `-- name: MarkAllNotificationsRead :execrows
+UPDATE notifications
+SET read_at = now()
+WHERE recipient_id = $1
+  AND read_at IS NULL
+`
+
+// F009 A7 (FR-402, BR-005): every unread row of the caller; read rows keep their read_at.
+func (q *Queries) MarkAllNotificationsRead(ctx context.Context, recipientID uuid.UUID) (int64, error) {
+	result, err := q.db.Exec(ctx, markAllNotificationsRead, recipientID)
+	if err != nil {
+		return 0, err
+	}
+	return result.RowsAffected(), nil
+}
+
+const markNotificationRead = `-- name: MarkNotificationRead :execrows
+UPDATE notifications
+SET read_at = coalesce(read_at, now())
+WHERE id = $1
+  AND recipient_id = $2
+`
+
+type MarkNotificationReadParams struct {
+	ID          uuid.UUID
+	RecipientID uuid.UUID
+}
+
+// F009 A6 (BR-001, BR-005): only the caller's own row; the first read time is kept. Zero rows
+// (missing id or someone else's) answers 404, so ids cannot be probed.
+func (q *Queries) MarkNotificationRead(ctx context.Context, arg MarkNotificationReadParams) (int64, error) {
+	result, err := q.db.Exec(ctx, markNotificationRead, arg.ID, arg.RecipientID)
+	if err != nil {
+		return 0, err
+	}
+	return result.RowsAffected(), nil
 }
 
 const upsertNotification = `-- name: UpsertNotification :one

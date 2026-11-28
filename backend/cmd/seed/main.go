@@ -57,7 +57,7 @@ func run() error {
 	defer conn.Close(context.WithoutCancel(ctx))
 
 	err = pgx.BeginFunc(ctx, conn, func(tx pgx.Tx) error {
-		for _, name := range []string{file, seeds.DemoActivityFile} {
+		for _, name := range []string{file, seeds.DemoActivityFile, seeds.DemoNotificationsFile} {
 			sql, err := seeds.Files.ReadFile(name)
 			if err != nil {
 				return fmt.Errorf("read %s: %w", name, err)

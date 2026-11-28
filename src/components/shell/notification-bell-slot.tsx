@@ -1,27 +1,15 @@
-"use client";
-
-import { useLocale } from "@/i18n/locale-provider";
-import { useSessionUser } from "./me-refresher";
-import { BellIcon } from "./shell-icons";
+import { NotificationBell } from "@/features/notifications/notification-bell";
+import { getRequestLocale } from "@/i18n/get-request-locale";
+import { loadDictionaries } from "@/i18n/load-dictionary";
 
 /**
- * F001 A4 bell entry: the mount point F009 fills in phase 10 (unread dot and
- * the notification panel). Until then the bell shows no dot and opens nothing.
- * Hidden without a signed-in Sunner (FR-602).
+ * F001 A4 bell entry, filled by F009 (phase 10): the bell with its unread dot
+ * and the notification panel. A Server Component, so the header and the admin
+ * chrome keep mounting it unchanged; it hands the panel its own dictionary
+ * (`common` + `notifications`). The bell hides without a signed-in Sunner (FR-602).
  */
-export function NotificationBellSlot() {
-  const user = useSessionUser();
-  const { t } = useLocale();
-  if (!user) return null;
-
-  return (
-    <button
-      type="button"
-      aria-label={t("shell.notifications")}
-      data-testid="notification-bell"
-      className="relative flex size-10 items-center justify-center rounded-control text-white hover:bg-primary-soft"
-    >
-      <BellIcon size={24} />
-    </button>
-  );
+export async function NotificationBellSlot() {
+  const locale = await getRequestLocale();
+  const dictionary = await loadDictionaries(locale, ["common", "notifications"]);
+  return <NotificationBell locale={locale} dictionary={dictionary} />;
 }

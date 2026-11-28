@@ -27,7 +27,7 @@ describe("resolveSessionSummary (F001 SC-006, F002 SC-012)", () => {
     const summary = await resolveSessionSummary({ hasSession: true, fetchMe: async () => me, provision: vi.fn() });
     expect(summary).toEqual({
       kind: "signed-in",
-      user: { displayName: "Nguyễn Văn An", avatarUrl: "https://lh3.googleusercontent.com/a/x", role: "user" },
+      user: { id: "u1", displayName: "Nguyễn Văn An", avatarUrl: "https://lh3.googleusercontent.com/a/x", role: "user" },
     });
   });
 
@@ -80,15 +80,16 @@ describe("resolveSessionSummary (F001 SC-006, F002 SC-012)", () => {
 });
 
 describe("toSessionUser", () => {
-  it("keeps only name, avatar and role, and a null avatar stays null", () => {
+  it("keeps only id, name, avatar and role, and a null avatar stays null", () => {
     expect(toSessionUser({ ...me, avatarUrl: null })).toEqual({
+      id: "u1",
       displayName: "Nguyễn Văn An",
       avatarUrl: null,
       role: "user",
     });
   });
 
-  it.each([null, "text", { ...me, name: 3 }, { ...me, role: undefined }])("rejects %j", (body) => {
+  it.each([null, "text", { ...me, name: 3 }, { ...me, role: undefined }, { ...me, id: undefined }, { ...me, id: "" }])("rejects %j", (body) => {
     expect(toSessionUser(body)).toBeNull();
   });
 });

@@ -3,14 +3,18 @@ package seeds
 
 import "embed"
 
-// Files holds the scenario files ({prelaunch,live,after-ceremony}.sql) and
-// demo_activity.sql.
+// Files holds the scenario files ({prelaunch,live,after-ceremony}.sql),
+// demo_activity.sql and demo_notifications.sql.
 //
 //go:embed *.sql
 var Files embed.FS
 
 // DemoActivityFile is applied after every scenario file.
 const DemoActivityFile = "demo_activity.sql"
+
+// DemoNotificationsFile is applied right after DemoActivityFile, in the same
+// transaction: it reads that file's temp tables (F009 demo notifications).
+const DemoNotificationsFile = "demo_notifications.sql"
 
 // DemoKudoPhoto is the team photo the seed stores at every demo kudo image key: a
 // thumbnail cropped from the Figma kudo card (docs/figma-refs/user/kudo-card.png).

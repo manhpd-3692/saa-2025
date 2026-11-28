@@ -14,6 +14,8 @@ export const ME_PATH = "/api/v1/me";
 export type SessionRole = "user" | "admin";
 
 export interface SessionUser {
+  /** `users.id`: keys per-user client state (the notification bell, F009 review W1). */
+  id: string;
   displayName: string;
   avatarUrl: string | null;
   /** From `users.role` as Go returns it; never from the browser (Codex R05). */
@@ -44,9 +46,10 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 /** Narrows a `/me` body to what the chrome needs; null when the shape is unusable. */
 export function toSessionUser(body: unknown): SessionUser | null {
   if (!isRecord(body)) return null;
-  const { name, avatarUrl, role } = body;
-  if (typeof name !== "string" || (role !== "user" && role !== "admin")) return null;
+  const { id, name, avatarUrl, role } = body;
+  if (typeof id !== "string" || !id || typeof name !== "string" || (role !== "user" && role !== "admin")) return null;
   return {
+    id,
     displayName: name,
     avatarUrl: typeof avatarUrl === "string" && avatarUrl ? avatarUrl : null,
     role,
