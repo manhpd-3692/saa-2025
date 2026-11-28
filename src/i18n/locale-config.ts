@@ -29,6 +29,7 @@ export const DICTIONARY_NAMESPACES = [
   "gamification",
   "profile",
   "notifications",
+  "admin",
 ] as const;
 export type DictionaryNamespace = (typeof DICTIONARY_NAMESPACES)[number];
 

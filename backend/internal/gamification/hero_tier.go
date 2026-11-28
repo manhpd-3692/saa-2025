@@ -1,6 +1,8 @@
 // Package gamification holds hearts, hero tiers and secret boxes (F008).
 package gamification
 
+import "math"
+
 // HeroTier is the badge derived from a Sunner's distinct senders over public
 // kudos received (BR-005). It is computed on read and never stored.
 type HeroTier string
@@ -34,6 +36,25 @@ func HeroTierFor(senders int) HeroTier {
 		return TierSuper
 	default:
 		return TierLegend
+	}
+}
+
+// HeroTierSenderRange is the inclusive distinct-sender range of a tier
+// (BR-005), the inverse of HeroTierFor, for reads that select Sunners by tier
+// in SQL (F010 Level filter) without a second set of thresholds. ok is false
+// for TierNone and unknown values; Legend's upper bound is math.MaxInt32.
+func HeroTierSenderRange(t HeroTier) (lo, hi int32, ok bool) {
+	switch t {
+	case TierNew:
+		return 1, risingFromSenders - 1, true
+	case TierRising:
+		return risingFromSenders, superFromSenders - 1, true
+	case TierSuper:
+		return superFromSenders, legendFromSenders - 1, true
+	case TierLegend:
+		return legendFromSenders, math.MaxInt32, true
+	default:
+		return 0, 0, false
 	}
 }
 

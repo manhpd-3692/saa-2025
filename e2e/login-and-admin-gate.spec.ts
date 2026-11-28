@@ -122,10 +122,11 @@ test.describe("signed-in admin", () => {
     await page.goto("/admin");
     await expect(page.getByTestId("forbidden-page")).toHaveCount(0);
     const nav = page.getByRole("navigation", { name: "Điều hướng quản trị" });
-    await expect(nav.getByRole("link")).toHaveText(["Overview", "Review content", "User", "Settings"]);
-    await expect(nav.locator('[aria-current="page"]')).toHaveText("Overview");
+    // Vietnamese admin copy (F010 FR-002, phase 11 fix round 1); English is in admin-overview-and-users.spec.ts.
+    await expect(nav.getByRole("link")).toHaveText(["Tổng quan", "Duyệt nội dung", "Người dùng", "Cài đặt"]);
+    await expect(nav.locator('[aria-current="page"]')).toHaveText("Tổng quan");
     await expect(page.getByRole("banner")).toContainText("ADMIN");
-    await expect(page.getByRole("heading", { level: 1, name: "Overview" })).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1, name: "Tổng quan" })).toBeVisible();
   });
 });
 

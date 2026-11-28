@@ -27,6 +27,7 @@
   /* Admin chrome */
   --color-admin-header: #2c2f31;
   --color-admin-page: #999999;
+  --color-admin-row-alt: #0d1114; /* Overview table head and every second row (Figma 620:7712) */
 
   /* Write-kudo window (F005, Figma 520:11602 and its states) */
   --color-compose: #fff8e1; /* cream panel */

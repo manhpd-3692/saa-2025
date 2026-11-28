@@ -20,8 +20,8 @@
   "shell.fab.writeKudos": "Viết KUDOS",
   "shell.admin.badge": "ADMIN",
   "shell.admin.nav.label": "Điều hướng quản trị",
-  "shell.admin.nav.overview": "Overview",
-  "shell.admin.nav.review": "Review content",
-  "shell.admin.nav.users": "User",
-  "shell.admin.nav.settings": "Settings"
+  "shell.admin.nav.overview": "Tổng quan",
+  "shell.admin.nav.review": "Duyệt nội dung",
+  "shell.admin.nav.users": "Người dùng",
+  "shell.admin.nav.settings": "Cài đặt"
 }
