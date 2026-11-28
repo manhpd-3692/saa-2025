@@ -1,0 +1,15 @@
+
+Running 10 tests using 1 worker
+
+  ok  1 [chromium] › e2e\like-kudos-and-secret-box.spec.ts:24:3 › as the recipient › a heart during the x2 campaign adds 2 at once and after reload; pressing again withdraws it; a double click stores one heart (FR-401, FR-402, BR-001, BR-004, SC-001, SC-003) (4.9s)
+  ok  2 [chromium] › e2e\like-kudos-and-secret-box.spec.ts:56:3 › as the recipient › a failed campaign check saves no heart: the control reverts and says so; a failed badge read only hides the badge (DEC-002, Codex R09, SC-010) (4.4s)
+  ok  3 [chromium] › e2e\like-kudos-and-secret-box.spec.ts:84:1 › the sender's own heart is disabled and Go refuses it; a spam kudo refuses hearts (DEC-001, BR-002, BR-003, FR-604, SC-002) (2.4s)
+  ok  4 [chromium] › e2e\like-kudos-and-secret-box.spec.ts:105:1 › the x2 campaign badge next to the heart total shows name, multiplier and window on hover and on focus (FR-204, US004, D013) (2.7s)
+  ok  5 [chromium] › e2e\like-kudos-and-secret-box.spec.ts:136:1 › hero badges follow distinct senders and each tier's hover tells its range; a Sunner without senders has none (FR-002, FR-203, BR-005, DEC-003, SC-005) (4.0s)
+  ok  6 [chromium] › e2e\like-kudos-and-secret-box.spec.ts:167:1 › Thể lệ opens from the FAB with the three rule blocks; Đóng and Esc close it; Viết KUDOS opens the write window (FR-101, FR-103, FR-201, FR-202, US005) (2.1s)
+  ok  7 [chromium] › e2e\secret-box-open-and-retry.spec.ts:32:1 › the window shows the unopened count; a click shakes the box, reveals one icon and the count drops by one (FR-102, FR-205, FR-206, FR-404, BR-007, BR-008, SC-006) (4.7s)
+  ok  8 [chromium] › e2e\secret-box-open-and-retry.spec.ts:58:1 › an open whose answer is lost is retried with the same Idempotency-Key: the same icon, one box consumed (Codex R12, N12, DEC-005, SC-013) (7.1s)
+  ok  9 [chromium] › e2e\secret-box-open-and-retry.spec.ts:95:3 › other Sunners › with no box left the window says so and nothing opens; a box taken in another tab ends in the same empty state (FR-207, DEC-004, SC-006) (4.9s)
+  ok 10 [chromium] › e2e\secret-box-open-and-retry.spec.ts:118:3 › other Sunners › the open that brings the sixth icon completes the set once: the congratulation box, then all six icons (BR-010, FR-409, SC-012) (6.2s)
+
+  10 passed (44.3s)

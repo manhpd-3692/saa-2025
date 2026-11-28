@@ -1,11 +1,11 @@
 {
-  "task": "Phase 7: Kudos live board and kudo detail (F006) - highlight carousel with filters, spotlight, keyset feed, sidebar, detail overlay and page, avatar hover card",
+  "task": "Phase 8: hearts with x2 campaign badge, hero badges, rules panel and secret box (F008)",
   "mode": "code",
   "acceptanceCriteria": [
-    "U5 Sun Kudos Live board", "U7 View Kudo", "Dropdown Hashtag filter", "Dropdown Phong ban",
-    "Hover Avatar info user", "Infor HoverAvatar", "Hashtag group", "KUDO card"
+    "Hover campaign", "The le rules panel", "Hover danh hieu New Hero", "Hover danh hieu Rising Hero", "Hover danh hieu Super Hero", "Hover danh hieu Legend Hero",
+    "Open secret box chua mo", "Open secret box action bam mo", "Open Giftbox ket qua", "Open secret box Standby"
   ],
-  "touchpoints": ["backend/internal/kudo/", "backend/internal/user/user_hover_card_handler.go", "backend/cmd/api/wire_kudo_board.go", "backend/db/queries/{kudo_read,user_hover_card}.sql", "backend/cmd/seed/", "backend/db/seeds/", "supabase/migrations/20261128070000_kudo_board_read_indexes.sql", "src/app/(shell)/kudos/", "src/app/(shell)/layout.tsx", "src/features/kudos-board/", "src/components/shell/{minimal-chrome,shell-actions-context}.tsx", "src/features/kudo-compose/", "next.config.ts", "e2e/kudos-board*.spec.ts"],
-  "blastRadius": ["homepage and awards /kudos links", "P6 edit entry and receiver prefill", "shell chrome hidden on kudo not-found", "seed now uploads Storage images"],
-  "contracts": ["GET /api/v1/kudos (keyset cursor)", "GET /api/v1/kudos/highlight", "GET /api/v1/kudos/spotlight", "GET /api/v1/kudos/sidebar", "GET /api/v1/kudos/filter-options", "GET /api/v1/users/{id}/hover-card", "KudoCard DTO R15", "R02 anonymous masking", "uniform not-found SC-006"]
+  "touchpoints": ["backend/internal/gamification/", "backend/internal/notification/notification_service.go", "backend/internal/httpx/request_failure_log.go", "backend/internal/auth/", "backend/cmd/api/wire_gamification_reads.go", "backend/db/queries/{gamification,kudo_read}.sql", "backend/db/seeds/demo_activity.sql", "src/features/gamification/", "src/features/kudos-board/{heart-slot,hero-badge-slot,board-sidebar}.tsx", "src/app/(shell)/layout.tsx", "src/app/(shell)/kudos/layout.tsx", "src/components/shell/shell-actions-context.tsx", "e2e/like-kudos-and-secret-box.spec.ts", "e2e/secret-box-open-and-retry.spec.ts"],
+  "blastRadius": ["P7 board slots and sidebar", "notification writes from the secret box transaction", "log level policy across ~20 handlers incl. auth middleware", "FAB and shell layout"],
+  "contracts": ["PUT/DELETE /api/v1/kudos/{id}/heart with campaign weight", "POST /api/v1/me/secret-boxes/open Idempotency-Key", "GET active campaign", "GET secret box summary", "icons_completed notice exactly once", "R02 masking on new reads"]
 }

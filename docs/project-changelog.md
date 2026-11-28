@@ -4,6 +4,26 @@ What each delivered phase changed, newest first. Phase scope and status live in
 [`plans/261109-1626-saa-2025-website/plan.md`](../plans/261109-1626-saa-2025-website/plan.md);
 current structure in [`system-architecture.md`](system-architecture.md).
 
+## Phase 8: hearts, hero badges, rules panel and secret box, F008 (commit `a9f3c68`, 2026-11-28)
+
+- Added: heart toggle on every KudoCard with an optimistic weighted total, one shared state per kudo across
+  Highlight, feed and detail, and a revert on failure; x2 campaign badge with a hover (name and window).
+- Added: hero tier badges (New, Rising, Super, Legend) with hover, from `heroTier` inside each card.
+- Added: rules panel ("Thể lệ") from the FAB; secret box window (box, revealed icon, n/6, congratulation box).
+- Added: Go routes `GET /api/v1/campaigns/active` and `GET /api/v1/me/secret-boxes`
+  (`wire_gamification_reads.go`); latest gift recipients now come from the gamification queries.
+- Changed: secret box open is idempotent by `Idempotency-Key` (replay returns the stored answer); the
+  completing open stores its `icons_completed` notice in the open's transaction (`notification.StoreInTx`,
+  savepoint), so it is written exactly once.
+- Changed: handlers log failures through `httpx.LogRequestFailure`: a caller-cancelled request is INFO, a
+  server deadline or any other failure stays ERROR.
+- Changed: seed adds 8 demo Sunners (24 users, 60 kudos) so every hero tier shows, a running x2 heart
+  campaign (now - 1 day to now + 13 days) with campaign-weighted hearts, and opened boxes for the e2e user.
+  The Go integration suite clears active campaigns, so reseed afterwards.
+- Added: Playwright specs `e2e/like-kudos-and-secret-box.spec.ts` and `e2e/secret-box-open-and-retry.spec.ts`;
+  Vitest for the heart store, toggle and open hook; Go tests for reads, cancellation logging and the notice.
+- Docs: F008 section in `system-architecture.md`; gamification route table in `backend/README.md`.
+
 ## Phase 7: Kudos Live board and View Kudo, F006 (commit `2f44032`, 2026-11-28)
 
 - Added: `/kudos` board: key visual, Highlight carousel (top 5 by weighted hearts, Hashtag and Phòng ban

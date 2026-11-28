@@ -125,3 +125,33 @@ Logs: no new ERROR, WARN or panic lines in `logs/api.log`. `logs/web.log`: expec
 
 **Verdict: PASS.** Fix list: none.
 
+
+
+---
+
+## Round 3 (P8 heart, x2 badge and hero badges on the card)
+
+**Final verdict: PASS.** The card component renders the P8 heart, the x2 badge and the hero pills in the right slots. No layout regression shows against `kudo-card.png`.
+
+Evidence (1440×1024, VN, sunner01.demo, live seed, no heart toggles):
+- Card element (Highlight, Hoàng Thu Hà → Lê Minh Châu, 12 hearts): `plans/261109-1626-saa-2025-website/evidence/screens/r3-kudo-card.png`
+- Reference: `docs/figma-refs/user/kudo-card.png`
+
+Compared against the frame:
+
+| Element | Reference | Actual | Result |
+|---------|-----------|--------|--------|
+| Avatars, arrow, names | as frame | same | OK |
+| Unit code and hero pill row | as frame (Legend pills) | Rising and New pills, same slot | OK (tier differs by data) |
+| Time line, centred title | as frame | same | OK |
+| Body box, cream, gold outline | as frame | same | OK |
+| Hashtags, red | as frame | same | OK |
+| Image row | 5 thumbnails in frame | none on this card (no images on this kudo) | NOT VERIFIED here (data, see round 1 C1) |
+| Heart, count | filled red heart, "1.000" | outline red heart, "12" (weighted total) | Accepted: DEC-001 outline for un-hearted; weighted count per G08 |
+| Campaign x2 badge | not in frame | flame x2 beside the heart | Accepted P8 addition (D013) |
+| Copy Link | as frame | same | OK |
+| "Xem chi tiết" link | not in the card frame | present (Highlight card, as in the board frame) | Accepted: same as `kudos-live-board.png` Highlight card |
+
+Known differences, all accepted: outline heart (DEC-001), x2 badge (D013), and "Xem chi tiết" in the Highlight card (matches the board frame, not the card frame).
+
+Fix list: none for row 29.

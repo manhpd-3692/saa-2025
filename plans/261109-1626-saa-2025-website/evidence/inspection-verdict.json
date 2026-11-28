@@ -1,21 +1,20 @@
 { "score": 9.5, "criticalCount": 0, "decision": "SEALED",
   "acceptanceCovered": [
-    "U5 Sun Kudos Live board: PASS round 0 (reports/verify-kudos-live-board.md); FR-403 first-paint errors deferred to P14",
-    "U7 View Kudo: PASS after fix round 1 (reports/verify-view-kudo.md)",
-    "Dropdown Hashtag filter: PASS round 0 (reports/verify-kudos-dropdown-hashtag-filter.md)",
-    "Dropdown Phong ban: PASS round 0 (reports/verify-kudos-dropdown-department.md)",
-    "Hover Avatar info user: PASS round 0 (reports/verify-hover-avatar-info.md)",
-    "Infor HoverAvatar: PASS round 0 (reports/verify-hover-avatar-info-2.md)",
-    "Hashtag group: PASS after fix round 1 (reports/verify-hashtag-group.md)",
-    "KUDO card: PASS after fix round 1 (reports/verify-kudo-card.md)"
+    "Hover campaign: PASS after fix round 1 (reports/verify-hover-campaign.md)",
+    "The le rules panel: PASS after fix round 1 (reports/verify-rules-panel.md)",
+    "Hover danh hieu New Hero: PASS round 0 (reports/verify-hero-badge-*.md)",
+    "Hover danh hieu Rising Hero: PASS round 0 (reports/verify-hero-badge-*.md)",
+    "Hover danh hieu Super Hero: PASS round 0 (reports/verify-hero-badge-*.md)",
+    "Hover danh hieu Legend Hero: PASS round 0 (reports/verify-hero-badge-*.md)",
+    "Open secret box chua mo: PASS round 0 (reports/verify-secret-box-*.md)",
+    "Open secret box action bam mo: PASS round 0 (reports/verify-secret-box-*.md)",
+    "Open Giftbox ket qua: PASS; giftbox 1/2 follow spec FR-206/D012 over Figma, open design item (reports/verify-secret-box-giftbox-*.md)",
+    "Open secret box Standby: PASS 1/8 to 8/8, prize frames as completion screen per D010 (reports/verify-secret-box-standby.md)"
   ],
-  "regressionChecked": ["gofmt", "go vet", "go test", "go test -tags integration", "tsc", "eslint", "vitest 317", "playwright e2e full suite 90", "next build", "logs/web.log and logs/api.log no new ERROR"],
+  "regressionChecked": ["gofmt", "go vet", "go test", "go test -tags integration", "tsc", "eslint", "vitest 347", "playwright e2e full suite 101", "next build", "rows 22/29 re-captured with P8 slots", "logs/api.log no new ERROR on client cancel"],
   "contractStatus": "OK", "refuted": [], "unproven": [], "reachableRegressions": [],
   "findings": [
-    { "severity": "Warning", "category": "Security", "location": "src/features/kudos-board/load-board-sections.ts:55", "summary": "W1 detail id not validated before Go URL (fixed: parseKudoIdParam requires UUID, notFound otherwise)", "disposition": "Accept" },
-    { "severity": "Warning", "category": "Performance", "location": "backend/db/queries/kudo_read.sql:20", "summary": "W2 heart-state aggregate per page (fixed for feed: OFFSET 0 fence, 40.9 to 0.17 ms); highlight full aggregate by design RISK-02", "disposition": "Accept" },
-    { "severity": "Warning", "category": "Privacy", "location": "src/features/kudos-board/hover-card-cache.ts:1", "summary": "W3 hover cache shared across viewers (fixed: keyed by signed-in user)", "disposition": "Accept" },
-    { "severity": "Warning", "category": "Performance", "location": "supabase/migrations/20261128070000_kudo_board_read_indexes.sql:1", "summary": "W4 missing indexes (added; spotlight index shows no measured gain, S-A)", "disposition": "Accept" },
-    { "severity": "Suggestion", "category": "Security", "location": "backend/cmd/seed/seed_kudo_images.go:1", "summary": "S-C seed http client follows redirects with apikey; set CheckRedirect (local-only seed)", "disposition": "Defer" },
-    { "severity": "Suggestion", "category": "Accessibility", "location": "src/app/(shell)/kudos/not-found.tsx:1", "summary": "S-B kudo 404 loses banner/footer landmarks inside shell main", "disposition": "Defer" }
+    { "severity": "Warning", "category": "Correctness", "location": "src/features/gamification/heart-state-store.ts:1", "summary": "W1 store keyed by session object reset on focus (fixed: keyed by user id); W2 concurrent toggles (fixed: per-kudo claim, safe rollback, finally release)", "disposition": "Accept" },
+    { "severity": "Warning", "category": "Reliability", "location": "backend/internal/gamification/secret_box_completion_notice.go:1", "summary": "W3 completion notice at-most-once (fixed: written in open tx via notification.StoreInTx under savepoint); spec line to amend", "disposition": "Accept" },
+    { "severity": "Suggestion", "category": "Observability", "location": "backend/internal/httpx/request_failure_log.go:1", "summary": "R1 browser 5 s budget vs DB 5 s deadline may log DB stall as INFO; R2 slices.Concat", "disposition": "Defer" }
   ] }

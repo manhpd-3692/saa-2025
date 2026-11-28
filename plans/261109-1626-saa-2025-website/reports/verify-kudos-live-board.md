@@ -105,3 +105,32 @@ Console: only the expected 404 for the made-up kudo id. Logs: `logs/api.log` has
 
 **Still open for row 22:** FR-403 first-paint error for Highlight, Spotlight and sidebar (needs a Go-side fault). Nothing else.
 
+
+
+---
+
+## Round 3 (P8 heart, x2 badge and hero badges on the board)
+
+**Final verdict: PASS.** The board renders with the P8 heart, the x2 badge and hero badge slots filled, and no layout regression shows against `kudos-live-board.png` in the regions compared.
+
+Evidence (1440×1024, VN, sunner01.demo, live seed, no heart toggles, no box opens):
+- Viewport of the Highlight carousel and top of the board: `plans/261109-1626-saa-2025-website/evidence/screens/r3-kudos-live-board-viewport.png`
+- Full page (saved for the record, compared at region level only): `evidence/screens/r3-kudos-live-board-full.png`
+- Read values: `evidence/p8-round3-results.json`: 15 cards with a heart, 15 with a campaign badge nearby, 2 hero badges on the first card
+
+Compared against `docs/figma-refs/user/kudos-live-board.png`:
+
+| Region | Reference | Actual | Result |
+|--------|-----------|--------|--------|
+| Header, hero, search bar | as frame | same | OK |
+| "HIGHLIGHT KUDOS" title, Hashtag and Phòng ban filters | as frame | same | OK |
+| Highlight carousel: card, arrows, pager | as frame (pager "2/5") | same structure, pager "1/5" | OK |
+| Highlight card: "Xem chi tiết" link, heart count | as frame | same | OK |
+| Hero badge slots (Rising, New) on the card | as frame (pills beside names) | same | OK |
+| Campaign x2 badge beside the heart count | not in frame | flame x2 beside the count | Accepted P8 addition (D013) |
+
+Known differences from the frame, all accepted:
+- Hearts are outline (un-hearted) and the frame shows a filled red heart on the example card. DEC-001 defines outline for un-hearted (deviation 3 from round 1).
+- The x2 badge is new on the card. The frame has no campaign badge. Spec D013 puts it beside the heart.
+
+Fix list: none for row 22.

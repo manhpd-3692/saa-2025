@@ -1,0 +1,96 @@
+{
+  "checks": {
+    "r30_placement": {
+      "badges": 16,
+      "cardsWithHeart": 15,
+      "sidebarBadge": true
+    },
+    "r30_noCampaign": {
+      "badges": 0,
+      "hovers": 0,
+      "sidebarHeartTotalVisible": 1
+    },
+    "r31": {
+      "before": {
+        "dismiss": {
+          "x": 927,
+          "y": 928,
+          "width": 94,
+          "height": 56
+        },
+        "write": {
+          "x": 1037,
+          "y": 928,
+          "width": 363,
+          "height": 56
+        },
+        "inView": [
+          true,
+          true
+        ]
+      },
+      "after": {
+        "dismiss": {
+          "x": 927,
+          "y": 928,
+          "width": 94,
+          "height": 56
+        },
+        "write": {
+          "x": 1037,
+          "y": 928,
+          "width": 363,
+          "height": 56
+        },
+        "inView": [
+          true,
+          true
+        ],
+        "scrollTop": 0
+      },
+      "scrollable": false
+    },
+    "fab": {
+      "fab": {
+        "x": 1191,
+        "y": 840,
+        "width": 111,
+        "height": 64
+      },
+      "heading": {
+        "x": 944.5,
+        "y": 2987,
+        "width": 280,
+        "height": 56
+      },
+      "overlap": {
+        "fab": {
+          "x": 1191,
+          "y": 840,
+          "w": 111,
+          "h": 64
+        },
+        "rowsUnder": 0,
+        "rows": 11
+      }
+    },
+    "heartFocus": {
+      "pre": "false",
+      "afterPressClick": "true",
+      "afterFocusEvent": "true",
+      "dbHeartRows": "1",
+      "restored": "0"
+    },
+    "reveal1": {
+      "icon": "STAY_GOLD",
+      "collected": "Icon đã sưu tập 4/6",
+      "unopenedDb": 4
+    },
+    "reveal2": {
+      "icon": "REVIVAL",
+      "collected": "Icon đã sưu tập 4/6",
+      "unopenedDb": 3
+    }
+  },
+  "campaignRestored": "t"
+}

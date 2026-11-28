@@ -1,0 +1,7 @@
+
+> saa-2025@0.1.0 e2e:session
+> node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON e2e/support/create-local-test-session.ts
+
+wrote playwright\.auth\user.json (sunner01.demo@sun-asterisk.com, cookie sb-127-auth-token, 1 chunk(s))
+wrote playwright\.auth\admin.json (saa.admin.e2e@sun-asterisk.com, cookie sb-127-auth-token, 1 chunk(s))
+provision saa.admin.e2e@sun-asterisk.com: HTTP 200

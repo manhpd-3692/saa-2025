@@ -1,0 +1,52 @@
+{
+  "shakeDefault": {
+    "reduced": false,
+    "stateBefore": null,
+    "maxConcurrentPictureAnimations": 0,
+    "framesWithAnimation": 0,
+    "frames": 73
+  },
+  "shakeReduced": {
+    "reduced": true,
+    "stateBefore": null,
+    "maxConcurrentPictureAnimations": 0,
+    "framesWithAnimation": 0,
+    "frames": 74
+  },
+  "rulesPanel": {
+    "panelScroll": {
+      "scrollH": 1395,
+      "clientH": 1024,
+      "overflowY": "auto"
+    },
+    "boxes": {
+      "dismissAtFold": {
+        "x": 927,
+        "y": 1299,
+        "width": 94,
+        "height": 56
+      },
+      "writeAtFold": {
+        "x": 1037,
+        "y": 1299,
+        "width": 363,
+        "height": 56
+      }
+    },
+    "afterScroll": {
+      "dismiss": {
+        "x": 927,
+        "y": 928,
+        "width": 94,
+        "height": 56
+      },
+      "write": {
+        "x": 1037,
+        "y": 928,
+        "width": 363,
+        "height": 56
+      },
+      "dismissVisible": true
+    }
+  }
+}

@@ -1,0 +1,5 @@
+auth health: 200
+saa_api can now log in.
+2026/11/28 16:49:28 INFO demo kudo images stored objects=16
+2026/11/28 16:49:28 INFO seed applied scenario=live start_at=2026-11-27T16:49:28+07:00 ceremony_at=2026-12-12T16:49:28+07:00 users=25 kudos=60 hearts=187 secret_boxes=31
+seeded live

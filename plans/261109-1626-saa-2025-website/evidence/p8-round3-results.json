@@ -1,0 +1,32 @@
+{
+  "checks": {
+    "sidebarScrolled": {
+      "fab": {
+        "x": 1191,
+        "y": 840,
+        "w": 111,
+        "h": 64
+      },
+      "listBox": {
+        "x": 898,
+        "y": 624,
+        "w": 373,
+        "h": 444
+      },
+      "rows": 10,
+      "rowsUnderFab": 0,
+      "maxRight": 1258
+    },
+    "card": {
+      "x": 552,
+      "y": 250,
+      "w": 528,
+      "h": 524,
+      "badges": 2,
+      "hasCampaign": true,
+      "heartLabel": "12"
+    },
+    "cardCount": 15,
+    "heartsWithCampaignNearby": 15
+  }
+}

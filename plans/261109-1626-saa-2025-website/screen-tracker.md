@@ -75,27 +75,27 @@ P2 (đường rủi ro đầu-cuối: provision, JWT, `/me`...) không có màn 
 | 27 | Infor - HoverAvatar | Sun* Kudos | P7 | 2268:35101 | `docs/figma-refs/user/hover-avatar-info-2.png` | F006 FR-103,402 · BR-002 · SC-002,007 | Done (PASS) | 0 | 2f44032 |
 | 28 | Hashtag group | Sun* Kudos | P7 | 1002:13094 | `docs/figma-refs/user/hashtag-group.png` | F006 FR-002 · F005 FR-002,205 · BR-002 | Done (PASS) | 1 | 2f44032 |
 | 29 | KUDO card (component, không có trong SCREENFLOW) | Sun* Kudos | P7 | - | `docs/figma-refs/user/kudo-card.png` | F006 FR-002,003,211 · BR-001,002 · SC-002,008 · F008 FR-401,408 | Done (PASS) | 1 | 2f44032 |
-| 30 | Hover campaign (x2 heart) | Like Kudos | P8 | 3241:15021 | `docs/figma-refs/user/hover-campaign.png` | F008 FR-204,401,402,408 · BR-001,002,003,004 · SC-001,002,003 | Pending | 0 | - |
-| 31 | Thể lệ UPDATE (rules panel) | Sun* Kudos | P8 | 3204:6051 | `docs/figma-refs/user/rules-panel.png` | F008 FR-101,103,201,202 · BR-005,009 · SC-005,008 | Pending | 0 | - |
-| 32 | Hover danh hiệu New Hero | (ngoài checklist) | P8 | 3241:14991 [H] | `docs/figma-refs/user/hover-badge-new-hero.png` | F008 FR-002,203 · BR-005 · SC-005 | Pending | 0 | - |
-| 33 | Hover danh hiệu Rising Hero | (ngoài checklist) | P8 | 3241:14995 [H] | `docs/figma-refs/user/hover-badge-rising-hero.png` | F008 FR-002,203,405 · BR-005 · SC-005 | Pending | 0 | - |
-| 34 | Hover danh hiệu Super Hero | (ngoài checklist) | P8 | 3241:14999 [H] | `docs/figma-refs/user/hover-badge-super-hero.png` | F008 FR-002,203,405 · BR-005 · SC-005 | Pending | 0 | - |
-| 35 | Hover danh hiệu Legend Hero | (ngoài checklist) | P8 | 3241:15003 [H] | `docs/figma-refs/user/hover-badge-legend-hero.png` | F008 FR-002,203,405 · BR-005 · SC-005 | Pending | 0 | - |
-| 36 | Open secret box - chưa mở (1) | (ngoài checklist) | P8 | 1466:7069 / 1466:7676 | `docs/figma-refs/user/secret-box-unopened-1.png` | F008 FR-102,205,207 · BR-006,007 · SC-007 | Pending | 0 | - |
-| 37 | Open secret box - chưa mở (2) | (ngoài checklist) | P8 | 1466:7069 / 1466:7676 | `docs/figma-refs/user/secret-box-unopened-2.png` | F008 FR-102,205,207 · BR-007 · SC-006 | Pending | 0 | - |
-| 38 | Open secret box - action bấm mở (1) | (ngoài checklist) | P8 | 1466:7024 / 1466:7593 | `docs/figma-refs/user/secret-box-opening-1.png` | F008 FR-404,602 · BR-007,008 · SC-006,013 | Pending | 0 | - |
-| 39 | Open secret box - action bấm mở (2) | (ngoài checklist) | P8 | 1466:7024 / 1466:7593 | `docs/figma-refs/user/secret-box-opening-2.png` | F008 FR-404 · BR-007,008 · SC-006,013,014 | Pending | 0 | - |
-| 40 | Open Giftbox - kết quả (1) | (ngoài checklist) | P8 | 2995:15708 / 15733 / 15754 | `docs/figma-refs/user/secret-box-giftbox-1.png` | F008 FR-206,404 · BR-008 · SC-006 | Pending | 0 | - |
-| 41 | Open Giftbox - kết quả (2) | (ngoài checklist) | P8 | 2995:15708 / 15733 / 15754 | `docs/figma-refs/user/secret-box-giftbox-2.png` | F008 FR-206,404 · BR-008,010 · SC-012 | Pending | 0 | - |
-| 42 | Open Giftbox - kết quả (3) | (ngoài checklist) | P8 | 2995:15708 / 15733 / 15754 | `docs/figma-refs/user/secret-box-giftbox-3.png` | F008 FR-206,409 · BR-010 · SC-012 | Pending | 0 | - |
-| 43 | Open secret box - Standby (1/8) | (ngoài checklist) | P8 | 1 trong 8 [S] | `docs/figma-refs/user/secret-box-standby-1.png` | F008 FR-205,206,404 · BR-008 · SC-006 | Pending | 0 | - |
-| 44 | Open secret box - Standby (2/8) | (ngoài checklist) | P8 | 1 trong 8 [S] | `docs/figma-refs/user/secret-box-standby-2.png` | F008 FR-205,206,404 · BR-008 · SC-006 | Pending | 0 | - |
-| 45 | Open secret box - Standby (3/8) | (ngoài checklist) | P8 | 1 trong 8 [S] | `docs/figma-refs/user/secret-box-standby-3.png` | F008 FR-205,206,404 · BR-008 · SC-006 | Pending | 0 | - |
-| 46 | Open secret box - Standby (4/8) | (ngoài checklist) | P8 | 1 trong 8 [S] | `docs/figma-refs/user/secret-box-standby-4.png` | F008 FR-205,206,404 · BR-008 · SC-006 | Pending | 0 | - |
-| 47 | Open secret box - Standby (5/8) | (ngoài checklist) | P8 | 1 trong 8 [S] | `docs/figma-refs/user/secret-box-standby-5.png` | F008 FR-206,404,409 · BR-008,010 · SC-012 | Pending | 0 | - |
-| 48 | Open secret box - Standby (6/8) | (ngoài checklist) | P8 | 1 trong 8 [S] | `docs/figma-refs/user/secret-box-standby-6.png` | F008 FR-206,404,409 · BR-008,010 · SC-012 | Pending | 0 | - |
-| 49 | Open secret box - Standby (7/8) | (ngoài checklist) | P8 | 1 trong 8 [S] | `docs/figma-refs/user/secret-box-standby-7.png` | F008 FR-206,404,409 · BR-008,010 · SC-012 | Pending | 0 | - |
-| 50 | Open secret box - Standby (8/8) | (ngoài checklist) | P8 | 1 trong 8 [S] | `docs/figma-refs/user/secret-box-standby-8.png` | F008 FR-206,404,409 · BR-008,010 · SC-012 | Pending | 0 | - |
+| 30 | Hover campaign (x2 heart) | Like Kudos | P8 | 3241:15021 | `docs/figma-refs/user/hover-campaign.png` | F008 FR-204,401,402,408 · BR-001,002,003,004 · SC-001,002,003 | Done (PASS) | 1 | a9f3c68 |
+| 31 | Thể lệ UPDATE (rules panel) | Sun* Kudos | P8 | 3204:6051 | `docs/figma-refs/user/rules-panel.png` | F008 FR-101,103,201,202 · BR-005,009 · SC-005,008 | Done (PASS) | 1 | a9f3c68 |
+| 32 | Hover danh hiệu New Hero | (ngoài checklist) | P8 | 3241:14991 [H] | `docs/figma-refs/user/hover-badge-new-hero.png` | F008 FR-002,203 · BR-005 · SC-005 | Done (PASS) | 0 | a9f3c68 |
+| 33 | Hover danh hiệu Rising Hero | (ngoài checklist) | P8 | 3241:14995 [H] | `docs/figma-refs/user/hover-badge-rising-hero.png` | F008 FR-002,203,405 · BR-005 · SC-005 | Done (PASS) | 0 | a9f3c68 |
+| 34 | Hover danh hiệu Super Hero | (ngoài checklist) | P8 | 3241:14999 [H] | `docs/figma-refs/user/hover-badge-super-hero.png` | F008 FR-002,203,405 · BR-005 · SC-005 | Done (PASS) | 0 | a9f3c68 |
+| 35 | Hover danh hiệu Legend Hero | (ngoài checklist) | P8 | 3241:15003 [H] | `docs/figma-refs/user/hover-badge-legend-hero.png` | F008 FR-002,203,405 · BR-005 · SC-005 | Done (PASS) | 0 | a9f3c68 |
+| 36 | Open secret box - chưa mở (1) | (ngoài checklist) | P8 | 1466:7069 / 1466:7676 | `docs/figma-refs/user/secret-box-unopened-1.png` | F008 FR-102,205,207 · BR-006,007 · SC-007 | Done (PASS) | 0 | a9f3c68 |
+| 37 | Open secret box - chưa mở (2) | (ngoài checklist) | P8 | 1466:7069 / 1466:7676 | `docs/figma-refs/user/secret-box-unopened-2.png` | F008 FR-102,205,207 · BR-007 · SC-006 | Done (PASS) | 0 | a9f3c68 |
+| 38 | Open secret box - action bấm mở (1) | (ngoài checklist) | P8 | 1466:7024 / 1466:7593 | `docs/figma-refs/user/secret-box-opening-1.png` | F008 FR-404,602 · BR-007,008 · SC-006,013 | Done (PASS) | 0 | a9f3c68 |
+| 39 | Open secret box - action bấm mở (2) | (ngoài checklist) | P8 | 1466:7024 / 1466:7593 | `docs/figma-refs/user/secret-box-opening-2.png` | F008 FR-404 · BR-007,008 · SC-006,013,014 | Done (PASS) | 0 | a9f3c68 |
+| 40 | Open Giftbox - kết quả (1) | (ngoài checklist) | P8 | 2995:15708 / 15733 / 15754 | `docs/figma-refs/user/secret-box-giftbox-1.png` | F008 FR-206,404 · BR-008 · SC-006 | Done (PASS) | 1 | a9f3c68 |
+| 41 | Open Giftbox - kết quả (2) | (ngoài checklist) | P8 | 2995:15708 / 15733 / 15754 | `docs/figma-refs/user/secret-box-giftbox-2.png` | F008 FR-206,404 · BR-008,010 · SC-012 | Done (PASS) | 1 | a9f3c68 |
+| 42 | Open Giftbox - kết quả (3) | (ngoài checklist) | P8 | 2995:15708 / 15733 / 15754 | `docs/figma-refs/user/secret-box-giftbox-3.png` | F008 FR-206,409 · BR-010 · SC-012 | Done (PASS) | 0 | a9f3c68 |
+| 43 | Open secret box - Standby (1/8) | (ngoài checklist) | P8 | 1 trong 8 [S] | `docs/figma-refs/user/secret-box-standby-1.png` | F008 FR-205,206,404 · BR-008 · SC-006 | Done (PASS) | 0 | a9f3c68 |
+| 44 | Open secret box - Standby (2/8) | (ngoài checklist) | P8 | 1 trong 8 [S] | `docs/figma-refs/user/secret-box-standby-2.png` | F008 FR-205,206,404 · BR-008 · SC-006 | Done (PASS) | 0 | a9f3c68 |
+| 45 | Open secret box - Standby (3/8) | (ngoài checklist) | P8 | 1 trong 8 [S] | `docs/figma-refs/user/secret-box-standby-3.png` | F008 FR-205,206,404 · BR-008 · SC-006 | Done (PASS) | 0 | a9f3c68 |
+| 46 | Open secret box - Standby (4/8) | (ngoài checklist) | P8 | 1 trong 8 [S] | `docs/figma-refs/user/secret-box-standby-4.png` | F008 FR-205,206,404 · BR-008 · SC-006 | Done (PASS) | 0 | a9f3c68 |
+| 47 | Open secret box - Standby (5/8) | (ngoài checklist) | P8 | 1 trong 8 [S] | `docs/figma-refs/user/secret-box-standby-5.png` | F008 FR-206,404,409 · BR-008,010 · SC-012 | Done (PASS) | 0 | a9f3c68 |
+| 48 | Open secret box - Standby (6/8) | (ngoài checklist) | P8 | 1 trong 8 [S] | `docs/figma-refs/user/secret-box-standby-6.png` | F008 FR-206,404,409 · BR-008,010 · SC-012 | Done (PASS) | 0 | a9f3c68 |
+| 49 | Open secret box - Standby (7/8) | (ngoài checklist) | P8 | 1 trong 8 [S] | `docs/figma-refs/user/secret-box-standby-7.png` | F008 FR-206,404,409 · BR-008,010 · SC-012 | Done (PASS) | 0 | a9f3c68 |
+| 50 | Open secret box - Standby (8/8) | (ngoài checklist) | P8 | 1 trong 8 [S] | `docs/figma-refs/user/secret-box-standby-8.png` | F008 FR-206,404,409 · BR-008,010 · SC-012 | Done (PASS) | 0 | a9f3c68 |
 | 51 | U8 Profile bản thân | (ngoài checklist) | P9 | 362:5037 | `docs/figma-refs/user/profile-own.png` | F007 FR-001,101,201,202,203,204,205,206,401,402,403,404 · BR-003,004,005 · SC-001,002,008,009 | Pending | 0 | - |
 | 52 | U9 Profile người khác | (ngoài checklist) | P9 | 362:5097 | `docs/figma-refs/user/profile-other.png` | F007 FR-102,103,104,301,302,601..605 · BR-001,002,003,004 · SC-003,005,006,007,011 | Pending | 0 | - |
 | 53 | Dropdown-filter đã nhận/gửi | (ngoài checklist) | P9 | 763:4728 | `docs/figma-refs/user/profile-dropdown-received-sent.png` | F007 FR-205,401,603 · BR-002 · SC-002,005 | Pending | 0 | - |

@@ -1,6 +1,6 @@
 # System Architecture
 
-State after Phase 7 (Kudos Live board and View Kudo on top of Phase 6 compose, Phase 5 Homepage and Awards,
+State after Phase 8 (hearts, hero badges, rules panel and secret box on top of Phase 7 Kudos Live board, Phase 6 compose, Phase 5 Homepage and Awards,
 the Phase 4 launch gate and the Phase 3 shell). Items marked **planned (Phase N)** do not exist in code yet. Backend detail lives in [`backend/README.md`](../backend/README.md).
 
 ## Components
@@ -265,11 +265,55 @@ per-viewer URLs).
 Tests: `e2e/kudos-board.spec.ts`, `e2e/kudos-board-images-and-actions.spec.ts`; Go integration tests
 `kudo_board_reads_integration_test.go`, `kudo_read_integration_test.go`, `api_kudo_board_integration_test.go`.
 
+## Hearts, hero badges, rules panel, secret box (F008)
+
+Code in `src/features/gamification/`, mounted by the shell (`gamification-shell-host.tsx`: rules panel and
+secret box window, opened from the FAB through `shell-actions-context.tsx`) and by `kudos/layout.tsx`
+(`ActiveCampaignProvider`). Go routes, all PROFILE (fields and errors in [`backend/README.md`](../backend/README.md)):
+
+| Route | Registered in | Feeds |
+|---|---|---|
+| `PUT` / `DELETE /api/v1/kudos/{id}/heart` | `wire_gamification.go` | Heart toggle (idempotent setters) |
+| `POST /api/v1/me/secret-boxes/open` | `wire_gamification.go` | Secret box open |
+| `GET /api/v1/campaigns/active` | `wire_gamification_reads.go` | x2 campaign badge (`null` when none) |
+| `GET /api/v1/me/secret-boxes` | `wire_gamification_reads.go` | Own box and icon summary |
+
+Hero tiers ride inside every `KudoCard` (`heroTier`); the latest gift recipients ride inside
+`GET /api/v1/kudos/sidebar`. Neither has a route of its own.
+
+**Heart client store** (`heart-state-store.ts`, one instance in `use-heart-view.ts`). One kudo can show in
+Highlight, the feed and the detail at once, so heart state is shared per kudo id: a heart given on one card
+shows on all. Entries belong to one viewer (`identify`; another viewer clears them all). Each entry keeps the
+server data it was made from (`base`), so a refreshed card shows the newer server data. One request per kudo
+at a time (`begin`/`end`); `revert` never undoes a newer state. The optimistic guess is plus or minus the
+active campaign's weight (`optimisticHeart`); the server's weighted total replaces it, and a failure restores
+the previous state.
+
+**Campaign badge.** `ActiveCampaignProvider` reads `/campaigns/active` once from the browser and drops the
+campaign when its window ends. A failed read only hides the badge: each heart's weight comes from Go's own
+lookup inside the heart transaction, so a badge failure never changes what is stored.
+
+**Secret box open.** The browser sends an `Idempotency-Key` UUID per opening intent
+(`secret-box-open-intent.ts`); a repeated key replays the stored answer and consumes no second box, and a key
+already used by another Sunner is 409. The open that completes the icon set writes its `icons_completed`
+notice through `notification.StoreInTx` in the same transaction as `users.icons_completed_at`, under a
+savepoint (`secret_box_completion_notice.go`): a notice failure is logged and never undoes the open, and the
+post-commit notifier call is then a no-op through the once-ever dedupe key.
+
+**Request-failure logging** (`internal/httpx/request_failure_log.go`). Handlers call
+`httpx.LogRequestFailure(r, err, msg, ...)`. `CanceledByCaller` is true only when the request context itself
+ended (tab closed, navigation, the browser's 5 s budget) and the error is that cancellation: INFO. The
+server's own 5 s database deadline expiring while the caller still waits, and any other failure, stay ERROR.
+
+Tests: `e2e/like-kudos-and-secret-box.spec.ts`, `e2e/secret-box-open-and-retry.spec.ts`; Go integration tests
+`gamification_reads_integration_test.go`, `secret_box_completion_notice_integration_test.go`,
+`api_gamification_cancellation_integration_test.go`.
+
 ## Planned (not yet in code)
 
 | Item | Phase |
 |---|---|
-| Feature routes and screens | 8 to 13 |
+| Feature routes and screens | 9 to 13 |
 | Final integration, E2E, docs | 14 |
 
 Source of truth for phases: `plans/261109-1626-saa-2025-website/plan.md`.

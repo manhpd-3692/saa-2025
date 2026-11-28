@@ -1,0 +1,22 @@
+{
+  "steps": [
+    {
+      "name": "S1 campaign hover (row 30)",
+      "ok": true,
+      "ms": 1234,
+      "data": {
+        "hover": "x2\nNgày x2 tim – lan tỏa gấp đôi yêu thương!\nTừ 16:07 ngày 27/11 đến 16:07 ngày 11/12, tất cả tim bạn nhận được đều được nhân đôi.",
+        "x2": "x2",
+        "pos": {
+          "x": 993.453125,
+          "y": 537,
+          "width": 368,
+          "height": 142
+        }
+      }
+    }
+  ],
+  "console": [],
+  "pageErrors": [],
+  "badResponses": []
+}

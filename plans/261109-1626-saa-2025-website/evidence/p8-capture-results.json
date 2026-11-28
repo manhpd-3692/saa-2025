@@ -1,0 +1,238 @@
+{
+  "steps": [
+    {
+      "name": "S1 campaign hover (row 30)",
+      "ok": false,
+      "ms": 1173,
+      "error": "locator.innerText: Error: Node is not an HTMLElement | Call log: | \u001b[2m  - waiting for getByTestId('campaign-hover').locator('svg text').first()\u001b[22m | "
+    },
+    {
+      "name": "S2 rules panel (row 31)",
+      "ok": true,
+      "ms": 961,
+      "data": {
+        "headings": [
+          "NGƯỜI NHẬN KUDOS: HUY HIỆU HERO CHO NHỮNG ẢNH HƯỞNG TÍCH CỰC",
+          "NGƯỜI GỬI KUDOS: SƯU TẬP TRỌN BỘ 6 ICON, NHẬN NGAY PHẦN QUÀ BÍ ẨN",
+          "KUDOS QUỐC DÂN"
+        ],
+        "tiers": "Có 1-4 người gửi Kudos cho bạn\n\nHành trình lan tỏa điều tốt đẹp bắt đầu – những lời cảm ơn và ghi nhận đầu tiên đã tìm đến bạn.\n\nCó 5-9 người gửi Kudos cho bạn\n\nHình ảnh bạn đang lớn dần trong trái tim đồng đội bằng sự tử tế và cống hiến của mình.\n\nCó 10–20 người gửi Kudos cho bạn\n\nBạn đã trở thành biểu tượng được tin tưởng và yêu quý, người luôn sẵn sàng hỗ trợ và được nhiều đồng đội nhớ đến.\n\nCó hơn 20 người gửi Kudos cho bạn\n\nBạn đã trở thành huyền thoại – người để lại dấu ấn khó quên trong tập thể bằng trái tim và hành động của mình.",
+        "icons": [
+          "REVIVAL",
+          "TOUCH OF LIGHT",
+          "STAY GOLD",
+          "FLOW TO HORIZON",
+          "BEYOND THE BOUNDARY",
+          "ROOT FURTHER"
+        ],
+        "body": "Thể lệ\nNGƯỜI NHẬN KUDOS: HUY HIỆU HERO CHO NHỮNG ẢNH HƯỞNG TÍCH CỰC\n\nDựa trên số lượng đồng đội gửi trao Kudos, bạn sẽ sở hữu Huy hiệu Hero tương ứng, được hiển thị trực tiếp cạnh tên profile\n\nCó 1-4 người gửi Kudos cho bạn\n\nHành trình lan tỏa điều tốt đẹp bắt đầu – những lời cảm ơn và ghi nhận đầu tiên đã tìm đến bạn.\n\nCó 5-9 người gửi Kudos cho bạn\n\nHình ảnh bạn đang lớn dần trong trái tim đồng đội bằng sự tử tế và cống hiến của mình.\n\nCó 10–20 người gửi Kudos cho bạn\n\nBạn đã trở thành biểu tượng được tin tưởng và yêu quý, người luôn sẵn sàng hỗ trợ và được nhiều đồng đội nhớ đến.\n\nCó hơn 20 người gửi Kudos cho bạn\n\nBạn đã trở thành huyền thoại – người để lại dấu ấn khó quên trong tập thể bằng trái tim và hành động của mình.\n\nNGƯỜI GỬI KUDOS: SƯU TẬP TRỌN BỘ 6 ICON, NHẬN NGAY PHẦN QUÀ BÍ ẨN\n\nMỗi lời Kudos bạn gửi sẽ được đăng tải trên hệ thống và nhận về những lượt\ntừ cộng đồng Sunner. Cứ mỗi 5 lượt\n, bạn sẽ được mở 1 Secret Box, với cơ hội nhận về một trong 6 icon độc quyền của SAA.\n\nREVIVAL\nTOUCH OF LIGHT\nSTAY GOLD\nFLOW TO HORIZON\nBEYOND THE BOUNDARY\nROOT FURTHER\n\nNhững Sunner thu thập trọn bộ 6 icon sẽ nhận về một phần quà bí ẩn từ SAA 2025.\n\nKUDOS QUỐC DÂN\n\n5 Kudos nhận về nh"
+      }
+    },
+    {
+      "name": "S3 hero hover New (rows 32-35)",
+      "ok": true,
+      "ms": 640,
+      "data": {
+        "dataTier": "New",
+        "hover": "Có 1–4 người gửi Kudos cho bạn\nHành trình lan tỏa điều tốt đẹp bắt đầu – những lời cảm ơn và ghi nhận đầu tiên đã tìm đến bạn.",
+        "label": null
+      }
+    },
+    {
+      "name": "S3 hero hover Rising (rows 32-35)",
+      "ok": true,
+      "ms": 675,
+      "data": {
+        "dataTier": "Rising",
+        "hover": "Có 5-9 người gửi Kudos cho bạn\nHình ảnh bạn đang lớn dần trong trái tim đồng đội bằng sự tử tế và cống hiến của mình.",
+        "label": null
+      }
+    },
+    {
+      "name": "S3 hero hover Super (rows 32-35)",
+      "ok": true,
+      "ms": 705,
+      "data": {
+        "dataTier": "Super",
+        "hover": "Có 10–20 người gửi Kudos cho bạn\nBạn đã trở thành biểu tượng được tin tưởng và yêu quý, người luôn sẵn sàng hỗ trợ và được nhiều đồng đội nhớ đến.",
+        "label": null
+      }
+    },
+    {
+      "name": "S3 hero hover Legend (rows 32-35)",
+      "ok": true,
+      "ms": 643,
+      "data": {
+        "dataTier": "Legend",
+        "hover": "Có hơn 20 người gửi Kudos cho bạn\nBạn đã trở thành huyền thoại – người để lại dấu ấn khó quên trong tập thể bằng trái tim và hành động của mình.",
+        "label": null
+      }
+    },
+    {
+      "name": "S3b sender cannot heart own kudo (DEC-001)",
+      "ok": true,
+      "ms": 260,
+      "data": {
+        "disabled": true,
+        "title": "Bạn không thể thả tim cho Kudos của mình",
+        "ariaPressed": null
+      }
+    },
+    {
+      "name": "S4 unopened window (row 36)",
+      "ok": true,
+      "ms": 1613,
+      "data": {
+        "phase": "ready",
+        "picture": "closed-sparkle",
+        "hint": "Click vào box để mở",
+        "unopened": "05",
+        "collected": null,
+        "dbUnopened": 5,
+        "dbDistinct": 3
+      }
+    },
+    {
+      "name": "S4b unopened window hover on box (row 37)",
+      "ok": true,
+      "ms": 138,
+      "data": {
+        "hovered": true
+      }
+    },
+    {
+      "name": "S5 opening + reveal (rows 38-40)",
+      "ok": true,
+      "ms": 2099,
+      "data": {
+        "stateRightAfterClick": "opening",
+        "animationsDuringOpen": [
+          "?"
+        ],
+        "revealedIcon": "REVIVAL",
+        "facts": {
+          "phase": "ready",
+          "picture": "revealed",
+          "hint": "Click vào box để mở",
+          "unopened": "04",
+          "collected": "Icon đã sưu tập 3/6"
+        },
+        "dbUnopened": 4,
+        "dbDistinct": 3
+      }
+    },
+    {
+      "name": "S6 double click opens exactly one box",
+      "ok": true,
+      "ms": 4671,
+      "data": {
+        "before": 4,
+        "after": 3,
+        "consumed": 1,
+        "facts": {
+          "phase": "ready",
+          "picture": "revealed",
+          "hint": "Click vào box để mở",
+          "unopened": "03",
+          "collected": "Icon đã sưu tập 3/6"
+        }
+      }
+    },
+    {
+      "name": "S7 reduced motion (no shake)",
+      "ok": true,
+      "ms": 1740,
+      "data": {
+        "animationNames": [
+          ""
+        ],
+        "stateAfterClick": "revealed",
+        "consumed": 1
+      }
+    },
+    {
+      "name": "S8 reveal #2 (row 41)",
+      "ok": true,
+      "ms": 1887,
+      "data": {
+        "facts": {
+          "phase": "ready",
+          "picture": "revealed",
+          "hint": "Click vào box để mở",
+          "unopened": "01",
+          "collected": "Icon đã sưu tập 4/6"
+        }
+      }
+    },
+    {
+      "name": "S9 reveal #3 (row 43 reference) and empty window (FR-207)",
+      "ok": true,
+      "ms": 3727,
+      "data": {
+        "afterReveal": {
+          "phase": "ready",
+          "picture": "revealed",
+          "hint": "Bạn không còn Secret Box nào để mở.",
+          "unopened": "00",
+          "collected": "Icon đã sưu tập 4/6"
+        },
+        "emptyWindow": {
+          "phase": "ready",
+          "picture": "closed",
+          "hint": "Bạn không còn Secret Box nào để mở.",
+          "unopened": "00",
+          "collected": null
+        },
+        "emptyOpenButtons": 0,
+        "dbUnopened": 0
+      }
+    },
+    {
+      "name": "S10 fixture reset (5 icons, 40 unopened)",
+      "ok": true,
+      "ms": 1317,
+      "data": {
+        "unopened": 40,
+        "distinct": 5
+      }
+    },
+    {
+      "name": "S10b ready window at 5/6 (row 50 reference)",
+      "ok": true,
+      "ms": 901,
+      "data": {
+        "phase": "ready",
+        "picture": "closed-sparkle",
+        "hint": "Click vào box để mở",
+        "unopened": "40",
+        "collected": null
+      }
+    },
+    {
+      "name": "S10c open until ROOT_FURTHER and completion screen (rows 42, 44-49)",
+      "ok": true,
+      "ms": 7517,
+      "data": {
+        "opens": 3,
+        "heading": "Chúc mừng bạn đã nhận được phần quà từ BTC SAA 2025",
+        "hint": "Click vào box để mở",
+        "listText": "Chúc mừng bạn đã nhận được phần quà từ BTC SAA 2025\n\nTrọn bộ 6 icon SAA 2025\n\nPhần quà bí ẩn sẽ được trao cho bạn tại SAA 2025.\n\nBạn nhận được icon Root Further."
+      }
+    },
+    {
+      "name": "S10d completion once (BR-010, FR-409)",
+      "ok": true,
+      "ms": 5853,
+      "data": {
+        "completedAt": "t",
+        "notificationsAfterCompletion": "1",
+        "notificationsAfterExtraOpen": "1",
+        "distinctAfter": 6
+      }
+    }
+  ],
+  "console": [],
+  "pageErrors": [],
+  "badResponses": [],
+  "unopenedBefore": 5
+}

@@ -1,0 +1,18 @@
+[
+  {
+    "reduced": false,
+    "framesSampled": 153,
+    "openingFrames": 54,
+    "maxAnimationsOnOpeningEl": 1,
+    "firstOpeningT": 45,
+    "lastOpeningT": 928
+  },
+  {
+    "reduced": true,
+    "framesSampled": 153,
+    "openingFrames": 1,
+    "maxAnimationsOnOpeningEl": 0,
+    "firstOpeningT": 42,
+    "lastOpeningT": 42
+  }
+]

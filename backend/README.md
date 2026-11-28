@@ -59,7 +59,7 @@ All commands from the repo root unless noted.
    `supabase db reset` recreates the cluster: re-run step 5 after every reset.
 6. Seed: `cd backend && set -a && . ./.env && set +a && go run ./cmd/seed`
    (`SEED_SCENARIO=prelaunch|live|after-ceremony`, default `live`). Re-runnable; it replaces the
-   event row and the demo Sunners' activity (16 users, 30 kudos with hearts and boxes in the last
+   event row and the demo Sunners' activity (24 users, 60 kudos with hearts and boxes in the last
    14 days: three Live board feed pages, a clear Highlight top 5, ten gift recipients) and
    stores 16 demo kudo images (a Figma-cropped team photo, `db/seeds/kudo-images/`) at fixed
    opaque keys through the Storage API, so it also needs `SUPABASE_URL` and
@@ -201,7 +201,8 @@ Hero tiers reach the browser inside every `KudoCard` (`heroTier`) and the latest
 `GET /api/v1/kudos/sidebar`. The open that completes the icon set stores its `icons_completed` notice in
 the same transaction as `users.icons_completed_at` (under a savepoint, so a notice failure never undoes
 the open) and also hands it to the post-commit notifier, which the once-ever dedupe makes a no-op.
-Handlers log a request the caller abandoned at INFO, not ERROR. The `live` seed runs an x2 heart campaign ("Ngày x2 tim – lan tỏa gấp đôi yêu
+Handlers log through `httpx.LogRequestFailure`: a request the caller abandoned is INFO, a server deadline
+or any other failure is ERROR. The `live` seed runs an x2 heart campaign ("Ngày x2 tim – lan tỏa gấp đôi yêu
 thương!", now - 1 day to now + 13 days); the integration suite clears active campaigns, so reseed afterwards.
 
 ## Upload lifecycle and cleanup
