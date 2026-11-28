@@ -11,6 +11,7 @@ cmd/purge-uploads/  manual purge of abandoned kudo images (no scheduler)
 db/queries/         sqlc queries, one file per capability (auth.sql, events.sql, ...)
 db/seeds/           prelaunch.sql | live.sql | after-ceremony.sql + demo_activity.sql (embedded)
 internal/admin/     F010 admin Overview and user directory reads, streamed CSV exports
+internal/moderation/ F011 Spam/Public decisions and the Review content reads
 internal/auth/      JWKS verifier, auth middleware (IDENTITY/PROFILE chains), RequireAdmin, AuthContext
 internal/config/    environment loading and validation
 internal/db/        sqlc output — generated, do not edit
@@ -275,6 +276,32 @@ the 10,000th name 377 ms to 28 ms. Deep offset pages still cost (page 500: 809 m
 **Integration fixtures** create their own units and Sunners per test and date all activity in February 2003
 (including an `x2` campaign), so a report range of 2003-02-10 to 2003-02-12 never meets seed or other suites'
 data.
+
+## Admin moderation endpoints (F011, `wire_moderation_review.go`, `wire_moderation.go`)
+
+All four are ADMIN routes (401 without a token, 403 `forbidden` for a `user` role, before any query); each
+handler also refuses with 403 when mounted outside the ADMIN chain. Package `internal/moderation`, queries in
+`db/queries/moderation.sql`.
+
+| Route | Answer | Notable errors |
+|---|---|---|
+| `GET /api/v1/admin/kudos?sender&receiver&status&from&to&q&page` | `{items, total, page, pageSize, filters}`: newest first, 20 a page, `page` clamped to the last page; each item has `id, createdAt, title, excerpt, isAnonymous, sender, receiver, hashtags, heartTotal, status, moderationVersion, moderatedBy, moderatedAt`; `filters` echoes the applied people, status, `from`, `to`, `q` | none for bad input, it is dropped; 5 s deadline |
+| `GET /api/v1/admin/kudos/people?role=sender\|receiver&q` | `{items: [{id, name, avatarUrl, unitCode}]}`: people who sent (or received) a kudo, by name, at most 20; `q` matches name or email, no email is returned | 400 `invalid_request` for a missing or unknown `role` |
+| `POST /api/v1/admin/kudos/{id}/spam` | Decision with `changed`; body `{expectedVersion}`; notifies the author | 400 `invalid_request` (no or negative `expectedVersion`); 404 `kudo_not_found`; 409 `stale_decision` with the current row in `current` |
+| `POST /api/v1/admin/kudos/{id}/public` | Same, target Public; notifies nobody | same |
+
+**List filters.** Every present filter narrows (AND). `sender` and `receiver` are user ids, `status` is `public` or
+`spam`, `from` / `to` are `YYYY-MM-DD` days in `Asia/Ho_Chi_Minh`, both included, and apply only as a valid pair
+(a missing or malformed day, or `from` after `to`, means no date filter). `q` is a case-insensitive "contains"
+on the title or the visible text of the body, cut to 100 characters; NUL bytes and invalid UTF-8 are dropped
+first (Postgres refuses them in a text parameter), so such input is never a 500. `excerpt` is the first 240
+characters of the visible text, plus an ellipsis when cut.
+
+**Sender.** `sender` is the real sender of an anonymous kudo for the admin caller, through `kudo.SenderShownTo`
+(the rule `maskSender` uses); `isAnonymous` marks it.
+
+**Integration fixtures** (`moderation_list_integration_test.go`) date their kudos in March 2004 (report time
+zone), so they never meet seed data or other suites' rows.
 
 ## Upload lifecycle and cleanup
 

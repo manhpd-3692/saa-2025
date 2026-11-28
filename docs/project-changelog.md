@@ -4,6 +4,28 @@ What each delivered phase changed, newest first. Phase scope and status live in
 [`plans/261109-1626-saa-2025-website/plan.md`](../plans/261109-1626-saa-2025-website/plan.md);
 current structure in [`system-architecture.md`](system-architecture.md).
 
+## Phase 12: admin kudo moderation and author spam alert, F011 (commit `a0d30a9`, 2026-11-29)
+
+- Added: `/admin/review` Review content: every kudo newest first, 20 a page, Sender / Receiver / Status / date
+  range filters and search kept in the address, match highlight, Spam / Public row action with confirmation.
+- Added: Go routes `GET /api/v1/admin/kudos` and `GET /api/v1/admin/kudos/people?role=&q`
+  (`wire_moderation_review.go`, `internal/moderation`, `db/queries/moderation.sql`), ADMIN class; the handlers
+  re-check the admin caller and answer 403 outside that chain.
+- Added: the anonymous sender is shown to the admin with a marker through `kudo.SenderShownTo`, shared with
+  `maskSender`.
+- Added: stale decisions: the row action sends `expectedVersion`; a 409 `stale_decision` refreshes the row from
+  `current` and says another admin changed it.
+- Added: search drops NUL bytes and invalid UTF-8 instead of failing; an invalid filter value is ignored.
+- Added: Spam badge on the kudo detail for the author and admins, and an author alert dialog linking to Community
+  Standards, shown on every open while the kudo is Spam.
+- Changed: `admin.ParseOptionalDateRange` (optional date filter); `kudo.VisibleText` exported for the table
+  excerpt; the admin pager, select and date range picker now serve both admin pages.
+- Changed: `demo_notifications.sql` adds three kudos of moderation history (two Spam, one restored to Public at
+  version 2) with their spam warnings.
+- Added: Playwright spec `e2e/admin-kudo-moderation.spec.ts` (fixtures in `e2e/support/moderation-fixtures.ts`);
+  Vitest and Go unit and integration tests (Go fixtures dated March 2004).
+- Docs: F011 section in `system-architecture.md`; moderation routes in `backend/README.md`.
+
 ## Phase 11: admin Overview and user directory, F010 (commit `7e263ad`, 2026-11-28)
 
 - Added: `/admin` Overview by unit (All first) with a date range picker (quick ranges, default last 30 days) and

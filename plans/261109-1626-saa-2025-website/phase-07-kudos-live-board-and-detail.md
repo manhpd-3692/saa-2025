@@ -167,7 +167,7 @@ Commit `2f44032` (pushed to `origin/feat/saa-screens`). Screen tracker rows 22â€
 | 13 | S4: Figma-derived seed display names could be real staff | P14 owner | Names confirmed as invented, or swapped |
 | 14 | S7: roadmap and changelog not updated for P7 | P14 owner | `docs/development-roadmap.md` and `docs/project-changelog.md` updated for P7 |
 | 15 | Heart button, hero badge and secret-box slots are placeholders | P8 owner | Closed in P8 (`a9f3c68`): `HeartSlot`, `HeroBadgeSlot` and the sidebar box slot are filled. Rows 22 and 29 re-check is open in P8 carry-over 16 |
-| 16 | Spam overlay host for the sender is not built | P12 owner | Host present on the sender's spam kudo; P12 e2e covers it |
+| 16 | Spam overlay host for the sender is not built | P12 owner | **Closed in P12 (a0d30a9):** overlay host on the sender's spam kudo, page and modal; P12 e2e test 6 and test 8 cover it |
 | 17 | Signed image URLs expire after 1 h. Card-level single re-read is in place, but a page open for over an hour still shows expired links after the retry | P14 owner | Long-open page check passes, or page-level re-sign added |
 
 **Open questions**

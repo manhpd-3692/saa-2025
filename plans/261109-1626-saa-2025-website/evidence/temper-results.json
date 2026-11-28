@@ -1,13 +1,13 @@
 {
   "commands": [
-    {"command": "sqlc diff / gofmt -l . / go vet ./... / go vet -tags integration ./...", "exitCode": 0, "status": "pass", "summary": "clean (evidence/p11-final/go-gate.log)", "ts": "2026-11-29T01:30:00Z"},
-    {"command": "go test ./... && go test -tags integration ./...", "exitCode": 0, "status": "pass", "summary": "admin-only access, filters, paging, CSV content/escaping/headers, streaming abort, date range", "ts": "2026-11-29T01:30:00Z"},
-    {"command": "npm run typecheck", "exitCode": 0, "status": "pass", "summary": "tsc clean", "ts": "2026-11-29T01:30:00Z"},
-    {"command": "npm run lint", "exitCode": 0, "status": "pass", "summary": "eslint 0", "ts": "2026-11-29T01:30:00Z"},
-    {"command": "npm test", "exitCode": 0, "status": "pass", "summary": "vitest 421 (evidence/p11-final/vitest.log)", "ts": "2026-11-29T01:30:00Z"},
-    {"command": "npm run build", "exitCode": 0, "status": "pass", "summary": "next build on final code", "ts": "2026-11-29T01:30:00Z"},
-    {"command": "npx playwright test (full suite, 1 worker)", "exitCode": 0, "status": "pass", "summary": "139/139 on final code (evidence/p11-final/e2e-full-fix1.log)", "ts": "2026-11-29T01:30:00Z"},
-    {"command": "Playwright visual + AC check of 6 P11 screens at 1440x1024, vi and en", "exitCode": 0, "status": "pass", "summary": "6/6 PASS after fix round 1 (FR-002 copy); admin + gate specs 29/29", "ts": "2026-11-29T01:30:00Z"},
-    {"command": "go test -race", "exitCode": 0, "status": "skipped", "summary": "no gcc in WSL", "ts": "2026-11-29T01:30:00Z"}
+    {"command": "gofmt -l . / go vet ./... / go vet -tags integration ./...", "exitCode": 0, "status": "pass", "summary": "clean after fix round 1 (evidence/p12-final/go-gate-fix1.log)", "ts": "2026-11-29T03:00:00Z"},
+    {"command": "go test ./... && go test -tags integration ./...", "exitCode": 0, "status": "pass", "summary": "admin-only, filters, stale decision, notification once, visibility restore, overlay audience, NUL/invalid UTF-8 search", "ts": "2026-11-29T03:00:00Z"},
+    {"command": "npm run typecheck", "exitCode": 0, "status": "pass", "summary": "tsc clean", "ts": "2026-11-29T03:00:00Z"},
+    {"command": "npm run lint", "exitCode": 0, "status": "pass", "summary": "eslint 0", "ts": "2026-11-29T03:00:00Z"},
+    {"command": "npm test", "exitCode": 0, "status": "pass", "summary": "vitest 431 (evidence/p12-final/vitest-fix2.log)", "ts": "2026-11-29T03:00:00Z"},
+    {"command": "npm run build", "exitCode": 0, "status": "pass", "summary": "next build on final code", "ts": "2026-11-29T03:00:00Z"},
+    {"command": "npx playwright test (full suite, 1 worker)", "exitCode": 0, "status": "pass", "summary": "149/149 on final code (evidence/p12-final/e2e-full-fix2.log)", "ts": "2026-11-29T03:00:00Z"},
+    {"command": "Playwright visual + AC check of 10 P12 screens at 1440x1024", "exitCode": 0, "status": "pass", "summary": "10/10 PASS (rows 67-69, 71 after fix round 1); moderation spec 10/10", "ts": "2026-11-29T03:00:00Z"},
+    {"command": "go test -race", "exitCode": 0, "status": "skipped", "summary": "no gcc in WSL", "ts": "2026-11-29T03:00:00Z"}
   ]
 }

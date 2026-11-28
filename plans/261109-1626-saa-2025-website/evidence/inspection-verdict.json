@@ -1,17 +1,20 @@
 { "score": 9.5, "criticalCount": 0, "decision": "SEALED",
   "acceptanceCovered": [
-    "A1 Admin Overview: PASS after fix round 1, Vietnamese copy (reports/verify-admin-overview.md)",
-    "A4 Admin User: PASS after fix round 1 (reports/verify-admin-user.md)",
-    "Dropdown search user admin: PASS after fix round 1 (reports/verify-admin-dropdown-search-user.md)",
-    "Dropdown list phong ban: PASS after fix round 1 (reports/verify-admin-dropdown-department.md)",
-    "Dropdown level: PASS after fix round 1 (reports/verify-admin-dropdown-level.md)",
-    "Dropdown Role: PASS after fix round 1 (reports/verify-admin-dropdown-role.md)"
+    "A2 Admin Review content: PASS round 0 (reports/verify-admin-review-content.md)",
+    "A3 Admin Review content Search: PASS round 0 (reports/verify-admin-review-content-search.md)",
+    "Action Spam: PASS round 0 (reports/verify-admin-action-spam.md)",
+    "Action Public: PASS round 0 (reports/verify-admin-action-public.md)",
+    "C_Filter: PASS round 0 (reports/verify-admin-filter.md)",
+    "Dropdown list nguoi da gui: PASS after fix round 1 (reports/verify-admin-dropdown-sender.md)",
+    "Dropdown list nguoi nhan: PASS after fix round 1 (reports/verify-admin-dropdown-receiver.md)",
+    "Dropdown list status: PASS after fix round 1 (reports/verify-admin-dropdown-status.md)",
+    "KUDO spam: PASS round 0 (reports/verify-kudo-spam.md)",
+    "Alert Overlay KUDO spam: PASS after fix round 1 (reports/verify-kudo-spam-alert-overlay.md)"
   ],
-  "regressionChecked": ["gofmt", "go vet", "go test", "go test -tags integration", "tsc", "eslint", "vitest 421", "playwright e2e full suite 139", "next build", "P3 admin gate spec with Vietnamese nav"],
+  "regressionChecked": ["gofmt", "go vet", "go test", "go test -tags integration", "tsc", "eslint", "vitest 431", "playwright e2e full suite 149", "next build", "P11 admin dropdowns unchanged", "F005 FR-602 spam edit refusal"],
   "contractStatus": "OK", "refuted": [], "unproven": [], "reachableRegressions": [],
   "findings": [
-    { "severity": "Warning", "category": "Reliability", "location": "src/features/admin/export-button.tsx:41", "summary": "W1 export stuck busy when URL build throws (fixed: runExport try/finally)", "disposition": "Accept" },
-    { "severity": "Warning", "category": "Auth UX", "location": "src/features/admin/user-search-box.tsx:32", "summary": "W2 suggest ignored 401 (fixed: admin-call-failure, internal-only next)", "disposition": "Accept" },
-    { "severity": "Warning", "category": "Performance", "location": "backend/db/queries/admin_reports.sql:96", "summary": "W3 no index for user list order (fixed: users_name_id_idx, 859 to 1.8 ms first page at 20k users)", "disposition": "Accept" },
-    { "severity": "Suggestion", "category": "Product", "location": "src/features/admin/users-table.tsx:1", "summary": "D010 ID column shows first 8 chars, identical for demo users; spec owner decision", "disposition": "Defer" }
+    { "severity": "Warning", "category": "Input validation", "location": "backend/internal/moderation/moderation_review_filter.go:67", "summary": "W1 NUL or invalid UTF-8 in q caused 500 (fixed: cutQuery strips NUL and ToValidUTF8, unit + API tests)", "disposition": "Accept" },
+    { "severity": "Warning", "category": "Process", "location": "plans/261109-1626-saa-2025-website/phase-12-admin-kudo-moderation.md:54", "summary": "W2 plan checkboxes (ticked at delivery)", "disposition": "Accept" },
+    { "severity": "Suggestion", "category": "Accessibility", "location": "src/features/moderation/spam-alert-overlay.tsx:1", "summary": "R2 Escape on a header popover trigger closes the alert first (low)", "disposition": "Defer" }
   ] }

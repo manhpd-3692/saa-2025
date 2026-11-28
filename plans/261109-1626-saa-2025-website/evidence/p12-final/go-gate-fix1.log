@@ -1,0 +1,43 @@
+﻿gofmt -l: [] exit=0
+go vet exit=0
+go vet -tags integration exit=0
+ok  	github.com/manhpd-3692/saa-2025/backend/cmd/api	0.040s
+?   	github.com/manhpd-3692/saa-2025/backend/cmd/purge-uploads	[no test files]
+ok  	github.com/manhpd-3692/saa-2025/backend/cmd/seed	0.026s
+?   	github.com/manhpd-3692/saa-2025/backend/db/seeds	[no test files]
+ok  	github.com/manhpd-3692/saa-2025/backend/internal/admin	0.036s
+ok  	github.com/manhpd-3692/saa-2025/backend/internal/auth	0.084s
+ok  	github.com/manhpd-3692/saa-2025/backend/internal/config	0.020s
+?   	github.com/manhpd-3692/saa-2025/backend/internal/db	[no test files]
+ok  	github.com/manhpd-3692/saa-2025/backend/internal/dbx	0.027s
+ok  	github.com/manhpd-3692/saa-2025/backend/internal/events	0.018s
+ok  	github.com/manhpd-3692/saa-2025/backend/internal/gamification	0.019s
+ok  	github.com/manhpd-3692/saa-2025/backend/internal/httpx	0.020s
+ok  	github.com/manhpd-3692/saa-2025/backend/internal/kudo	0.033s
+ok  	github.com/manhpd-3692/saa-2025/backend/internal/moderation	0.019s
+ok  	github.com/manhpd-3692/saa-2025/backend/internal/notification	0.019s
+?   	github.com/manhpd-3692/saa-2025/backend/internal/profile	[no test files]
+?   	github.com/manhpd-3692/saa-2025/backend/internal/testkit	[no test files]
+ok  	github.com/manhpd-3692/saa-2025/backend/internal/upload	0.073s
+?   	github.com/manhpd-3692/saa-2025/backend/internal/user	[no test files]
+go test exit=0
+ok  	github.com/manhpd-3692/saa-2025/backend/cmd/api	2.710s
+?   	github.com/manhpd-3692/saa-2025/backend/cmd/purge-uploads	[no test files]
+ok  	github.com/manhpd-3692/saa-2025/backend/cmd/seed	0.009s
+?   	github.com/manhpd-3692/saa-2025/backend/db/seeds	[no test files]
+ok  	github.com/manhpd-3692/saa-2025/backend/internal/admin	0.934s
+ok  	github.com/manhpd-3692/saa-2025/backend/internal/auth	2.001s
+ok  	github.com/manhpd-3692/saa-2025/backend/internal/config	0.009s
+?   	github.com/manhpd-3692/saa-2025/backend/internal/db	[no test files]
+ok  	github.com/manhpd-3692/saa-2025/backend/internal/dbx	0.541s
+ok  	github.com/manhpd-3692/saa-2025/backend/internal/events	0.008s
+ok  	github.com/manhpd-3692/saa-2025/backend/internal/gamification	3.681s
+ok  	github.com/manhpd-3692/saa-2025/backend/internal/httpx	0.009s
+ok  	github.com/manhpd-3692/saa-2025/backend/internal/kudo	4.596s
+ok  	github.com/manhpd-3692/saa-2025/backend/internal/moderation	3.795s
+ok  	github.com/manhpd-3692/saa-2025/backend/internal/notification	2.875s
+ok  	github.com/manhpd-3692/saa-2025/backend/internal/profile	0.504s
+?   	github.com/manhpd-3692/saa-2025/backend/internal/testkit	[no test files]
+ok  	github.com/manhpd-3692/saa-2025/backend/internal/upload	0.737s
+?   	github.com/manhpd-3692/saa-2025/backend/internal/user	[no test files]
+go test -tags integration exit=0

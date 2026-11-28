@@ -1,0 +1,43 @@
+{
+  "consoleErrors": [],
+  "badResponses": [],
+  "pageErrors": [],
+  "checks": {
+    "reviewHeading": "Duyệt nội dung",
+    "reviewHeaders": [
+      "ID",
+      "Người gửi",
+      "Người nhận",
+      "Nội dung",
+      "Hashtag",
+      "Tim",
+      "Thời gian",
+      "Trạng thái",
+      "Thao tác"
+    ],
+    "pagerText": "1–20 trên 66 kudos\n‹\n1\n2\n3\n4\n›",
+    "searchMarks": [
+      "phi thường",
+      "phi thường",
+      "phi thường"
+    ],
+    "filter-senderOptions": [],
+    "filter-receiverOptions": [],
+    "filter-statusOptions": [
+      "Tất cả",
+      "Public",
+      "Spam"
+    ],
+    "spamConfirmText": "Tác giả sẽ nhận được thông báo. Đánh dấu kudos này là Spam?\n\nHủy\nĐánh dấu Spam",
+    "spamRowPill": "Spam",
+    "spamRowAction": "Bỏ Spam",
+    "adminDetailBadge": "Spam\n: Kudos này đã bị đánh dấu Spam và đang được ẩn khỏi bảng Kudos.",
+    "adminOverlayCount": 0,
+    "overlayVisible": true,
+    "overlayText": "Cảnh báo vi phạm\ntiêu chuẩn cộng đồng\n\nKudos này đã bị ẩn vì vi phạm tiêu chuẩn cộng đồng.",
+    "overlayLink": "/community-standards",
+    "editButtons": 0,
+    "overlayAfterClose": 0,
+    "overlayAfterReload": 1
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "phase": "b",
+  "consoleErrors": [
+    "tabA: Failed to load resource: the server responded with a status of 409 (Conflict)"
+  ],
+  "badResponses": [
+    "tabA: 409 /api/v1/admin/kudos/eee87ee8-c8ef-4664-acf5-c082bcb7685c/spam"
+  ],
+  "pageErrors": [],
+  "checks": {
+    "tabBPill": "Spam",
+    "tabAPillBeforeAction": "Public",
+    "tabANotice": "Kudos này vừa được một admin khác thay đổi.",
+    "tabAPillAfter": "Spam",
+    "tabAActionAfter": "Bỏ Spam"
+  }
+}

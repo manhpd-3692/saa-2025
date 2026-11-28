@@ -81,3 +81,9 @@ Root cause for M2 (hypothesis, to confirm in the fix): the editor is created wit
 2. (M1) `src/features/kudo-compose/image-attachment-grid.tsx`: keep the Image button beside the 5th thumbnail. Expected: inline (frame). Actual: 107 px button wraps at 5 thumbs. Fix as in `verify-write-kudo.md` M1. Re-check with 5 images in edit mode.
 
 Evidence: `plans/261109-1626-saa-2025-website/evidence/screens/write-kudo-edit-mode/` (`vn-1440-edit-prefilled.png`, `vn-1440-edit-non-author.png`).
+
+## Addendum: FR-602 spam edit refusal (F011 phase 12, 2026-11-29)
+
+- Verified: a Spam kudo (`kudo_spam_locked`) cannot be edited by its author. The edit button is absent on the card (`kudo-edit` count 0). Opening the edit modal through `?editKudo=<id>` calls `GET /api/v1/kudos/{id}/edit`, which returns 409 `kudo_spam_locked`, and the modal shows "Kudos này hiện không thể chỉnh sửa." with Hủy only. Evidence: `evidence/screens/kudo-spam/row70-kudo-spam-edit-refused.png`.
+- Result: PASS for the refusal. The 409 is the expected refusal, not a fault. Full write-up in `verify-kudo-spam.md`.
+- No change to the M1 and M2 fixes above.

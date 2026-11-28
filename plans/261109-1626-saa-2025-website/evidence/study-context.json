@@ -1,8 +1,8 @@
 {
-  "task": "Phase 11: admin overview by unit with CSV export and user directory with filters, search and CSV export (F010)",
+  "task": "Phase 12: admin kudo moderation review list and Spam/Public decisions, author spam alert on kudo detail (F011)",
   "mode": "code",
-  "acceptanceCriteria": ["A1 Admin Overview", "A4 Admin User", "Dropdown search user admin", "Dropdown list phong ban", "Dropdown level", "Dropdown Role"],
-  "touchpoints": ["backend/internal/admin/", "backend/db/queries/admin_reports.sql", "backend/cmd/api/wire_admin_reports.go", "backend/internal/gamification/hero_tier.go", "supabase/migrations/20261128080000_admin_user_directory_order_index.sql", "src/app/admin/", "src/features/admin/", "src/i18n/dictionaries/{vi,en}/{admin,shell}.json", "e2e/admin-overview-and-users.spec.ts", "e2e/login-and-admin-gate.spec.ts"],
-  "blastRadius": ["admin layout and nav copy", "hero tier thresholds shared with F008 (additive)", "CORS exposed Content-Disposition"],
-  "contracts": ["GET /api/v1/admin/overview (+ export)", "GET /api/v1/admin/users (+ export)", "ADMIN route class RequireAdmin", "CSV formula guard, BOM, streaming, 20 s deadline (R23)", "401 to Login, 403 Forbidden"]
+  "acceptanceCriteria": ["A2 Admin Review content", "A3 Admin Review content Search", "Action Spam", "Action Public", "C_Filter", "Dropdown list nguoi da gui", "Dropdown list nguoi nhan", "Dropdown list status", "KUDO spam", "Alert Overlay KUDO spam"],
+  "touchpoints": ["backend/internal/moderation/", "backend/db/queries/moderation.sql", "backend/cmd/api/wire_moderation_review.go", "backend/internal/kudo/{mask_sender,visible_text}.go", "backend/internal/admin/report_date_range.go", "backend/db/seeds/demo_notifications.sql", "src/app/admin/review/", "src/features/moderation/", "src/features/admin/", "src/features/kudos-board/kudo-detail-overlay.tsx", "src/app/(shell)/kudos/layout.tsx", "e2e/admin-kudo-moderation.spec.ts"],
+  "blastRadius": ["kudo detail page and overlay", "board and profile visibility after Spam/Public", "spam warning notifications", "P11 shared admin components (additive)", "maskSender refactor"],
+  "contracts": ["GET /api/v1/admin/kudos", "GET /api/v1/admin/kudos/people", "POST spam/public with expectedVersion, 409 stale_decision", "ADMIN route class + in-handler role re-check", "R02 real anonymous sender admin only"]
 }

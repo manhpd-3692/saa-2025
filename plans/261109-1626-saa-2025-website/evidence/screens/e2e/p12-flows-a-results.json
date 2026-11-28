@@ -1,0 +1,26 @@
+{
+  "phase": "a",
+  "consoleErrors": [
+    "author: Failed to load resource: the server responded with a status of 409 (Conflict)",
+    "author: Failed to load resource: the server responded with a status of 409 (Conflict)"
+  ],
+  "badResponses": [
+    "author: 409 /api/v1/kudos/f44ad018-4ed5-47da-81e2-af18043d4366/edit",
+    "author: 409 /api/v1/kudos/f44ad018-4ed5-47da-81e2-af18043d4366/edit"
+  ],
+  "pageErrors": [],
+  "checks": {
+    "boardHasPublic": 1,
+    "boardHasSpam": 0,
+    "editResponseStatus": 409,
+    "editDialogCount": 1,
+    "editRefusalText": "",
+    "overlayBeforeEsc": 1,
+    "overlayAfterEsc": 1,
+    "overlayEnText": "Warning: this kudo breaks the\ncommunity standards\n\nThis kudo was hidden for breaking the community standards.",
+    "afterCancelPill": "Public",
+    "spamRowMenuButtons": [
+      "Bỏ Spam"
+    ]
+  }
+}

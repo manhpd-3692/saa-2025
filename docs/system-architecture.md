@@ -1,6 +1,6 @@
 # System Architecture
 
-State after Phase 11 (admin Overview and user directory on top of Phase 10 notification center, Phase 9 Sunner profiles, Phase 8 hearts, hero badges, rules panel and secret box, Phase 7 Kudos Live board, Phase 6 compose, Phase 5 Homepage and Awards,
+State after Phase 12 (admin kudo moderation and author spam alert on top of Phase 11 admin Overview and user directory, Phase 10 notification center, Phase 9 Sunner profiles, Phase 8 hearts, hero badges, rules panel and secret box, Phase 7 Kudos Live board, Phase 6 compose, Phase 5 Homepage and Awards,
 the Phase 4 launch gate and the Phase 3 shell). Items marked **planned (Phase N)** do not exist in code yet. Backend detail lives in [`backend/README.md`](../backend/README.md).
 
 ## Components
@@ -92,6 +92,7 @@ Migrations (`supabase/migrations`, in order):
 | `src/app/(minimal)/layout.tsx` | `MinimalChrome` (language switch and copyright, no Go call) for Login |
 | `src/app/admin/layout.tsx` | Role gate plus `AdminChrome`; nav items in `src/features/admin/admin-nav-items.ts` |
 | `src/app/admin/page.tsx`, `src/app/admin/users/page.tsx`, `src/features/admin/` | Overview and User directory pages and their code ([details](#admin-overview-and-user-directory-f010)) |
+| `src/app/admin/review/page.tsx`, `src/features/moderation/` | Review content page, Spam/Public row action, spam badge and author alert ([details](#admin-kudo-moderation-and-spam-alert-f011)) |
 | `src/app/not-found.tsx` | Localized 404 in the minimal chrome (`src/components/errors/`) |
 | `src/app/(shell)/kudos/`, `src/features/kudos-board/` | Live board, View Kudo overlay and page, KudoCard UI ([Kudos Live board](#kudos-live-board-f006)) |
 | `src/components/shell/` | Header, avatar and language menus, nav links, FAB, footer, bell slot |
@@ -146,7 +147,7 @@ Supported: `vi`, `en` (`src/i18n/locale-config.ts`). Order, in `resolveLocale`:
 3. `vi` (master language and last fallback).
 
 `getRequestLocale()` reads cookies and headers; dictionaries load per namespace from
-`src/i18n/dictionaries/{locale}/{namespace}.json` (namespaces `common`, `shell`, `auth`, `errors`, `countdown`, `home`, `awards`, `standards`, `kudo-compose`, `kudos-board`; the root layout sends `common` and `shell` to the client). A key missing in `en` shows the `vi` text; typed content (award catalog, community rules) uses `pickLocalized` with the same fallback (see [Homepage, Awards and Community Standards](system-architecture-homepage-awards.md)).
+`src/i18n/dictionaries/{locale}/{namespace}.json` (namespaces `common`, `shell`, `auth`, `errors`, `countdown`, `home`, `awards`, `standards`, `kudo-compose`, `kudos-board`, `gamification`, `profile`, `notifications`, `admin`, `moderation`; the root layout sends `common` and `shell` to the client). A key missing in `en` shows the `vi` text; typed content (award catalog, community rules) uses `pickLocalized` with the same fallback (see [Homepage, Awards and Community Standards](system-architecture-homepage-awards.md)).
 
 ## Rendering decision: `instant = false`
 
@@ -436,11 +437,54 @@ Tests: `e2e/admin-overview-and-users.spec.ts`; Vitest `report-dates.test.ts`, `e
 `csv_stream_writer_test.go`, `report_request_parsing_test.go`, the integration tests in `internal/admin` and
 `cmd/api/api_admin_reports_integration_test.go`.
 
+## Admin kudo moderation and spam alert (F011)
+
+`/admin/review` (`src/app/admin/review/page.tsx`, code in `src/features/moderation/`) lists every kudo, newest
+first, 20 a page, with Sender / Receiver / Status / date range / search filters kept in the address. Four
+ADMIN routes (PROFILE + `RequireAdmin`); fields and errors in [`backend/README.md`](../backend/README.md):
+
+| Route | Registered in | Feeds |
+|---|---|---|
+| `GET /api/v1/admin/kudos` | `wire_moderation_review.go` | Review table page, match count, applied filters |
+| `GET /api/v1/admin/kudos/people?role=sender\|receiver&q` | `wire_moderation_review.go` | Sender / Receiver filter options |
+| `POST /api/v1/admin/kudos/{id}/spam` | `wire_moderation.go` | Row action: mark Spam |
+| `POST /api/v1/admin/kudos/{id}/public` | `wire_moderation.go` | Row action: mark Public |
+
+**Admin-only, checked twice.** The route class answers 401 / 403 before any query. Each handler also calls
+`adminCaller` (`moderation_list_handler.go`) and answers 403 `forbidden` if it was ever mounted outside the
+ADMIN chain, so real senders and decisions never reach another role.
+
+**Real sender for admins.** The review list shows the sender of an anonymous kudo with `isAnonymous` as the
+marker. It goes through `kudo.SenderShownTo(isAnonymous, viewer)` (`mask_sender.go`), the same rule `maskSender`
+applies to every card: one anonymity rule, two callers.
+
+**`expectedVersion` decision.** A row carries `moderationVersion`; the action posts it back as
+`expectedVersion` (body required, integer >= 0, else 400 `invalid_request`). The target status comes from the
+route, never from the body. If another admin moved the version first, Go answers 409 `stale_decision` with the
+current row in `current`; `runKudoDecision` (`kudo-decision.ts`) replaces the row with it and says another admin
+changed it. A 404 reloads the table; 401 / 403 follow the admin call rule. The same target at the current version
+is 200 with `changed: false`. A change to Spam notifies the author (`kudo_spam_warning`); a change to Public
+notifies nobody.
+
+**Search.** `q` is a case-insensitive "contains" on the title or the visible text of the body, cut to 100
+characters. NUL bytes and invalid UTF-8 are dropped before the text reaches Postgres, so bad input is never a
+500. An invalid `sender`, `receiver` or `status`, or a bad date pair, is ignored, not an error.
+
+**Spam badge and author alert.** `kudo-detail-overlay.tsx` wraps the card in `SpamKudoFrame`
+(`spam-alert-overlay.tsx`). A Spam kudo shows the Spam badge to whoever can open it (its author and admins).
+When `isOwn` it also opens `SpamAlertOverlay`, an alert dialog linking to `/community-standards`: focus moves to
+the close control and stays inside, Escape or the close control dismisses only the alert, and it shows again on
+every open while the kudo is Spam. `kudos/layout.tsx` loads the `moderation` dictionary for both.
+
+Tests: `e2e/admin-kudo-moderation.spec.ts`; Vitest `kudo-decision.test.ts`, `search-match-highlight.test.ts`; Go
+`moderation_review_filter_test.go`, `moderation_list_integration_test.go`,
+`api_moderation_review_integration_test.go`.
+
 ## Planned (not yet in code)
 
 | Item | Phase |
 |---|---|
-| Feature routes and screens | 12 to 13 |
+| Feature routes and screens | 13 |
 | Final integration, E2E, docs | 14 |
 
 Source of truth for phases: `plans/261109-1626-saa-2025-website/plan.md`.

@@ -107,16 +107,16 @@ P2 (đường rủi ro đầu-cuối: provision, JWT, `/me`...) không có màn 
 | 59 | Dropdown list phòng ban | (ngoài checklist) | P11 | 1002:15708 | `docs/figma-refs/admin/admin-dropdown-department.png` | F010 FR-202 · BR-005 · SC-003 | Done (PASS) | 1 | 7e263ad |
 | 60 | Dropdown level | (ngoài checklist) | P11 | 1002:15711 | `docs/figma-refs/admin/admin-dropdown-level.png` | F010 FR-202 · BR-005 · SC-003 | Done (PASS) | 1 | 7e263ad |
 | 61 | Dropdown Role | (ngoài checklist) | P11 | 1002:15714 | `docs/figma-refs/admin/admin-dropdown-role.png` | F010 FR-202,206 · BR-005 · SC-003 | Done (PASS) | 1 | 7e263ad |
-| 62 | A2 Admin - Review content | (ngoài checklist) | P12 | 722:16251 | `docs/figma-refs/admin/admin-review-content.png` | F011 FR-101,102,103,206,601,602 · BR-004,007 · SC-001,002,007 | Pending | 0 | - |
-| 63 | A3 Admin - Review content - Search | (ngoài checklist) | P12 | 832:13197 | `docs/figma-refs/admin/admin-review-content-search.png` | F011 FR-205,206 · BR-001 · SC-001 | Pending | 0 | - |
-| 64 | Action - Spam | (ngoài checklist) | P12 | 773:26373 | `docs/figma-refs/admin/admin-action-spam.png` | F011 FR-301,303,304,305,603 · BR-002,003 · SC-003,004,005,009,011 | Pending | 0 | - |
-| 65 | Action - Public | (ngoài checklist) | P12 | 773:26295 | `docs/figma-refs/admin/admin-action-public.png` | F011 FR-302,304,305,603 · BR-002,008 · SC-006,009,010 | Pending | 0 | - |
-| 66 | C_Filter | (ngoài checklist) | P12 | 1002:15394 | `docs/figma-refs/admin/admin-filter.png` | F011 FR-203,204,206 · BR-001,005 · SC-001 | Pending | 0 | - |
-| 67 | Dropdown list người đã gửi | (ngoài checklist) | P12 | 1002:15428 | `docs/figma-refs/admin/admin-dropdown-sender.png` | F011 FR-201 · BR-009 · SC-002 | Pending | 0 | - |
-| 68 | Dropdown list người nhận | (ngoài checklist) | P12 | 1002:15464 | `docs/figma-refs/admin/admin-dropdown-receiver.png` | F011 FR-202 · BR-009 · SC-002 | Pending | 0 | - |
-| 69 | Dropdown list status | (ngoài checklist) | P12 | 1002:15559 | `docs/figma-refs/admin/admin-dropdown-status.png` | F011 FR-203 · BR-001 · SC-001 | Pending | 0 | - |
-| 70 | KUDO spam | (ngoài checklist) | P12 | 3127:24099 hoặc 3127:24672 | `docs/figma-refs/user/kudo-spam.png` | F011 FR-304,401 · BR-006,008 · SC-008 · F006 FR-001 | Pending | 0 | - |
-| 71 | Alert Overlay (KUDO spam) | (ngoài checklist) | P12 | 3127:24099 hoặc 3127:24672 | `docs/figma-refs/user/kudo-spam-alert-overlay.png` | F011 FR-401,402 · BR-006 · SC-008 · F004 FR-103 | Pending | 0 | - |
+| 62 | A2 Admin - Review content | (ngoài checklist) | P12 | 722:16251 | `docs/figma-refs/admin/admin-review-content.png` | F011 FR-101,102,103,206,601,602 · BR-004,007 · SC-001,002,007 | Done (PASS) | 0 | a0d30a9 |
+| 63 | A3 Admin - Review content - Search | (ngoài checklist) | P12 | 832:13197 | `docs/figma-refs/admin/admin-review-content-search.png` | F011 FR-205,206 · BR-001 · SC-001 | Done (PASS) | 0 | a0d30a9 |
+| 64 | Action - Spam | (ngoài checklist) | P12 | 773:26373 | `docs/figma-refs/admin/admin-action-spam.png` | F011 FR-301,303,304,305,603 · BR-002,003 · SC-003,004,005,009,011 | Done (PASS) | 0 | a0d30a9 |
+| 65 | Action - Public | (ngoài checklist) | P12 | 773:26295 | `docs/figma-refs/admin/admin-action-public.png` | F011 FR-302,304,305,603 · BR-002,008 · SC-006,009,010 | Done (PASS) | 0 | a0d30a9 |
+| 66 | C_Filter | (ngoài checklist) | P12 | 1002:15394 | `docs/figma-refs/admin/admin-filter.png` | F011 FR-203,204,206 · BR-001,005 · SC-001 | Done (PASS) | 0 | a0d30a9 |
+| 67 | Dropdown list người đã gửi | (ngoài checklist) | P12 | 1002:15428 | `docs/figma-refs/admin/admin-dropdown-sender.png` | F011 FR-201 · BR-009 · SC-002 | Done (PASS) | 1 | a0d30a9 |
+| 68 | Dropdown list người nhận | (ngoài checklist) | P12 | 1002:15464 | `docs/figma-refs/admin/admin-dropdown-receiver.png` | F011 FR-202 · BR-009 · SC-002 | Done (PASS) | 1 | a0d30a9 |
+| 69 | Dropdown list status | (ngoài checklist) | P12 | 1002:15559 | `docs/figma-refs/admin/admin-dropdown-status.png` | F011 FR-203 · BR-001 · SC-001 | Done (PASS) | 1 | a0d30a9 |
+| 70 | KUDO spam | (ngoài checklist) | P12 | 3127:24099 hoặc 3127:24672 | `docs/figma-refs/user/kudo-spam.png` | F011 FR-304,401 · BR-006,008 · SC-008 · F006 FR-001 | Done (PASS) | 0 | a0d30a9 |
+| 71 | Alert Overlay (KUDO spam) | (ngoài checklist) | P12 | 3127:24099 hoặc 3127:24672 | `docs/figma-refs/user/kudo-spam-alert-overlay.png` | F011 FR-401,402 · BR-006 · SC-008 · F004 FR-103 | Done (PASS) | 1 | a0d30a9 |
 | 72 | A5 Admin - Setting | (ngoài checklist) | P13 | 820:10492 | `docs/figma-refs/admin/admin-setting.png` | F012 FR-101,102,103,405,601 · BR-006 · SC-001,004,008 | Pending | 0 | - |
 | 73 | A6 add new Campaign | (ngoài checklist) | P13 | 820:11445 | `docs/figma-refs/admin/admin-setting-add-new-campaign.png` | F012 FR-201,203,401,402,403 · BR-001,002,003 · SC-002,003 | Pending | 0 | - |
 | 74 | A7 add Campaign (đã điền) | (ngoài checklist) | P13 | 832:12113 | `docs/figma-refs/admin/admin-setting-add-campaign-filled.png` | F012 FR-201,401,402,602 · BR-001,002,003,007 · SC-002,003,006 | Pending | 0 | - |

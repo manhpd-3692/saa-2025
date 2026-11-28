@@ -1,0 +1,16 @@
+﻿
+> saa-2025@0.1.0 test
+> vitest run
+
+
+ RUN  v5.1.0 C:/Users/phan.duc.manh/sourcecode/saa-2025
+
+
+ Test Files  37 passed (37)
+      Tests  431 passed (431)
+   Start at  00:46:56
+   Duration  2.87s (transform 40%, import 36%, tests 17%, worker 6%, environment 1%)
+
+    Isolate  37 workers spawned · ~574ms startup each (spawn + environment, per file)
+             at least ~1.36s faster with isolate: false — reuses workers across files instead of one per file
+
